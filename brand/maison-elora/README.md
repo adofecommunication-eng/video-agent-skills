@@ -16,6 +16,10 @@ Client d'ADOFE Communication. Référence à appliquer à toute production pour 
 - **Signature internationale** : *Elegance. Comfort. Serenity.*
 - **Valeurs** : Élégance, Confort, Sérénité, Discrétion, Hospitalité
 - **Personnalité** : une hôtesse discrète et cultivée
+- **Logements** : studio haut standing, appartements 1, 2 et 3 pièces. Équipements : climatisation, Wi-Fi haut débit, Netflix, cuisine équipée, chauffe-eau, parking interne sécurisé, résidence gardée 24h/24.
+- **Tarifs** : ils diffèrent d'un appartement à l'autre. Ne jamais annoncer un tarif unique ; tarif sur demande tant que la grille n'est pas fournie.
+- **Contact** : 07 08 49 69 01
+- **Conditions** : séjours réservés aux majeurs, ni fêtes ni événements, réservation soumise à la confirmation des disponibilités.
 - **Cibles** : le professionnel en mission, le couple en escapade, le visiteur international (dont la diaspora)
 
 ## Couleurs
