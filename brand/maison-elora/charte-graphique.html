@@ -2,24 +2,24 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Montserrat:wght@300;400;500&display=swap">
 <style>
 /* Layout : un livret de marque. Chapitres en bandes pleine largeur qui alternent ivoire et vert profond, comme les pièces d'une maison qu'on traverse. L'arche, reprise de l'architecture du lieu, sert de motif. */
 :root {
   --vert: #172D2A;
   --vert-2: #1F3A36;
-  --nuit: #0E1C1A;
+  --nuit: #173D30;
   --or: #C5A46D;
   --or-doux: #D9C29A;
   --ivoire: #F5F1E8;
-  --lin: #E9E1D2;
+  --lin: #D7B891;
   --teck: #9A7350;
   --pierre: #B5AB9C;
   --texte: #172D2A;
   --texte-doux: #55635F;
   --filet: rgba(23,45,42,.16);
   --filet-clair: rgba(245,241,232,.18);
-  --f-script: "Great Vibes", "Snell Roundhand", cursive;
+  --f-script: "Bickham Script Pro", "BickhamScriptPro-Regular", "Bickham Script Pro 3", "Pinyon Script", "Snell Roundhand", cursive;
   --f-titre: "Cormorant Garamond", "Cormorant", Garamond, "Times New Roman", serif;
   --f-texte: "Montserrat", "Helvetica Neue", Arial, sans-serif;
   --souffle: cubic-bezier(.22,.61,.36,1);
@@ -34,7 +34,8 @@ a { color: inherit; }
 
 .bande { padding-block: clamp(56px, 9vw, 112px); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 .bande.sombre { background: var(--vert); color: var(--ivoire); }
-.bande.lin { background: var(--lin); }
+.bande.lin { background: var(--lin); --texte-doux: #3D4A45; }
+.lin .chap-tete .etiquette, .lin .num, .lin > .cadre > div > .etiquette { color: var(--vert); }
 .cadre { max-width: 1120px; margin: 0 auto; display: grid; gap: clamp(32px, 5vw, 56px); }
 
 .etiquette { font-family: var(--f-texte); font-size: 11px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; color: var(--teck); }
@@ -257,7 +258,7 @@ a { color: inherit; }
 .post.citation .l { width: 36px; height: 1px; background: var(--or); }
 .post.citation .s { font-family: var(--f-texte); font-style: normal; font-size: 9px; letter-spacing: .28em; text-transform: uppercase; color: var(--or); }
 .post.story { aspect-ratio: 9/16; color: var(--ivoire); }
-.post.story::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(14,28,26,.55), rgba(14,28,26,.1) 40%, rgba(14,28,26,.75)); }
+.post.story::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(23,61,48,.55), rgba(23,61,48,.1) 40%, rgba(23,61,48,.75)); }
 .post.story .contenu { position: relative; z-index: 1; display: grid; grid-template-rows: auto 1fr auto; padding: 22px 18px; text-align: center; }
 .post.story .logo { font-size: 20px; justify-self: center; }
 .post.story .logo .trait { background: var(--or); }
@@ -272,7 +273,7 @@ a { color: inherit; }
 /* ---------- Applications ---------- */
 .applis { display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); align-items: start; }
 .applis > figure { margin: 0; display: grid; gap: 12px; min-width: 0; }
-.carte { aspect-ratio: 85/55; max-width: 100%; display: grid; place-items: center; box-shadow: 0 18px 40px -22px rgba(14,28,26,.55); position: relative; }
+.carte { aspect-ratio: 85/55; max-width: 100%; display: grid; place-items: center; box-shadow: 0 18px 40px -22px rgba(23,61,48,.55); position: relative; }
 .carte.recto { background: var(--vert); }
 .carte.verso { background: var(--ivoire); color: var(--vert); place-items: stretch; padding: 7% 8%; grid-template-rows: 1fr auto; border: 1px solid var(--filet); }
 .carte.verso .nom-p { font-family: var(--f-titre); font-size: 22px; line-height: 1.1; }
@@ -281,13 +282,13 @@ a { color: inherit; }
 .carte.verso .coord .logo { font-size: 12px; color: var(--vert); }
 .carte .mono { width: 26%; }
 .carte .mono span { font-size: clamp(26px, 3.4vw, 36px); }
-.cle { aspect-ratio: 85.6/54; background: linear-gradient(135deg, var(--vert-2), var(--nuit)); color: var(--ivoire); display: grid; grid-template-rows: 1fr auto; padding: 7%; border-radius: 10px; box-shadow: 0 18px 40px -22px rgba(14,28,26,.55); max-width: 100%; }
+.cle { aspect-ratio: 85.6/54; background: linear-gradient(135deg, var(--vert-2), var(--nuit)); color: var(--ivoire); display: grid; grid-template-rows: 1fr auto; padding: 7%; border-radius: 10px; box-shadow: 0 18px 40px -22px rgba(23,61,48,.55); max-width: 100%; }
 .cle .logo { font-size: 18px; justify-self: start; align-items: flex-start; }
 .cle .logo .sig { display: none; }
 .cle .bas { display: flex; justify-content: space-between; align-items: end; font-size: 9px; letter-spacing: .24em; text-transform: uppercase; color: var(--or); }
 .cle .bas b { font-family: var(--f-titre); font-size: 30px; letter-spacing: 0; color: var(--ivoire); font-weight: 400; }
 .porte { background: var(--lin); aspect-ratio: 85/55; display: grid; place-items: center; max-width: 100%; }
-.plaque { width: 40%; aspect-ratio: 3/4; background: var(--vert); border-radius: 999px 999px 0 0; display: grid; place-items: center; align-content: center; gap: 6px; color: var(--ivoire); text-align: center; box-shadow: 0 14px 30px -18px rgba(14,28,26,.6); }
+.plaque { width: 40%; aspect-ratio: 3/4; background: var(--vert); border-radius: 999px 999px 0 0; display: grid; place-items: center; align-content: center; gap: 6px; color: var(--ivoire); text-align: center; box-shadow: 0 14px 30px -18px rgba(23,61,48,.6); }
 .plaque b { font-family: var(--f-titre); font-weight: 400; font-size: clamp(30px, 4vw, 42px); line-height: 1; }
 .plaque span { font-size: 8px; letter-spacing: .28em; text-transform: uppercase; color: var(--or); }
 .bienvenue { background: var(--ivoire); border: 1px solid var(--filet); aspect-ratio: 85/55; display: grid; place-items: center; text-align: center; padding: 6%; gap: 4px; max-width: 100%; }
@@ -461,7 +462,7 @@ a { color: inherit; }
       <div class="interdit"><div class="vue"><div class="logo" style="color:#A3342B"><span class="la">La</span><span class="nom">Maison Élora</span><span class="trait"></span></div></div><p>Changer les couleurs</p></div>
       <div class="interdit"><div class="vue"><div class="logo" style="text-shadow:3px 3px 4px rgba(0,0,0,.5)"><span class="la">La</span><span class="nom">Maison Élora</span><span class="trait"></span></div></div><p>Ajouter ombre, relief ou contour</p></div>
       <div class="interdit"><div class="vue"><div class="logo" style="transform:rotate(-14deg)"><span class="la">La</span><span class="nom">Maison Élora</span><span class="trait"></span></div></div><p>Pivoter ou incliner</p></div>
-      <div class="interdit"><div class="vue" style="background:repeating-linear-gradient(60deg,#9A7350 0 10px,#E9E1D2 10px 20px,#C5A46D 20px 30px)"><div class="logo"><span class="la">La</span><span class="nom">Maison Élora</span><span class="trait"></span></div></div><p>Poser sur un fond chargé sans voile</p></div>
+      <div class="interdit"><div class="vue" style="background:repeating-linear-gradient(60deg,#9A7350 0 10px,#D7B891 10px 20px,#C5A46D 20px 30px)"><div class="logo"><span class="la">La</span><span class="nom">Maison Élora</span><span class="trait"></span></div></div><p>Poser sur un fond chargé sans voile</p></div>
       <div class="interdit"><div class="vue"><div class="logo" style="font-family:Montserrat,sans-serif"><span class="la" style="font-family:Montserrat,sans-serif;font-size:1em">La</span><span class="nom" style="font-family:Montserrat,sans-serif;font-weight:500">Maison Élora</span><span class="trait"></span></div></div><p>Recomposer avec une autre police</p></div>
     </div>
   </div>
@@ -487,8 +488,8 @@ a { color: inherit; }
       <h3 class="sous-titre">Les matières de la maison</h3>
       <p class="legende" style="max-width:62ch">Tirées des photographies du lieu (bois, lin, pierre), ces nuances servent aux fonds, aux séparations et aux illustrations. Elles ne remplacent jamais les trois couleurs principales.</p>
       <div class="secondaires">
-        <div><div class="p" style="background:#0E1C1A"></div><strong>Vert nuit</strong><code>#0E1C1A</code><span class="legende">Fonds vidéo, version prestige</span></div>
-        <div><div class="p" style="background:#E9E1D2"></div><strong>Lin</strong><code>#E9E1D2</code><span class="legende">Fonds alternés, encarts</span></div>
+        <div><div class="p" style="background:#173D30"></div><strong>Vert nuit</strong><code>#173D30</code><span class="legende">Fonds vidéo, version prestige</span></div>
+        <div><div class="p" style="background:#D7B891"></div><strong>Lin</strong><code>#D7B891</code><span class="legende">Fonds alternés, encarts</span></div>
         <div><div class="p" style="background:#B5AB9C"></div><strong>Pierre</strong><code>#B5AB9C</code><span class="legende">Filets, pictogrammes</span></div>
         <div><div class="p" style="background:#9A7350"></div><strong>Teck</strong><code>#9A7350</code><span class="legende">Petits titres sur ivoire</span></div>
       </div>
@@ -529,11 +530,11 @@ a { color: inherit; }
     <div class="chap-tete">
       <span class="num">Chapitre IV</span>
       <h2>Typographie</h2>
-      <p>Trois familles, trois rôles. Toutes sont gratuites (Google Fonts) et s'installent sur n'importe quel poste, ce qui garantit la cohérence entre l'agence, l'équipe et les prestataires.</p>
+      <p>Trois familles, trois rôles. Cormorant Garamond et Montserrat sont gratuites (Google Fonts). Bickham Script Pro est une police Adobe sous licence : elle doit être installée via Adobe Fonts (Creative Cloud) sur chaque poste qui produit des supports.</p>
     </div>
     <div class="familles">
       <div class="famille"><span class="specimen" style="font-family:var(--f-titre);font-weight:500">Aa</span><span class="etiquette">Titres</span><h3>Cormorant Garamond</h3><p>Medium 500 pour les titres, Italique 400 pour les citations et la signature internationale. Capitales espacées (+2 %) pour le nom de la maison.</p><span class="alpha" style="font-family:var(--f-titre)">ABCDÉFGH abcdéfgh 0123456789</span></div>
-      <div class="famille"><span class="specimen" style="font-family:var(--f-script)">Aa</span><span class="etiquette">Accent</span><h3>Great Vibes</h3><p>Réservée au « La » du logo et à un mot d'accueil isolé (« Bienvenue », « Merci »). Jamais pour une phrase, jamais en capitales, jamais sous 24 pt.</p><span class="alpha" style="font-family:var(--f-script);font-size:26px">Bienvenue chez vous</span></div>
+      <div class="famille"><span class="specimen" style="font-family:var(--f-script)">Aa</span><span class="etiquette">Accent</span><h3>Bickham Script Pro Regular</h3><p>Réservée au « La » du logo et à un mot d'accueil isolé (« Bienvenue », « Merci »). Jamais pour une phrase, jamais en capitales, jamais sous 24 pt.</p><span class="alpha" style="font-family:var(--f-script);font-size:26px">Bienvenue chez vous</span></div>
       <div class="famille"><span class="specimen" style="font-family:var(--f-texte);font-weight:300">Aa</span><span class="etiquette">Texte courant</span><h3>Montserrat Light</h3><p>Light 300 pour les paragraphes, Medium 500 pour les labels en capitales avec un interlettrage de +20 à +30 %. Aucune graisse au-delà de 500.</p><span class="alpha" style="font-family:var(--f-texte);font-weight:300;font-size:15px">ABCDÉFGH abcdéfgh 0123456789</span></div>
     </div>
   </div>
