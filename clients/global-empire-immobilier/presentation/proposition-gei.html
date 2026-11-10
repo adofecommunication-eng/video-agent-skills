@@ -3,40 +3,48 @@
 <head>
 <meta charset="utf-8">
 <title>Proposition GEI</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* === Charte (provisoire) — remplacer par les couleurs officielles GEI === */
+  /* === Charte GEI Sarl : bleu roi, bleu ciel, vert olive, jaune-vert (logo + affiches) === */
   :root{
-    --navy:#0B1F3A; --navy-2:#132D52; --gold:#C9A13B; --gold-2:#E6C66A;
-    --ink:#1A2433; --muted:#5B6678; --paper:#FFFFFF; --cream:#F7F3EA; --line:#E4DCC8;
+    --navy:#0A1496; --navy-2:#1F5BE0; --gold:#5E8A16; --gold-2:#D4E021; --green:#6B8E23;
+    --ink:#141B3D; --muted:#55607A; --paper:#FFFFFF; --cream:#F1F4FC; --line:#D9E0F2;
   }
   @page{size:A4;margin:0}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:var(--paper);color:var(--ink);font-family:Montserrat,Inter,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .page{width:210mm;height:297mm;position:relative;overflow:hidden;page-break-after:always;padding:22mm 18mm 20mm}
   .page:last-child{page-break-after:auto}
-  h1,h2,h3{font-family:'Playfair Display',serif;color:var(--navy);line-height:1.1}
-  h2{font-size:30pt;margin-bottom:6mm}
+  h1,h2,h3{font-family:Montserrat,sans-serif;color:var(--navy);line-height:1.12;font-weight:800;letter-spacing:-.01em}
+  h2{text-transform:uppercase}
+  h2{font-size:23pt;margin-bottom:6mm}
   h3{font-size:14pt;margin-bottom:2mm}
   p{font-size:10.5pt;line-height:1.6;color:var(--ink)}
   .kicker{font-size:8.5pt;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:4mm}
   .lead{font-size:12.5pt;line-height:1.6;color:var(--muted);max-width:155mm;margin-bottom:8mm}
   .gold{color:var(--gold)}
   .foot{position:absolute;left:18mm;right:18mm;bottom:10mm;display:flex;justify-content:space-between;font-size:7.5pt;color:var(--muted);letter-spacing:.08em;border-top:1px solid var(--line);padding-top:3mm}
-  .bar{position:absolute;top:0;left:0;width:100%;height:4mm;background:linear-gradient(90deg,var(--navy) 0 70%,var(--gold) 70% 100%)}
+  .bar{position:absolute;top:0;left:0;width:100%;height:4mm;background:linear-gradient(90deg,var(--navy) 0 62%,var(--navy-2) 62% 80%,var(--green) 80% 100%)}
+  .logo-top{position:absolute;top:9mm;right:16mm;height:17mm}
+  .foot img{height:6mm;vertical-align:middle;margin-right:2mm}
+  .foot span{display:flex;align-items:center}
 
   /* cover */
-  .cover{background:radial-gradient(120% 80% at 80% 0%,var(--navy-2),var(--navy) 60%);color:#fff;padding:0}
-  .cover .frame{position:absolute;inset:12mm;border:1px solid rgba(201,161,59,.55)}
-  .cover .inner{position:absolute;left:26mm;right:26mm;top:38mm}
+  .cover{background:linear-gradient(180deg,var(--navy) 0%,#0B1FB0 55%,var(--navy-2) 100%);color:#fff;padding:0}
+  .cover .frame{position:absolute;inset:12mm;border:1px solid rgba(212,224,33,.55);z-index:2}
+  .cover .photo{position:absolute;left:0;right:0;bottom:0;height:118mm;background:url(img/villa-adiake.jpg) center/cover}
+  .cover .photo:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#0B1FB0 0%,rgba(11,31,176,.35) 35%,rgba(10,20,150,.55) 75%,rgba(10,20,150,.92) 100%)}
+  .logo-card{background:#fff;border-radius:4mm;padding:3mm 4mm;display:inline-block;box-shadow:0 2mm 6mm rgba(0,0,0,.25)}
+  .logo-card img{height:30mm;display:block}
+  .cover .inner{position:absolute;left:26mm;right:26mm;top:26mm;z-index:3}
   .brand{display:flex;align-items:center;gap:5mm}
-  .mono{width:22mm;height:22mm;border:1.5px solid var(--gold);display:grid;place-items:center;font-family:'Playfair Display';font-size:17pt;color:var(--gold);font-weight:800;transform:rotate(45deg)}
+  .mono{width:22mm;height:22mm;border:1.5px solid var(--gold);display:grid;place-items:center;font-family:Montserrat;font-weight:800;font-size:17pt;color:var(--gold);font-weight:800;transform:rotate(45deg)}
   .mono span{transform:rotate(-45deg)}
   .brand .n{font-size:10pt;letter-spacing:.35em;color:var(--gold-2);font-weight:700}
-  .cover h1{color:#fff;font-size:44pt;margin:30mm 0 8mm}
+  .cover h1{color:#fff;font-size:33pt;margin:14mm 0 6mm;text-transform:uppercase;line-height:1.08}
   .cover h1 em{font-style:normal;color:var(--gold)}
   .cover .sub{font-size:13pt;line-height:1.6;color:#D6DCE6;max-width:140mm}
-  .cover .meta{position:absolute;left:26mm;right:26mm;bottom:30mm;display:flex;justify-content:space-between;align-items:flex-end;font-size:9pt;color:#C2CAD6;letter-spacing:.06em}
+  .cover .meta{z-index:3;position:absolute;left:26mm;right:26mm;bottom:30mm;display:flex;justify-content:space-between;align-items:flex-end;font-size:9pt;color:#C2CAD6;letter-spacing:.06em}
   .cover .meta b{color:#fff;display:block;font-size:11pt;letter-spacing:.12em;margin-bottom:1mm}
   .skyline{position:absolute;left:0;right:0;bottom:0;height:70mm;opacity:.18}
 
@@ -44,21 +52,23 @@
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
   .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm}
   .card{background:var(--cream);border-radius:3mm;padding:6mm;border-top:1.2mm solid var(--gold)}
+  .card.dark .num{color:var(--gold-2)}
   .card.dark{background:var(--navy);color:#fff;border-top-color:var(--gold)}
   .card.dark h3,.card.dark p{color:#fff}
   .card p{font-size:9.8pt}
-  .num{font-family:'Playfair Display';font-size:30pt;color:var(--gold);font-weight:800;line-height:1}
-  .quote{border-left:1.2mm solid var(--gold);padding:4mm 0 4mm 7mm;font-family:'Playfair Display';font-size:19pt;color:var(--navy);line-height:1.35;margin:8mm 0}
+  .num{white-space:nowrap;font-family:Montserrat;font-weight:800;font-size:26pt;color:var(--gold);font-weight:800;line-height:1}
+  .quote{border-left:1.2mm solid var(--gold);padding:4mm 0 4mm 7mm;font-family:Montserrat;font-weight:800;font-size:19pt;color:var(--navy);line-height:1.35;margin:8mm 0}
   ul.check{list-style:none;margin-top:2mm}
   ul.check li{font-size:9.8pt;line-height:1.5;padding-left:6mm;position:relative;margin-bottom:1.8mm}
-  ul.check li:before{content:"";position:absolute;left:0;top:1.6mm;width:2.4mm;height:2.4mm;background:var(--gold);transform:rotate(45deg)}
+  ul.check li:before{content:"";position:absolute;left:0;top:1.6mm;width:2.4mm;height:2.4mm;background:var(--green);border-radius:.4mm}
+  .card.dark ul.check li:before,.offer.star ul.check li:before{background:var(--gold-2)}
   .card.dark ul.check li{color:#E3E8EF}
   .pill{display:inline-block;font-size:7.5pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:1.2mm 3mm;border-radius:10mm;background:var(--navy);color:var(--gold-2);margin-bottom:3mm}
 
   /* funnel */
   .steps{display:flex;flex-direction:column;gap:3.2mm;margin-top:4mm}
   .step{display:grid;grid-template-columns:14mm 1fr;align-items:center;background:var(--cream);border-radius:3mm;overflow:hidden}
-  .step .i{height:100%;min-height:19mm;background:var(--navy);color:var(--gold);font-family:'Playfair Display';font-size:17pt;font-weight:800;display:grid;place-items:center}
+  .step .i{height:100%;min-height:19mm;background:var(--navy);color:var(--gold-2);font-family:Montserrat;font-weight:800;font-size:17pt;font-weight:800;display:grid;place-items:center}
   .step .t{padding:3.2mm 5mm}
   .step .t b{font-size:10.5pt;color:var(--navy)}
   .step .t p{font-size:9.2pt;line-height:1.45;color:var(--muted)}
@@ -66,27 +76,27 @@
   /* posts mock */
   .post{border-radius:3mm;overflow:hidden;box-shadow:0 1mm 4mm rgba(11,31,58,.15);background:#fff}
   .post .img{height:42mm;background:linear-gradient(160deg,var(--navy),var(--navy-2));position:relative;color:#fff;padding:5mm}
-  .post .img .tag{position:absolute;top:4mm;right:4mm;background:var(--gold);color:var(--navy);font-size:7pt;font-weight:800;padding:1mm 2.5mm;border-radius:1mm;letter-spacing:.08em}
-  .post .img .big{position:absolute;left:5mm;bottom:5mm;right:5mm;font-family:'Playfair Display';font-size:13.5pt;line-height:1.2}
+  .post .img .tag{position:absolute;top:4mm;right:4mm;background:var(--gold-2);color:var(--navy);font-size:7pt;font-weight:800;padding:1mm 2.5mm;border-radius:1mm;letter-spacing:.08em}
+  .post .img .big{position:absolute;left:5mm;bottom:5mm;right:5mm;font-family:Montserrat;font-weight:800;font-size:10.5pt;line-height:1.2}
   .post .img .big small{display:block;font-family:Montserrat;font-size:8pt;color:var(--gold-2);font-weight:600;margin-top:1.5mm}
   .post .cap{padding:3.5mm 4mm;font-size:8.3pt;line-height:1.45;color:var(--muted)}
   .post .cap b{color:var(--navy)}
 
   /* table / pricing */
   table{width:100%;border-collapse:collapse;font-size:9.5pt}
-  th,td{padding:2.6mm 3mm;text-align:left;border-bottom:1px solid var(--line)}
+  th,td{padding:2mm 3mm;text-align:left;border-bottom:1px solid var(--line)}
   th{font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
   td b{color:var(--navy)}
   .offers{display:grid;grid-template-columns:1fr 1.12fr 1fr;gap:4mm;align-items:stretch;margin-top:4mm}
   .offer{border:1px solid var(--line);border-radius:3mm;padding:6mm 5mm;display:flex;flex-direction:column;background:#fff}
   .offer.star{background:var(--navy);color:#fff;border:none;transform:translateY(-3mm);box-shadow:0 2mm 7mm rgba(11,31,58,.3);position:relative}
-  .offer.star:before{content:"RECOMMANDÉE";position:absolute;top:-3.2mm;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:7pt;font-weight:800;letter-spacing:.18em;padding:1.3mm 4mm;border-radius:10mm}
+  .offer.star:before{content:"RECOMMANDÉE";position:absolute;top:-3.2mm;left:50%;transform:translateX(-50%);background:var(--gold-2);color:var(--navy);font-size:7pt;font-weight:800;letter-spacing:.18em;padding:1.3mm 4mm;border-radius:10mm}
   .offer h3{font-size:16pt}
   .offer.star h3{color:#fff}
   .offer .for{font-size:8.3pt;color:var(--muted);min-height:10mm;margin-bottom:3mm}
   .offer.star .for{color:#BFC8D6}
-  .price{font-family:'Playfair Display';font-size:19pt;font-weight:800;color:var(--navy)}
-  .offer.star .price{color:var(--gold)}
+  .price{font-family:Montserrat;font-weight:800;font-size:19pt;font-weight:800;color:var(--navy)}
+  .offer.star .price{color:var(--gold-2)}
   .price small{white-space:nowrap;font-family:Montserrat;font-size:8pt;font-weight:600;color:var(--muted)}
   .offer.star .price small{color:#BFC8D6}
   .offer ul.check{margin-top:4mm;flex:1}
@@ -95,23 +105,24 @@
 
   .roi{display:grid;grid-template-columns:1.3fr 1fr;gap:6mm;align-items:center;background:var(--navy);border-radius:3mm;padding:7mm;color:#fff;margin-top:6mm}
   .roi p{color:#D6DCE6}
-  .roi .num{font-size:34pt}
+  .roi .num{font-size:30pt;color:var(--gold-2)}
 
   .timeline{position:relative;margin-top:6mm;padding-left:10mm}
   .timeline:before{content:"";position:absolute;left:3mm;top:2mm;bottom:2mm;width:.6mm;background:var(--gold)}
   .tl{position:relative;margin-bottom:6mm}
-  .tl:before{content:"";position:absolute;left:-8.8mm;top:1mm;width:4mm;height:4mm;background:var(--navy);border:1mm solid var(--gold);transform:rotate(45deg)}
+  .tl:before{content:"";position:absolute;left:-8.8mm;top:1mm;width:4mm;height:4mm;background:var(--navy);border:1mm solid var(--gold-2);border-radius:50%}
   .tl .w{font-size:8pt;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:800}
 
-  .cta{background:radial-gradient(120% 80% at 20% 100%,var(--navy-2),var(--navy) 60%);color:#fff}
-  .cta h2{color:#fff;font-size:34pt}
+  .cta{background:linear-gradient(180deg,var(--navy) 0%,#0B1FB0 60%,var(--navy-2) 100%);color:#fff}
+  .cta h2{color:#fff;font-size:25pt}
   .cta p{color:#D6DCE6}
+  .card.dark .gold,.roi .gold,.cover .gold,.cta .gold,.cta .kicker,.card.dark .kicker,.roi .kicker,.cover em{color:var(--gold-2)!important}
   .cta .card{background:rgba(255,255,255,.06);border-top-color:var(--gold)}
   .cta .card h3{color:var(--gold-2)}
   .cta .card p{color:#E3E8EF}
   .cta .foot{color:#9AA6B8;border-top-color:rgba(255,255,255,.15)}
   .sign{margin-top:9mm;display:flex;gap:6mm;align-items:center}
-  .btn{display:inline-block;background:var(--gold);color:var(--navy);font-weight:800;letter-spacing:.12em;font-size:10pt;padding:4mm 7mm;border-radius:1.5mm;text-transform:uppercase}
+  .btn{display:inline-block;background:var(--gold-2);color:var(--navy);font-weight:800;letter-spacing:.12em;font-size:10pt;padding:4mm 7mm;border-radius:1.5mm;text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -120,11 +131,11 @@
 <section class="page cover">
   <div class="frame"></div>
   <div class="inner">
-    <div class="brand"><div class="mono"><span>G</span></div><div class="n">GLOBAL EMPIRE<br>IMMOBILIER</div></div>
+    <div class="logo-card"><img src="img/logo-gei.png" alt="Logo Global Empire Immobilier Sarl"></div>
     <h1>Transformer chaque publication<br>en <em>visite de terrain</em>,<br>chaque visite en <em>vente</em>.</h1>
     <p class="sub">Proposition de communication digitale et d'acquisition de prospects pour la vente de terrains, de maisons et de biens immobiliers.</p>
   </div>
-  <svg class="skyline" viewBox="0 0 800 260" preserveAspectRatio="none"><path fill="#C9A13B" d="M0 260V170h40v-40h30v60h40V90h50v100h30v-60h40V60h20V30h20v30h20v130h40v-70h50v70h30V100h60v90h30v-50h40v120h30V80h50v110h40v-60h50v130z"/></svg>
+  <div class="photo"></div>
   <div class="meta">
     <div><b>PRÉSENTÉ PAR ADOFE COMMUNICATION</b>Agence de communication 360°</div>
     <div style="text-align:right"><b>NOVEMBRE 2026</b>Document confidentiel</div>
@@ -134,6 +145,7 @@
 <!-- 2. LE DÉFI -->
 <section class="page">
   <div class="bar"></div>
+  <img class="logo-top" src="img/logo-gei.png" alt="">
   <div class="kicker">01 — Le contexte</div>
   <h2>Le client veut acheter.<br>Mais il a <span class="gold">peur</span>.</h2>
   <p class="lead">Chaque jour, des milliers d'Ivoiriens et de membres de la diaspora cherchent un terrain ou une maison sur leur téléphone. Le désir de devenir propriétaire est immense. Ce qui les arrête, ce n'est pas le prix&nbsp;: c'est la confiance.</p>
@@ -144,37 +156,39 @@
   </div>
   <div class="quote">« Sur le marché immobilier, ce n'est pas celui qui publie le plus qui vend.<br>C'est celui qui inspire le plus confiance. »</div>
   <p class="lead" style="margin-bottom:0">Global Empire Immobilier a déjà ce qu'il faut pour gagner cette confiance : de vrais biens, de vrais documents, une vraie équipe. <b style="color:var(--navy)">Notre mission est de le rendre visible, chaque jour, aux bonnes personnes — et de transformer cette attention en rendez-vous pour votre équipe commerciale.</b></p>
-  <div class="foot"><span>GLOBAL EMPIRE IMMOBILIER × ADOFE COMMUNICATION</span><span>02</span></div>
+  <div class="foot"><span><img src="img/logo-gei.png" alt="">GLOBAL EMPIRE IMMOBILIER SARL × ADOFE COMMUNICATION</span><span>02</span></div>
 </section>
 
 <!-- 3. POSITIONNEMENT -->
 <section class="page">
   <div class="bar"></div>
+  <img class="logo-top" src="img/logo-gei.png" alt="">
   <div class="kicker">02 — Notre conviction</div>
   <h2>Faire de GEI la marque<br>de l'achat <span class="gold">en toute sécurité</span>.</h2>
   <p class="lead">Un positionnement clair, répété avec constance sur tous les supports, pour que le nom Global Empire Immobilier devienne synonyme de sérénité.</p>
-  <div class="card dark" style="padding:9mm;margin-bottom:7mm;text-align:center">
+  <div class="card dark" style="padding:7mm;margin-bottom:6mm;text-align:center">
     <div class="kicker" style="margin-bottom:3mm">Signature proposée</div>
-    <p style="font-family:'Playfair Display';font-size:22pt;line-height:1.3;color:#fff">« Achetez en toute sécurité.<br>Devenez propriétaire en toute <span class="gold">sérénité</span>. »</p>
+    <p style="font-family:Montserrat;font-weight:800;font-size:22pt;line-height:1.3;color:#fff">« Achetez en toute sécurité.<br>Devenez propriétaire en toute <span class="gold">sérénité</span>. »</p>
   </div>
   <div class="grid3">
     <div class="card"><span class="pill">Pilier 1</span><h3>Sécurité</h3><p>Des documents montrés, expliqués, vérifiables. Chaque offre affiche clairement sa situation juridique.</p></div>
     <div class="card"><span class="pill">Pilier 2</span><h3>Accessibilité</h3><p>Le prix exprimé en mensualité : « à partir de X FCFA par mois ». Le rêve devient un plan concret.</p></div>
     <div class="card"><span class="pill">Pilier 3</span><h3>Proximité</h3><p>Des visages, des visites, des témoignages. Un accompagnement de la première question jusqu'à la remise des documents.</p></div>
   </div>
-  <h3 style="margin-top:9mm">Trois cibles, trois messages</h3>
+  <h3 style="margin-top:6mm">Trois cibles, trois messages</h3>
   <table>
     <tr><th>Cible</th><th>Ce qu'elle recherche</th><th>Notre message</th></tr>
     <tr><td><b>Primo-accédants</b><br>25–45 ans, Abidjan</td><td>Devenir propriétaire sans se ruiner</td><td>« Votre terrain dès X FCFA / mois, avec des documents en règle. »</td></tr>
     <tr><td><b>Diaspora</b><br>France, USA, Canada, Italie…</td><td>Investir au pays sans être trompé à distance</td><td>« Visitez en vidéo, suivez votre bien en direct, signez en confiance. »</td></tr>
     <tr><td><b>Investisseurs</b><br>Cadres, entrepreneurs</td><td>Plus-value et sécurité du capital</td><td>« Les zones d'avenir, avant tout le monde. »</td></tr>
   </table>
-  <div class="foot"><span>GLOBAL EMPIRE IMMOBILIER × ADOFE COMMUNICATION</span><span>03</span></div>
+  <div class="foot"><span><img src="img/logo-gei.png" alt="">GLOBAL EMPIRE IMMOBILIER SARL × ADOFE COMMUNICATION</span><span>03</span></div>
 </section>
 
 <!-- 4. DISPOSITIF -->
 <section class="page">
   <div class="bar"></div>
+  <img class="logo-top" src="img/logo-gei.png" alt="">
   <div class="kicker">03 — Le dispositif</div>
   <h2>Être présent là où<br>vos acheteurs <span class="gold">décident</span>.</h2>
   <p class="lead">Chaque plateforme a un rôle précis dans le parcours d'achat. Ensemble, elles forment une machine cohérente.</p>
@@ -190,12 +204,13 @@
     <li>Badge <b>« Documents vérifiables »</b> sur chaque offre, sceau de confiance de la marque</li>
     <li>Chaque projet porte un nom, une couleur d'accent et une histoire</li>
   </ul>
-  <div class="foot"><span>GLOBAL EMPIRE IMMOBILIER × ADOFE COMMUNICATION</span><span>04</span></div>
+  <div class="foot"><span><img src="img/logo-gei.png" alt="">GLOBAL EMPIRE IMMOBILIER SARL × ADOFE COMMUNICATION</span><span>04</span></div>
 </section>
 
 <!-- 5. LIGNE ÉDITORIALE -->
 <section class="page">
   <div class="bar"></div>
+  <img class="logo-top" src="img/logo-gei.png" alt="">
   <div class="kicker">04 — La ligne éditoriale</div>
   <h2>Des contenus qui <span class="gold">vendent</span>,<br>pas seulement qui plaisent.</h2>
   <table style="margin-bottom:8mm">
@@ -208,17 +223,18 @@
   </table>
   <h3>Aperçu des publications</h3>
   <div class="grid3" style="margin-top:3mm">
-    <div class="post"><div class="img"><span class="tag">OFFRE</span><div class="big">Votre terrain de 500 m² à Bingerville<small>À partir de 150 000 FCFA / mois*</small></div></div><div class="cap"><b>Objectif :</b> demande de contact via WhatsApp ou formulaire. <i>*Exemple illustratif.</i></div></div>
+    <div class="post"><div class="img" style="background:linear-gradient(180deg,rgba(10,20,150,.1),rgba(10,20,150,.9)),url(img/villa-adiake.jpg) center/cover"><span class="tag">OFFRE</span><div class="big">Votre villa aux Rives de l'Opulence, Adiaké<small>Apport 15 M · paiement progressif</small></div></div><div class="cap"><b>Objectif :</b> demande de contact via WhatsApp ou formulaire, avec visite de la cité.</div></div>
     <div class="post"><div class="img" style="background:linear-gradient(160deg,#6B5216,var(--gold))"><span class="tag" style="background:var(--navy);color:var(--gold-2)">CONFIANCE</span><div class="big">« J'ai reçu mes documents en main propre. »<small>Témoignage client — vidéo 45 s</small></div></div><div class="cap"><b>Objectif :</b> rassurer les hésitants par la preuve sociale.</div></div>
     <div class="post"><div class="img" style="background:linear-gradient(160deg,var(--navy-2),#2A4A7A)"><span class="tag">GEI VOUS EXPLIQUE</span><div class="big">ACD, lettre d'attribution, attestation : quelle différence&nbsp;?<small>Carrousel pédagogique</small></div></div><div class="cap"><b>Objectif :</b> installer GEI comme l'expert de confiance.</div></div>
   </div>
   <p style="margin-top:7mm;font-size:9.5pt;color:var(--muted)">Rythme : <b style="color:var(--navy)">12 à 20 publications par mois</b> selon la formule, aux heures où votre audience est la plus active, validées chaque mois par GEI via un calendrier éditorial.</p>
-  <div class="foot"><span>GLOBAL EMPIRE IMMOBILIER × ADOFE COMMUNICATION</span><span>05</span></div>
+  <div class="foot"><span><img src="img/logo-gei.png" alt="">GLOBAL EMPIRE IMMOBILIER SARL × ADOFE COMMUNICATION</span><span>05</span></div>
 </section>
 
 <!-- 6. MACHINE À PROSPECTS -->
 <section class="page">
   <div class="bar"></div>
+  <img class="logo-top" src="img/logo-gei.png" alt="">
   <div class="kicker">05 — Le cœur de la prestation</div>
   <h2>La machine à <span class="gold">prospects</span>.</h2>
   <p class="lead" style="margin-bottom:4mm">Le community management ne s'arrête pas aux « j'aime ». Nous construisons un parcours complet qui amène l'acheteur de la publicité jusqu'au bureau de votre commercial.</p>
@@ -231,20 +247,21 @@
     <div class="step"><div class="i">6</div><div class="t"><b>Relancer</b><p>Messages de relance à J+3, J+7 et J+15 pour les indécis : aucun prospect n'est oublié.</p></div></div>
     <div class="step"><div class="i">7</div><div class="t"><b>Fidéliser</b><p>Après chaque vente, un témoignage est recueilli et réinjecté dans la communication : la confiance nourrit la confiance.</p></div></div>
   </div>
-  <div class="foot"><span>GLOBAL EMPIRE IMMOBILIER × ADOFE COMMUNICATION</span><span>06</span></div>
+  <div class="foot"><span><img src="img/logo-gei.png" alt="">GLOBAL EMPIRE IMMOBILIER SARL × ADOFE COMMUNICATION</span><span>06</span></div>
 </section>
 
 <!-- 7. RÉSULTATS -->
 <section class="page">
   <div class="bar"></div>
+  <img class="logo-top" src="img/logo-gei.png" alt="">
   <div class="kicker">06 — Résultats visés</div>
   <h2>Des objectifs chiffrés,<br>un suivi <span class="gold">transparent</span>.</h2>
   <p class="lead">Nous nous engageons sur des indicateurs commerciaux, pas sur des « likes ». Ils sont suivis chaque mois et présentés lors d'une réunion de bilan.</p>
   <div class="grid2" style="grid-template-columns:repeat(4,1fr);gap:4mm">
-    <div class="card" style="text-align:center"><div class="num" style="font-size:24pt">80–150</div><p style="margin-top:2mm"><b>prospects qualifiés</b> visés par mois</p></div>
-    <div class="card" style="text-align:center"><div class="num">&lt; 2h</div><p style="margin-top:2mm"><b>délai de transmission</b> et de rappel</p></div>
-    <div class="card" style="text-align:center"><div class="num" style="font-size:24pt">15–30</div><p style="margin-top:2mm"><b>visites de terrain</b> visées par mois</p></div>
-    <div class="card" style="text-align:center"><div class="num">100 %</div><p style="margin-top:2mm"><b>des prospects</b> tracés dans le tableau</p></div>
+    <div class="card" style="text-align:center"><div class="num" style="font-size:19pt">80–150</div><p style="margin-top:2mm"><b>prospects qualifiés</b> visés par mois</p></div>
+    <div class="card" style="text-align:center"><div class="num" style="font-size:19pt">&lt; 2h</div><p style="margin-top:2mm"><b>délai de transmission</b> et de rappel</p></div>
+    <div class="card" style="text-align:center"><div class="num" style="font-size:19pt">15–30</div><p style="margin-top:2mm"><b>visites de terrain</b> visées par mois</p></div>
+    <div class="card" style="text-align:center"><div class="num" style="font-size:19pt">100&nbsp;%</div><p style="margin-top:2mm"><b>des prospects</b> tracés dans le tableau</p></div>
   </div>
   <p style="font-size:8.5pt;color:var(--muted);margin-top:3mm">Objectifs indicatifs pour la formule Croissance avec le budget publicitaire recommandé ; ils sont affinés après le premier mois de tests.</p>
 
@@ -252,11 +269,11 @@
     <div>
       <div class="kicker">Le calcul qui compte</div>
       <h3 style="color:#fff;font-size:19pt">Une seule vente rembourse plusieurs mois de communication.</h3>
-      <p style="margin-top:3mm;font-size:10pt">Pour un terrain vendu 10&nbsp;000&nbsp;000 FCFA, l'investissement mensuel de la formule Croissance représente moins de 5&nbsp;% du prix d'une seule vente. Chaque vente supplémentaire générée par le digital est un gain net pour GEI.</p>
+      <p style="margin-top:3mm;font-size:10pt">Une villa de la Cité Les Rives de l'Opulence à Adiaké est vendue 45&nbsp;000&nbsp;000 FCFA. Un mois de formule Croissance représente <b style="color:#fff">1&nbsp;%</b> de ce prix. Chaque vente supplémentaire obtenue grâce au digital est un gain net pour GEI.</p>
     </div>
     <div style="text-align:center;border-left:1px solid rgba(255,255,255,.2);padding-left:6mm">
-      <div class="num">1 vente</div>
-      <p style="color:#fff;font-weight:600;margin-top:2mm">peut financer<br>plusieurs mois d'accompagnement</p>
+      <div class="num">1 %</div>
+      <p style="color:#fff;font-weight:600;margin-top:2mm">du prix d'une villa<br>= 1 mois de formule Croissance</p>
     </div>
   </div>
 
@@ -266,12 +283,13 @@
     <li>Un rapport clair : prospects générés, coût par prospect, visites, contenus les plus performants</li>
     <li>Des recommandations concrètes pour le mois suivant</li>
   </ul>
-  <div class="foot"><span>GLOBAL EMPIRE IMMOBILIER × ADOFE COMMUNICATION</span><span>07</span></div>
+  <div class="foot"><span><img src="img/logo-gei.png" alt="">GLOBAL EMPIRE IMMOBILIER SARL × ADOFE COMMUNICATION</span><span>07</span></div>
 </section>
 
 <!-- 8. OFFRES -->
 <section class="page">
   <div class="bar"></div>
+  <img class="logo-top" src="img/logo-gei.png" alt="">
   <div class="kicker">07 — Nos formules</div>
   <h2>Choisissez votre <span class="gold">rythme de croissance</span>.</h2>
   <p class="lead" style="margin-bottom:6mm">Trois formules mensuelles, sans surprise. Le budget publicitaire est versé directement aux plateformes : vous gardez la maîtrise totale de vos dépenses.</p>
@@ -303,12 +321,13 @@
     <tr><td><b>Budget publicitaire</b> (payé directement à Meta / TikTok)</td><td>150 000 à 500 000 FCFA / mois recommandés</td></tr>
     <tr><td><b>Frais de démarrage</b> (audit, gabarits graphiques, configuration WhatsApp Business et formulaires)</td><td>150 000 FCFA, une seule fois</td></tr>
   </table>
-  <div class="foot"><span>GLOBAL EMPIRE IMMOBILIER × ADOFE COMMUNICATION</span><span>08</span></div>
+  <div class="foot"><span><img src="img/logo-gei.png" alt="">GLOBAL EMPIRE IMMOBILIER SARL × ADOFE COMMUNICATION</span><span>08</span></div>
 </section>
 
 <!-- 9. PLANNING -->
 <section class="page">
   <div class="bar"></div>
+  <img class="logo-top" src="img/logo-gei.png" alt="">
   <div class="kicker">08 — Le démarrage</div>
   <h2>Des premiers prospects<br>dès le <span class="gold">premier mois</span>.</h2>
   <div class="grid2" style="grid-template-columns:1.2fr 1fr;gap:9mm">
@@ -335,11 +354,12 @@
       </div>
     </div>
   </div>
-  <div class="foot"><span>GLOBAL EMPIRE IMMOBILIER × ADOFE COMMUNICATION</span><span>09</span></div>
+  <div class="foot"><span><img src="img/logo-gei.png" alt="">GLOBAL EMPIRE IMMOBILIER SARL × ADOFE COMMUNICATION</span><span>09</span></div>
 </section>
 
 <!-- 10. CTA -->
 <section class="page cta">
+  <div class="logo-card" style="position:absolute;top:12mm;right:16mm"><img src="img/logo-gei.png" alt="" style="height:20mm"></div>
   <div class="kicker" style="margin-top:6mm">09 — Pourquoi ADOFE Communication</div>
   <h2>Un partenaire qui pense<br><span class="gold">ventes</span>, pas seulement <span class="gold">likes</span>.</h2>
   <p class="lead" style="color:#D6DCE6">ADOFE Communication est une agence de communication 360°. Notre force : unir création, digital et développement commercial, avec l'exigence de résultats concrets pour nos clients.</p>
