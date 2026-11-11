@@ -37,17 +37,13 @@ def anton(size):
     return ImageFont.truetype(str(F / "Anton-Regular.ttf"), size)
 
 
-def script(size):
-    return ImageFont.truetype(str(F / "KaushanScript-Regular.ttf"), size)
-
-
-def mont(size, weight=600):
-    f = ImageFont.truetype(str(F / "Montserrat.ttf"), size)
-    try:
-        f.set_variation_by_axes([weight])
-    except Exception:
-        pass
-    return f
+def helv(size, bold=False):
+    """Police secondaire : Helvetica Neue si le fichier est fourni, sinon TeX Gyre Heros (clone libre)."""
+    for name in (["HelveticaNeue-Bold.otf", "HelveticaNeue-Bold.ttf", "texgyreheros-bold.otf"] if bold
+                 else ["HelveticaNeue.otf", "HelveticaNeue.ttf", "texgyreheros-regular.otf"]):
+        if (F / name).exists():
+            return ImageFont.truetype(str(F / name), size)
+    raise FileNotFoundError("police secondaire introuvable dans fonts/")
 
 
 # ---------------------------------------------------------------- easing
@@ -256,151 +252,193 @@ def deco_pattern(width, rows=3, cell=90):
     return img
 
 
+# ---------------------------------------------------------------- calage sur la voix off
+# Instants (s) où chaque mot est prononcé par Lola, décalage de 0,15 s inclus.
+# Mesurés sur l'enveloppe de sources/voix-off-lola.mp3. Musique (music.py) et
+# animation lisent ces mêmes valeurs : tout tombe sur la voix.
+CUE = {
+    "samedi": 0.15, "question": 1.49, "suspense": 2.35,
+    "par": 2.75, "quoi": 2.99, "commencer": 3.21,
+    "buffet": 4.15, "horaires": 4.97,
+    "act": [7.17, 7.85, 8.57, 9.45, 10.21],
+    "pass": 11.69, "prix": 12.43, "prix_fin": 12.95,
+    "amis": 13.59, "famille": 14.47,
+    "ecrivez": 15.47, "brunch": 15.83, "reserver": 16.07,
+}
+CUTS = [4.10, 7.05, 11.60, 15.40]
+IMPACTS = [CUE["par"], CUE["quoi"], CUE["commencer"], CUE["buffet"], CUE["brunch"]]
+
+
+def slam(canvas, layer, cx, cy, t, t0, big=1.55, dur=0.14, alpha=1.0):
+    """Mot qui « claque » : arrive en grand et se pose net sur la syllabe prononcée."""
+    if t < t0 - 0.02:
+        return
+    p = prog(t, t0 - 0.02, dur)
+    sc = big + (1 - big) * ease_out(p)
+    place(canvas, layer, cx, cy, alpha=clamp(p * 3) * alpha, scale=sc)
+
+
 # ---------------------------------------------------------------- textes pré-calculés
+# Anton = police principale (titres, accroches, prix, numéros)
+# Helvetica Neue (ici TeX Gyre Heros, clone libre) = infos pratiques, horaires, adresse, sous-titres
 T = {
-    "samedi": text_layer("SAMEDI,", anton(150)),
-    "question": text_layer("UNE SEULE QUESTION :", mont(46, 700), tracking=6),
-    "parquoi": text_layer("PAR QUOI", anton(230)),
-    "commencer": text_layer("commencer ?", script(190), gold=True),
+    "samedi": text_layer("SAMEDI,", anton(170)),
+    "question": text_layer("UNE SEULE QUESTION :", anton(76), tracking=4),
+    "par": text_layer("PAR", anton(270)),
+    "quoi": text_layer("QUOI", anton(270)),
+    "commencer": text_layer("COMMENCER ?", anton(190), gold=True),
     "buffet": text_layer("BUFFET À VOLONTÉ", anton(150)),
-    "horaire": text_layer("SAMEDI  ·  12H – 18H30", mont(52, 700), gold=True, tracking=4),
-    "trinque": text_layer("on trinque, on partage", script(96), gold=True),
-    "apres": text_layer("ET APRÈS LE BUFFET ?", mont(44, 700), gold=True, tracking=8),
-    "amis": text_layer("ENTRE AMIS", anton(140)),
-    "famille": text_layer("ou en famille", script(120), gold=True),
-    "wellbrunch": text_layer("Well Brunch", script(190), gold=True),
-    "ecrivez": text_layer("ÉCRIVEZ « BRUNCH »", anton(118)),
-    "au": text_layer("AU", mont(40, 700), tracking=8),
+    "horaire": text_layer("SAMEDI  ·  12H – 18H30", helv(54, bold=True), gold=True, tracking=3),
+    "apres": text_layer("ET APRÈS LE BUFFET ?", anton(66), gold=True, tracking=6),
+    "amis": text_layer("ENTRE AMIS", anton(150)),
+    "famille": text_layer("OU EN FAMILLE", anton(110), gold=True, tracking=2),
+    "wellbrunch": text_layer("WELL BRUNCH", anton(170), gold=True, tracking=4),
+    "tous": text_layer("TOUS LES SAMEDIS  ·  12H – 18H30", helv(36, bold=True), gold=True, tracking=2),
+    "ecrivez": text_layer("ÉCRIVEZ", anton(120)),
+    "brunch": text_layer("« BRUNCH »", anton(190), gold=True),
+    "reserver": text_layer("POUR RÉSERVER", helv(40, bold=True), tracking=6),
     "tel1": text_layer("07 47 79 95 07", anton(130), gold=True),
-    "tel2": text_layer("05 66 92 33 91", mont(48, 600)),
-    "adresse": text_layer("COCODY RIVIERA 3  ·  ROUTE M'BADON", mont(34, 600), tracking=3),
-    "tous": text_layer("TOUS LES SAMEDIS  ·  12H – 18H30", mont(34, 700), gold=True, tracking=3),
+    "tel2": text_layer("05 66 92 33 91", anton(80)),
+    "adresse": text_layer("COCODY RIVIERA 3  ·  ROUTE M'BADON", helv(36, bold=True), tracking=2),
 }
 ACTIVITES = ["PISCINE", "BABY-FOOT", "BILLARD", "KARAOKÉ", "DJ MIXTE"]
 T_ACT = [text_layer(a, anton(150)) for a in ACTIVITES]
 T_ACT_GOLD = [text_layer(a, anton(150), gold=True) for a in ACTIVITES]
 
+_BADGES = {}
 
-def pass_badge():
-    lab = text_layer("PASS : 10.000", anton(110), fill=INK, shadow=False)
+
+def pass_badge(value, fcfa=True):
+    """Badge or « PASS : 10.000 FCFA » ; largeur fixe pour que le compteur ne tremble pas."""
+    key = (value, fcfa)
+    if key in _BADGES:
+        return _BADGES[key]
+    ref = text_layer("PASS : 10.000", anton(110), fill=INK, shadow=False)
+    lab = text_layer(f"PASS : {value}", anton(110), fill=INK, shadow=False)
     cur = text_layer("FCFA", anton(56), fill=INK, shadow=False)
-    w, h = lab.width + cur.width - 40, 170
+    w, h = ref.width + cur.width - 40, 170
     b = gradient_fill((w, h), GOLD_STOPS).convert("RGBA")
     m = Image.new("L", (w, h), 0)
     ImageDraw.Draw(m).rounded_rectangle((0, 0, w - 1, h - 1), radius=18, fill=255)
     b.putalpha(m)
     b.alpha_composite(lab, (0, (h - lab.height) // 2 + 4))
-    b.alpha_composite(cur, (lab.width - 70, (h - lab.height) // 2 - 14))
+    if fcfa:
+        b.alpha_composite(cur, (ref.width - 70, (h - ref.height) // 2 - 14))
+    _BADGES[key] = b
     return b
 
 
-T["pass"] = pass_badge()
 DECO = deco_pattern(W + 180)
 
 
 # ---------------------------------------------------------------- séquences
 def s_hook(c, t):
-    """0 – 2,4 s : accroche. Table en plan large, question en typographie."""
+    """0 – 4,1 s : « Samedi, … une seule question : » puis PAR / QUOI / COMMENCER ? sur chaque mot."""
     c.alpha_composite(BG["table"])
-    p = prog(t, 0, 2.6)
-    ph = framed(kb_crop("table", p, 1.0, 1.18, dx=0.04))
-    place(c, ph, W / 2, 1290, alpha=ease_out(prog(t, 0, 0.35)))
-    wipe_up(c, T["samedi"], W / 2, 380, prog(t, 0.05, 0.4))
-    place(c, T["question"], W / 2, 510, alpha=ease_out(prog(t, 0.35, 0.35)))
-    wipe_up(c, T["parquoi"], W / 2, 680, prog(t, 0.65, 0.4))
-    k = prog(t, 0.95, 0.45)
-    place(c, T["commencer"], W / 2, 880, alpha=k, scale=0.85 + 0.15 * back_out(k) if k > 0 else 1)
-    gold_rule(c, W / 2, 1030, 420, prog(t, 0.8, 0.5))
+    # suspense : la première partie s'efface pendant le silence de la voix (2,35 -> 2,67)
+    out = 1 - ease_in_out(prog(t, CUE["suspense"], 0.32))
+    if out > 0:
+        ph = framed(kb_crop("table", prog(t, 0, 2.7), 1.0, 1.18, dx=0.04))
+        place(c, ph, W / 2, 1230, alpha=ease_out(prog(t, 0, 0.35)) * out, scale=1 - 0.06 * (1 - out))
+        slam(c, T["samedi"], W / 2, 470, t, CUE["samedi"], alpha=out)
+        if out >= 1:
+            wipe_up(c, T["question"], W / 2, 640, prog(t, CUE["question"], 0.3))
+        else:
+            place(c, T["question"], W / 2, 640, alpha=out)
+    c.alpha_composite(Image.new("RGBA", (W, H), INK + (int(190 * (1 - out)),)))
+    # la question, mot à mot, sur la voix
+    slam(c, T["par"], W / 2, 600, t, CUE["par"])
+    slam(c, T["quoi"], W / 2, 880, t, CUE["quoi"])
+    slam(c, T["commencer"], W / 2, 1140, t, CUE["commencer"], big=1.8, dur=0.16)
+    gold_rule(c, W / 2, 1280, 520, prog(t, CUE["commencer"] + 0.1, 0.4))
+    light_leak(c, t, CUE["commencer"] - 0.05, 0.4)
 
 
 def s_buffet(c, t):
-    """2,4 – 6 s : gros plan buffet puis verres qui trinquent."""
-    lt = t - 2.4
-    if lt < 1.9:
+    """4,1 – 7,05 s : « Buffet à volonté de 12h à 18h30 »."""
+    lt = t - CUTS[0]
+    if t < 5.6:
         c.alpha_composite(BG["buffet"])
-        ph = framed(kb_crop("buffet", prog(lt, 0, 1.9), 1.05, 1.25, dy=-0.1))
+        ph = framed(kb_crop("buffet", prog(t, CUTS[0], 1.5), 1.05, 1.25, dy=-0.1))
     else:
         c.alpha_composite(BG["toast"])
-        ph = framed(kb_crop("toast", prog(lt, 1.9, 1.7), 1.15, 1.0, dx=0.08))
-    place(c, ph, W / 2, 1010)
-    wipe_up(c, T["buffet"], W / 2, 560, prog(lt, 0.1, 0.45))
-    gold_rule(c, W / 2, 680, 560, prog(lt, 0.4, 0.5))
-    place(c, T["horaire"], W / 2, 750, alpha=ease_out(prog(lt, 0.5, 0.4)))
-    k = prog(lt, 2.1, 0.5)
-    place(c, T["trinque"], W / 2, 1400, alpha=k, scale=0.9 + 0.1 * ease_out(k))
-    light_leak(c, lt, 1.75)
+        ph = framed(kb_crop("toast", prog(t, 5.6, 1.5), 1.15, 1.0, dx=0.08))
+    place(c, ph, W / 2, 1060)
+    slam(c, T["buffet"], W / 2, 560, t, CUE["buffet"], big=1.35)
+    gold_rule(c, W / 2, 680, 560, prog(t, CUE["buffet"] + 0.15, 0.5))
+    wipe_up(c, T["horaire"], W / 2, 755, prog(t, CUE["horaires"], 0.35))
+    light_leak(c, t, 5.6, 0.3)
+    light_leak(c, lt, 0.0, 0.25)
 
 
 def s_activites(c, t):
-    """6 – 12 s : les activités tombent une à une et forment la liste."""
-    lt = t - 6.0
+    """7,05 – 11,6 s : chaque activité apparaît quand Lola la prononce."""
     c.alpha_composite(BG["group"])
     c.alpha_composite(Image.new("RGBA", (W, H), INK + (120,)))
-    place(c, T["apres"], W / 2, 380, alpha=ease_out(prog(lt, 0.0, 0.4)))
-    gold_rule(c, W / 2, 440, 300, prog(lt, 0.15, 0.5))
+    place(c, T["apres"], W / 2, 400, alpha=ease_out(prog(t, CUTS[1], 0.3)))
+    gold_rule(c, W / 2, 470, 300, prog(t, CUTS[1] + 0.1, 0.4))
     y0, step = 640, 190
-    for i in range(5):
-        ti = 0.35 + i * 1.0
-        p = prog(lt, ti, 0.45)
-        if p <= 0:
+    acts = CUE["act"]
+    all_gold = t >= 10.95
+    for i, ti in enumerate(acts):
+        if t < ti - 0.02:
             continue
-        active = ti <= lt < ti + 1.0 or (i == 4 and lt >= ti)
-        lay = T_ACT_GOLD[i] if active and lt < 5.4 else T_ACT[i]
-        sc = 1.0 + 0.12 * (1 - ease_out(prog(lt, ti, 0.35)))
-        if p < 1:
-            wipe_up(c, lay, W / 2, y0 + i * step, p)
-        else:
-            place(c, lay, W / 2, y0 + i * step, scale=sc)
-    # final : la liste entière passe en or et pulse
-    if lt >= 5.4:
-        k = prog(lt, 5.4, 0.4)
-        for i in range(5):
-            place(c, T_ACT_GOLD[i], W / 2, y0 + i * step, alpha=k)
-    light_leak(c, lt, 0.0, 0.3)
+        nxt = acts[i + 1] if i + 1 < len(acts) else 99
+        lay = T_ACT_GOLD[i] if (ti <= t < nxt or all_gold) else T_ACT[i]
+        slam(c, lay, W / 2, y0 + i * step, t, ti, big=1.4, dur=0.13)
+    light_leak(c, t, CUTS[1], 0.25)
 
 
 def s_groupe(c, t):
-    """12 – 15 s : groupe d'amis qui rit + pass."""
-    lt = t - 12.0
+    """11,6 – 15,4 s : « Le pass : 10.000 francs. Venez entre amis ou en famille. »"""
     c.alpha_composite(BG["group"])
-    ph = framed(kb_crop("group", prog(lt, 0, 3.0), 1.0, 1.14, dx=0.06, out_w=1040))
+    ph = framed(kb_crop("group", prog(t, CUTS[2], 3.8), 1.0, 1.14, dx=0.06, out_w=1040))
     place(c, ph, W / 2, 990)
-    wipe_up(c, T["amis"], W / 2, 470, prog(lt, 0.1, 0.45))
-    place(c, T["famille"], W / 2, 610, alpha=ease_out(prog(lt, 0.45, 0.4)))
-    k = prog(lt, 0.9, 0.5)
+    # badge : arrive sur « Le pass », le prix défile sur « 10.000 francs »
+    k = prog(t, CUE["pass"], 0.3)
     if k > 0:
-        place(c, T["pass"], W / 2, 1390, alpha=clamp(k * 2), scale=0.7 + 0.3 * back_out(k))
-    light_leak(c, lt, 0.0, 0.3)
+        cp = prog(t, CUE["prix"], CUE["prix_fin"] - CUE["prix"])
+        val = int(round(10000 * ease_out(cp) / 500) * 500)
+        txt = f"{val // 1000}.{val % 1000:03d}" if val >= 1000 else str(val)
+        badge = pass_badge(txt, fcfa=cp >= 1)
+        pop = 1 + 0.08 * math.sin(math.pi * prog(t, CUE["prix_fin"], 0.25))
+        place(c, badge, W / 2, 1400, alpha=clamp(k * 2), scale=(0.7 + 0.3 * back_out(k)) * pop)
+    light_leak(c, t, CUE["prix_fin"], 0.3)
+    slam(c, T["amis"], W / 2, 470, t, CUE["amis"], big=1.35)
+    slam(c, T["famille"], W / 2, 620, t, CUE["famille"], big=1.35)
+    light_leak(c, t, CUTS[2], 0.25)
 
 
 def s_final(c, t):
-    """15 – 18 s : carte finale, logo or, appel à l'action, numéro."""
-    lt = t - 15.0
+    """15,4 – 18 s : « Écrivez “BRUNCH” pour réserver. »"""
+    lt = t - CUTS[3]
     c.alpha_composite(Image.new("RGBA", (W, H), INK + (255,)))
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).ellipse((W / 2 - 520, 120, W / 2 + 520, 960), fill=(120, 84, 20, 90))
     c.alpha_composite(glow.filter(ImageFilter.GaussianBlur(120)))
     drift = int(60 * lt)
     c.alpha_composite(DECO, (-90 - drift % 90, H - DECO.height - 40))
-    place(c, LOGO, W / 2, 330, alpha=ease_out(prog(lt, 0.0, 0.5)), scale=0.92 + 0.08 * ease_out(prog(lt, 0, 0.8)))
-    k = prog(lt, 0.2, 0.5)
-    place(c, T["wellbrunch"], W / 2, 620, alpha=k, scale=0.9 + 0.1 * ease_out(k))
-    place(c, T["tous"], W / 2, 755, alpha=ease_out(prog(lt, 0.45, 0.4)))
-    gold_rule(c, W / 2, 815, 640, prog(lt, 0.5, 0.5), thick=2)
-    wipe_up(c, T["ecrivez"], W / 2, 920, prog(lt, 0.7, 0.45))
-    place(c, T["au"], W / 2, 1035, alpha=ease_out(prog(lt, 0.95, 0.3)))
-    k = prog(lt, 1.05, 0.45)
-    pulse = 1 + 0.025 * math.sin(max(0, lt - 1.6) * 6) if lt > 1.6 else 1
-    place(c, T["tel1"], W / 2, 1140, alpha=k, scale=(0.85 + 0.15 * back_out(k)) * pulse if k > 0 else 1)
-    place(c, T["tel2"], W / 2, 1260, alpha=ease_out(prog(lt, 1.3, 0.4)))
-    place(c, T["adresse"], W / 2, 1345, alpha=ease_out(prog(lt, 1.5, 0.4)))
-
+    place(c, LOGO, W / 2, 270, alpha=ease_out(prog(lt, 0.0, 0.4)), scale=0.78 + 0.07 * ease_out(prog(lt, 0, 0.8)))
+    place(c, T["wellbrunch"], W / 2, 545, alpha=ease_out(prog(lt, 0.0, 0.35)))
+    place(c, T["tous"], W / 2, 660, alpha=ease_out(prog(lt, 0.15, 0.35)))
+    gold_rule(c, W / 2, 715, 640, prog(lt, 0.15, 0.4), thick=2)
+    slam(c, T["ecrivez"], W / 2, 825, t, CUE["ecrivez"], big=1.3)
+    slam(c, T["brunch"], W / 2, 990, t, CUE["brunch"], big=1.8, dur=0.16)
+    light_leak(c, t, CUE["brunch"] - 0.03, 0.35)
+    wipe_up(c, T["reserver"], W / 2, 1125, prog(t, CUE["reserver"], 0.3))
+    t1 = CUE["reserver"] + 0.25
+    if t < t1 + 0.5:
+        slam(c, T["tel1"], W / 2, 1230, t, t1, big=1.3)
+    else:  # le numéro respire doucement jusqu'à la fin
+        place(c, T["tel1"], W / 2, 1230, scale=1 + 0.025 * math.sin((t - t1 - 0.5) * 6))
+    place(c, T["tel2"], W / 2, 1335, alpha=ease_out(prog(t, CUE["reserver"] + 0.5, 0.35)))
+    place(c, T["adresse"], W / 2, 1420, alpha=ease_out(prog(t, CUE["reserver"] + 0.7, 0.35)))
 
 
 # ---------------------------------------------------------------- sous-titres (voix off)
 SUBS_ON = "--subs" in sys.argv
 SUB_Y = 1610  # au-dessus de la zone de légende Instagram / Facebook
-SUB_FONT = mont(40, 600)
+SUB_FONT = helv(42, bold=True)
 
 
 def load_srt(path):
@@ -454,9 +492,23 @@ def draw_sub(c, t):
             place(c, sub_layer(text), W / 2, SUB_Y, alpha=k)
             return
 
-SCENES = [(0.0, 2.4, s_hook), (2.4, 6.0, s_buffet), (6.0, 12.0, s_activites),
-          (12.0, 15.0, s_groupe), (15.0, 18.0, s_final)]
-XF = 0.2  # fondu enchaîné entre séquences
+SCENES = [(0.0, CUTS[0], s_hook), (CUTS[0], CUTS[1], s_buffet), (CUTS[1], CUTS[2], s_activites),
+          (CUTS[2], CUTS[3], s_groupe), (CUTS[3], DUR, s_final)]
+XF = 0.12  # fondu très court : les coupes restent franches
+
+
+def shake(c, t):
+    """Secousse brève (0,18 s) sur les mots qui claquent."""
+    for ti in IMPACTS:
+        p = (t - ti) / 0.18
+        if 0 <= p <= 1:
+            amp = 14 * (1 - p)
+            dx, dy = amp * math.sin(p * 37), amp * math.cos(p * 29)
+            z = 1.025
+            big = c.resize((int(W * z), int(H * z)), Image.BILINEAR)
+            ox, oy = (big.width - W) / 2 + dx, (big.height - H) / 2 + dy
+            return big.crop((int(ox), int(oy), int(ox) + W, int(oy) + H))
+    return c
 
 
 def frame(t):
@@ -471,6 +523,7 @@ def frame(t):
                 k = (t - (b - XF)) / XF
                 c = Image.blend(c, nxt, ease_in_out(k))
             break
+    c = shake(c, t)
     if SUBS_ON:
         draw_sub(c, t)
     # fondu au noir des 6 dernières images pour la boucle
@@ -482,7 +535,7 @@ def frame(t):
 
 def main():
     if "--stills" in sys.argv:
-        for t in [1.8, 3.6, 5.2, 8.6, 11.8, 13.8, 17.0]:
+        for t in [1.9, 3.7, 5.3, 9.0, 12.6, 14.9, 17.2]:
             Image.fromarray(frame(t)).save(OUT / f"apercu-{t:04.1f}s.png")
         return
     name = "well-brunch-reel-18s-sous-titres" if SUBS_ON else "well-brunch-reel-18s"

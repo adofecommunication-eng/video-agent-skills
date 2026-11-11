@@ -17,9 +17,10 @@ Client d'ADOFE Communication. Lire ce fichier avant toute création pour Wellbei
 - **Typos (règle du client)** :
   - **Police principale : Anton** (titres, accroches, prix, numéros, en capitales).
   - **Police secondaire : Helvetica Neue** (infos pratiques, horaires, adresse, sous-titres, textes courants).
-  - Accent manuscrit or (ex. Kaushan Script pour « Well Brunch ») : seulement en touche ponctuelle, jamais à la place d'Anton ou d'Helvetica Neue.
   - Helvetica Neue est une police payante : pour les rendus automatisés, utiliser le fichier fourni par l'agence (`.otf`/`.ttf`) ; à défaut, remplaçant le plus proche : Arimo ou Liberation Sans, en le signalant.
-  - Le Reel Well Brunch de novembre 2026 utilisait encore Montserrat en secondaire : à remplacer par Helvetica Neue dans les prochaines versions.
+  - Remplaçant utilisé tant que le fichier Helvetica Neue n'est pas fourni : TeX Gyre Heros (clone libre d'Helvetica).
+  - Pas de police manuscrite : tout titre ou accroche en Anton (y compris « WELL BRUNCH »).
+- **Synchronisation** : les mots clés apparaissent sur la syllabe où la voix off les prononce (le client y tient : « pour que le résultat soit spectaculaire »).
 - **Habillage** : photos au format cinéma 2.35:1 cerclées d'un filet or sur fond flou assombri, filets or, motif art déco en éventails en bas (repris du flyer), éclats dorés aux coupes, grain léger et vignettage.
 - **Ton** : chaleureux, convivial, haut de gamme sans être guindé.
 
@@ -28,8 +29,8 @@ Client d'ADOFE Communication. Lire ce fichier avant toute création pour Wellbei
 Projet de référence : `projets/wellbeing-resort/well-brunch-reel/` (le client a dit « c'est très bien fait »). Réutiliser cette structure pour les prochains Reels WBR.
 
 - Format 9:16, 1080x1920, 30 i/s, textes entre 250 px et 1 560 px du haut ; sous-titres à 1 610 px.
-- Structure : accroche question (0–2,4 s) · buffet + trinquer (2,4–6 s) · liste d'activités animée (6–12 s) · groupe + pass (12–15 s) · carte finale logo or + CTA + numéros (15–18 s).
-- Son : voix off ElevenLabs « Lola » (féminine, posée, assurée) ; musique légère lounge/amapiano à 100 BPM pour que les coupes (2,4 · 6 · 12 · 15 s) tombent sur les temps ; ducking ~10 dB sous la voix ; -14 LUFS, crête -1,5 dBFS.
+- Structure calée sur la voix : accroche + suspense + PAR / QUOI / COMMENCER mot à mot (0–4,1 s) · buffet + horaires (4,1–7 s) · activités au mot près (7–11,6 s) · groupe + prix qui défile (11,6–15,4 s) · carte finale (15,4–18 s).
+- Son : voix off ElevenLabs « Lola » (féminine, posée, assurée) ; musique légère lounge/amapiano à 100 BPM, silence de suspense avant la question, impacts sur les mots clés ; ducking ~10 dB sous la voix ; -14 LUFS, crête -1,5 dBFS.
 - Livrer 2 versions : avec sous-titres incrustés (version principale) et sans, + le `.srt`.
 - Typos : Anton + Helvetica Neue (voir ci-dessus).
 - Outils : `render.py` (image + mixage, `--subs`), `music.py` (musique), `remix.py` (remixer l'audio seul).

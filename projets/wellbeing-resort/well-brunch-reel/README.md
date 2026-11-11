@@ -19,8 +19,8 @@ Reel vertical 9:16, 18 secondes, 1080x1920, 30 i/s. Client : Wellbeing Resort, C
 ## Direction artistique
 
 - **Univers** : noir chaud + or, comme le flyer. Plans au format cinéma 2.35:1 cerclés d'un filet or, fond flou de la scène.
-- **Typos** : Anton (titres, comme « BUFFET À VOLONTÉ » du flyer), Kaushan Script (touches manuscrites or, rappel du logo « Well Brunch »), Montserrat (infos).
-- **Rythme** : une info par séquence, révélations en masque, éclats dorés aux coupes, fondu au noir final pour la boucle.
+- **Typos (règle du client)** : **Anton** en principale (titres, accroches, prix, numéros) ; **Helvetica Neue** en secondaire (horaires, adresse, infos pratiques, sous-titres). En l'absence du fichier Helvetica Neue, le rendu utilise **TeX Gyre Heros**, clone libre d'Helvetica ; déposer `HelveticaNeue-Bold.otf` dans `fonts/` suffit pour qu'il soit pris automatiquement.
+- **Synchronisation voix / image** : chaque mot clé apparaît sur la syllabe où Lola le prononce (instants mesurés sur la voix, table `CUE` dans `render.py`). Les mots « claquent » (arrivée en grand + secousse brève), les coupes tombent sur la voix.
 
 ## Script parlé (voix off, ~17 s)
 
@@ -29,19 +29,20 @@ Reel vertical 9:16, 18 secondes, 1080x1920, 30 i/s. Client : Wellbeing Resort, C
 ## Son
 
 - **Voix off** : ElevenLabs « Lola », décalée de 0,15 s, nettoyée (coupe-bas 90 Hz, présence +2 dB à 3,5 kHz, compression douce).
-- **Musique** : composition originale, lounge / amapiano doux à **100 BPM**. Un temps dure 0,6 s, donc les coupes à **2,4 s · 6 s · 12 s · 15 s** tombent toutes sur un temps. L'accroche (0–2,4 s) n'a que la nappe et le shaker ; le rythme (kick doux, basse log drum, piano en contretemps) entre sur la coupe de 2,4 s. Souffle montant avant chaque coupe, impact doux et scintillement dessus. Fondu final à partir de 17 s.
-- **Mixage** : la musique s'efface automatiquement quand la voix parle (ducking), environ 10 dB sous la voix. Niveau final -14 LUFS, crête -1,5 dBFS (norme Instagram / Facebook).
+- **Musique** : composition originale lounge / amapiano doux à 100 BPM, dont la grille démarre sur le mot « PAR ». Silence de suspense entre « …une seule question : » et « par quoi commencer ? », souffle aspiré, puis trois impacts sur PAR / QUOI / COMMENCER où le groove entre. Souffle + impact doux à chaque coupe, scintillement sur chaque activité prononcée, compteur qui tique pendant que le prix défile, impact sur « BRUNCH ».
+- **Mixage** : la musique s'efface sous la voix (ducking), environ 10 dB sous la voix. -14 LUFS, crête -1,5 dBFS.
 
-## Montage du rendu actuel
+## Montage du rendu actuel (calé sur la voix)
 
-| Temps | Image | Texte à l'écran |
+| Temps | Voix | Image et texte |
 |---|---|---|
-| 0–2,4 s | Table en plan large, zoom lent | SAMEDI, UNE SEULE QUESTION : PAR QUOI *commencer ?* |
-| 2,4–4,3 s | Gros plan buffet | BUFFET À VOLONTÉ · SAMEDI · 12H–18H30 |
-| 4,3–6 s | Verres qui trinquent | *on trinque, on partage* |
-| 6–12 s | Liste animée sur fond flou | ET APRÈS LE BUFFET ? PISCINE · BABY-FOOT · BILLARD · KARAOKÉ · DJ MIXTE |
-| 12–15 s | Groupe d'amis qui rit | ENTRE AMIS *ou en famille* · PASS : 10.000 FCFA |
-| 15–18 s | Carte finale noir et or | Logo WBR · *Well Brunch* · ÉCRIVEZ « BRUNCH » AU 07 47 79 95 07 · 05 66 92 33 91 · Cocody Riviera 3 |
+| 0–2,35 s | « Samedi, vous n'aurez qu'une seule question : » | Table en plan large · SAMEDI, (0,15 s) · UNE SEULE QUESTION : (1,5 s) |
+| 2,35–2,75 s | silence | Tout s'efface : suspense |
+| 2,75–4,1 s | « par quoi commencer ? » | PAR (2,75) · QUOI (2,99) · COMMENCER ? en or (3,21), impacts + éclat |
+| 4,1–7,05 s | « Buffet à volonté de 12h à 18h30 » | BUFFET À VOLONTÉ (4,15) · SAMEDI · 12H – 18H30 (4,97) · buffet puis verres |
+| 7,05–11,6 s | « piscine, baby-foot, billard, karaoké et ambiance DJ » | Chaque activité tombe sur son mot (7,17 · 7,85 · 8,57 · 9,45 · 10,21) |
+| 11,6–15,4 s | « Le pass : 10.000 francs. Venez entre amis ou en famille. » | Badge sur « pass » · prix qui défile jusqu'à 10.000 FCFA · ENTRE AMIS (13,6) · OU EN FAMILLE (14,5) |
+| 15,4–18 s | « Écrivez “BRUNCH” pour réserver. » | Logo · WELL BRUNCH · ÉCRIVEZ (15,47) · « BRUNCH » (15,83) · POUR RÉSERVER + numéros (16,1) · adresse |
 
 ## Tournage réel (version 2, à filmer sur place un samedi)
 
