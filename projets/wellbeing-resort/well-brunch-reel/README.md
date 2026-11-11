@@ -6,10 +6,14 @@ Reel vertical 9:16, 18 secondes, 1080x1920, 30 i/s. Client : Wellbeing Resort, C
 
 | Fichier | Contenu |
 |---|---|
-| `rendu/well-brunch-reel-18s.mp4` | Version motion design prête à publier (sans son : ajouter voix off + musique) |
+| `rendu/well-brunch-reel-18s-sous-titres.mp4` | **Version finale** : voix off Lola + musique légère + sous-titres incrustés |
+| `rendu/well-brunch-reel-18s.mp4` | Même version sans sous-titres incrustés (pour charger le `.srt` sur Facebook) |
 | `rendu/planche-apercu.jpg` | Une image par séquence |
-| `rendu/voix-off.srt` | Sous-titres calés sur le script parlé |
-| `render.py` | Script de rendu (`python3 render.py`, `--stills` pour les aperçus) |
+| `rendu/voix-off.srt` | Sous-titres calés sur la voix réelle (8 répliques) |
+| `render.py` | Rendu image + mixage (`python3 render.py`, `--subs` pour incruster les sous-titres, `--stills` pour les aperçus) |
+| `music.py` | Compose la musique légère (`sources/musique-legere.wav`) |
+| `remix.py` | Refait seulement le mixage audio d'une vidéo déjà rendue |
+| `sources/voix-off-lola.mp3` | Voix off ElevenLabs (Lola), 17,4 s |
 | `sources/flyer-well-brunch.png` | Flyer officiel, seule source image |
 
 ## Direction artistique
@@ -22,7 +26,11 @@ Reel vertical 9:16, 18 secondes, 1080x1920, 30 i/s. Client : Wellbeing Resort, C
 
 « Samedi, vous n'aurez qu'une seule question : par quoi commencer ? Buffet à volonté de 12h à 18h30, piscine, baby-foot, billard, karaoké et ambiance DJ. Le pass : 10.000 francs. Venez entre amis ou en famille. Écrivez “BRUNCH” pour réserver. »
 
-Voix chaleureuse et souriante, débit vif. Musique : afro-house / amapiano légère, ~115 BPM, coupes sur les temps (2,4 s · 6 s · 12 s · 15 s).
+## Son
+
+- **Voix off** : ElevenLabs « Lola », décalée de 0,15 s, nettoyée (coupe-bas 90 Hz, présence +2 dB à 3,5 kHz, compression douce).
+- **Musique** : composition originale, lounge / amapiano doux à **100 BPM**. Un temps dure 0,6 s, donc les coupes à **2,4 s · 6 s · 12 s · 15 s** tombent toutes sur un temps. L'accroche (0–2,4 s) n'a que la nappe et le shaker ; le rythme (kick doux, basse log drum, piano en contretemps) entre sur la coupe de 2,4 s. Souffle montant avant chaque coupe, impact doux et scintillement dessus. Fondu final à partir de 17 s.
+- **Mixage** : la musique s'efface automatiquement quand la voix parle (ducking), environ 10 dB sous la voix. Niveau final -14 LUFS, crête -1,5 dBFS (norme Instagram / Facebook).
 
 ## Montage du rendu actuel
 

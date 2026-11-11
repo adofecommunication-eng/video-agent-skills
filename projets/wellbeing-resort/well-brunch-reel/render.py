@@ -2,7 +2,9 @@
 """Reel « Well Brunch » — Wellbeing Resort (WBR) — 18 s, 9:16, 1080x1920, 30 i/s.
 
 Version motion design construite à partir du flyer officiel (sources/flyer-well-brunch.png).
-Usage :  python3 render.py            -> rendu/well-brunch-reel-18s.mp4
+Usage :  python3 music.py puis
+         python3 render.py            -> rendu/well-brunch-reel-18s.mp4 (voix off + musique)
+         python3 render.py --subs     -> rendu/well-brunch-reel-18s-sous-titres.mp4
          python3 render.py --stills   -> rendu/apercu-*.png (une image par séquence)
 """
 import math
@@ -394,6 +396,64 @@ def s_final(c, t):
     place(c, T["adresse"], W / 2, 1345, alpha=ease_out(prog(lt, 1.5, 0.4)))
 
 
+
+# ---------------------------------------------------------------- sous-titres (voix off)
+SUBS_ON = "--subs" in sys.argv
+SUB_Y = 1610  # au-dessus de la zone de légende Instagram / Facebook
+SUB_FONT = mont(40, 600)
+
+
+def load_srt(path):
+    def ts(x):
+        h, m, rest = x.strip().split(":")
+        sec, ms = rest.split(",")
+        return int(h) * 3600 + int(m) * 60 + int(sec) + int(ms) / 1000
+    subs = []
+    for block in path.read_text(encoding="utf-8").strip().split("\n\n"):
+        lines = block.strip().splitlines()
+        a, b = lines[1].split("-->")
+        subs.append((ts(a), ts(b), " ".join(lines[2:])))
+    return subs
+
+
+SUBS = load_srt(OUT / "voix-off.srt")
+_SUB_CACHE = {}
+
+
+def sub_layer(text):
+    if text in _SUB_CACHE:
+        return _SUB_CACHE[text]
+    d = ImageDraw.Draw(Image.new("L", (1, 1)))
+    words, lines, cur = text.split(), [], ""
+    for wd in words:
+        trial = (cur + " " + wd).strip()
+        if d.textlength(trial, font=SUB_FONT) > 960 and cur:
+            lines.append(cur)
+            cur = wd
+        else:
+            cur = trial
+    lines.append(cur)
+    lh = 54
+    tw = int(max(d.textlength(li, font=SUB_FONT) for li in lines))
+    w, h = tw + 56, lh * len(lines) + 30
+    lay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    dd = ImageDraw.Draw(lay)
+    dd.rounded_rectangle((0, 0, w - 1, h - 1), radius=16, fill=(11, 9, 6, 170))
+    dd.rectangle((0, 12, 4, h - 12), fill=GOLD + (255,))
+    for i, li in enumerate(lines):
+        lw = d.textlength(li, font=SUB_FONT)
+        dd.text(((w - lw) / 2, 12 + i * lh), li, font=SUB_FONT, fill=WHITE)
+    _SUB_CACHE[text] = lay
+    return lay
+
+
+def draw_sub(c, t):
+    for a, b, text in SUBS:
+        if a <= t < b:
+            k = min(prog(t, a, 0.12), prog(b, t, 0.12) if t > b - 0.12 else 1.0)
+            place(c, sub_layer(text), W / 2, SUB_Y, alpha=k)
+            return
+
 SCENES = [(0.0, 2.4, s_hook), (2.4, 6.0, s_buffet), (6.0, 12.0, s_activites),
           (12.0, 15.0, s_groupe), (15.0, 18.0, s_final)]
 XF = 0.2  # fondu enchaîné entre séquences
@@ -411,6 +471,8 @@ def frame(t):
                 k = (t - (b - XF)) / XF
                 c = Image.blend(c, nxt, ease_in_out(k))
             break
+    if SUBS_ON:
+        draw_sub(c, t)
     # fondu au noir des 6 dernières images pour la boucle
     out = finish(c)
     if t > DUR - 0.2:
@@ -423,11 +485,13 @@ def main():
         for t in [1.8, 3.6, 5.2, 8.6, 11.8, 13.8, 17.0]:
             Image.fromarray(frame(t)).save(OUT / f"apercu-{t:04.1f}s.png")
         return
-    dst = OUT / "well-brunch-reel-18s.mp4"
+    name = "well-brunch-reel-18s-sous-titres" if SUBS_ON else "well-brunch-reel-18s"
+    dst = OUT / f"{name}.mp4"
+    silent = OUT / f".{name}-video.mp4"
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
            "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
            "-c:v", "libx264", "-preset", "slow", "-crf", "21", "-pix_fmt", "yuv420p",
-           "-movflags", "+faststart", str(dst)]
+           "-movflags", "+faststart", str(silent)]
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     for n in range(N):
         proc.stdin.write(frame(n / FPS).tobytes())
@@ -435,7 +499,32 @@ def main():
             print(f"{n}/{N}", flush=True)
     proc.stdin.close()
     proc.wait()
+    mux_audio(silent, dst)
+    silent.unlink()
     print("OK", dst)
+
+
+VOICE = ROOT / "sources" / "voix-off-lola.mp3"
+MUSIC = ROOT / "sources" / "musique-legere.wav"  # généré par music.py
+VOICE_DELAY_MS = 150
+
+
+def mux_audio(video, dst):
+    """Voix off traitée + musique légère qui s'efface sous la voix (ducking), -14 LUFS."""
+    fc = (
+        f"[1:a]adelay={VOICE_DELAY_MS}|{VOICE_DELAY_MS},highpass=f=90,"
+        "equalizer=f=3500:t=q:w=1.2:g=2,"
+        "acompressor=threshold=-20dB:ratio=3:attack=5:release=80:makeup=2,"
+        "pan=stereo|c0=c0|c1=c0,apad=whole_dur=18,asplit=2[v][key];"
+        "[2:a]volume=0.5[m];"
+        "[m][key]sidechaincompress=threshold=0.03:ratio=3:attack=25:release=350[md];"
+        "[v][md]amix=inputs=2:duration=first:normalize=0,"
+        "loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[a]"
+    )
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(video), "-i", str(VOICE),
+                    "-i", str(MUSIC), "-filter_complex", fc, "-map", "0:v", "-map", "[a]",
+                    "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-t", str(DUR),
+                    "-movflags", "+faststart", str(dst)], check=True)
 
 
 if __name__ == "__main__":
