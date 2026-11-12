@@ -11,6 +11,7 @@ Reel vertical 9:16, 18 secondes, 1080x1920, 30 i/s. Client : Wellbeing Resort, C
 | `rendu/planche-apercu.jpg` | Une image par séquence |
 | `legende-instagram.md` | Légende Instagram prête à copier-coller, hashtags et conseils de publication |
 | `legende-facebook.md` | Légende Facebook courte, prête à copier-coller |
+| `reponses-types-brunch.md` | Réponses types à ceux qui écrivent « BRUNCH » : commentaire public, message privé, confirmation |
 | `rendu/voix-off.srt` | Sous-titres calés sur la voix réelle (8 répliques) |
 | `render.py` | Rendu image + mixage (`python3 render.py`, `--subs` pour incruster les sous-titres, `--stills` pour les aperçus) |
 | `music.py` | Compose la musique légère (`sources/musique-legere.wav`) |
