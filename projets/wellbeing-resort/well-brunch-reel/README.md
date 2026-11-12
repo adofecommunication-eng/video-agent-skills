@@ -14,6 +14,7 @@ Reel vertical 9:16, 18 secondes, 1080x1920, 30 i/s. Client : Wellbeing Resort, C
 | `reponses-types-brunch.md` | Réponses types à ceux qui écrivent « BRUNCH » : commentaire public, message privé, confirmation |
 | `rendu/couverture-reel.jpg` | Couverture du Reel 1080x1920, essentiel dans la zone 3:4 de la grille du profil (`cover.py` pour la régénérer) |
 | `stories/` | Stories de rappel (vendredi, samedi matin), sticker « en direct » et plan des stories du samedi (`stories/plan-stories.md`) |
+| `campagne-meta-ads.md` | Plan de campagne Meta Ads (objectif messages) : budget, ciblage, visuels, textes, pas à pas |
 | `rendu/voix-off.srt` | Sous-titres calés sur la voix réelle (8 répliques) |
 | `render.py` | Rendu image + mixage (`python3 render.py`, `--subs` pour incruster les sous-titres, `--stills` pour les aperçus) |
 | `music.py` | Compose la musique légère (`sources/musique-legere.wav`) |
