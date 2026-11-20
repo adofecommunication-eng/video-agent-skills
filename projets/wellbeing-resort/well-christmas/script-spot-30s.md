@@ -7,15 +7,15 @@ Format : vertical 9:16 (1080x1920, 30 i/s), 30 secondes. Charte WBR : noir chaud
 
 ## 1. Voix off : texte à coller dans ElevenLabs (voix « Lola »)
 
-Les nombres sont écrits en toutes lettres et les pauses balisées pour une diction propre. Durée visée : 27 à 28 s.
+Les nombres sont écrits en toutes lettres et les pauses balisées pour une diction propre. Environ 84 mots, durée visée : 28 s (débit légèrement vif).
 
 ```
 Cette année, Noël se fête… au bord de la piscine ! <break time="0.4s" />
 Wellbeing Resort vous invite au Well Christmas, la fête de Noël pour tous. <break time="0.3s" />
 Le vingt-quatre décembre, de dix heures à dix-huit heures : piscine, jeux, stands et don de cadeaux. <break time="0.3s" />
-Tentez votre chance à l'atelier tombola, à deux mille francs. <break time="0.2s" />
+Atelier tombola à deux mille francs. <break time="0.2s" />
 À gagner : une nuitée dans notre résidence hôtelière, ou un mois de cours de natation. <break time="0.3s" />
-Et qui sera Miss Wellbeing, notre ambassadrice pour toute l'année deux mille vingt-sept ? <break time="0.4s" />
+Et qui sera Miss Wellbeing, notre ambassadrice pour l'année deux mille vingt-sept ? <break time="0.4s" />
 L'entrée est gratuite ! <break time="0.2s" />
 Wellbeing Resort, Cocody Riviera 3.
 ```
@@ -32,9 +32,9 @@ Réglages conseillés : stabilité 50 %, similarité 75 %, style chaleureux et p
 | 3,0–7,0 | « Wellbeing Resort vous invite au Well Christmas, la fête de Noël pour tous. » | Rideau de guirlandes lumineuses qui s'ouvre ; logo WBR or, puis le titre. | WELLBEING RESORT ORGANISE · **WELL CHRISTMAS** · LA FÊTE DE NOËL POUR TOUS | La musique démarre sur « Well Christmas » |
 | 7,0–11,5 | « Le vingt-quatre décembre, de dix heures à dix-huit heures : » | L'animateur au bonnet de Père Noël, bouche grande ouverte, bras chargés de cadeaux, face caméra. | **24 DÉC. 2026** puis **10H00 – 18H00** | Un impact par information |
 | 11,5–15,0 | « piscine, jeux, stands et don de cadeaux. » | Un plan par mot : plongeon · enfants qui jouent · stands décorés · enfant qui reçoit un cadeau. | **PISCINE · JEUX · STANDS · DON DE CADEAUX** (chaque mot sur la voix) | Un scintillement par mot |
-| 15,0–18,0 | « Tentez votre chance à l'atelier tombola, à deux mille francs. » | Ticket de tombola doré qui tourne dans la lumière. | **ATELIER TOMBOLA** · **2.000 F** | Petit compteur qui tique, « ding » |
+| 15,0–18,0 | « Atelier tombola à deux mille francs. » | Ticket de tombola doré qui tourne dans la lumière. | **ATELIER TOMBOLA** · **2.000 F** | Petit compteur qui tique, « ding » |
 | 18,0–22,0 | « À gagner : une nuitée dans notre résidence hôtelière, ou un mois de cours de natation. » | Chambre de la résidence hôtelière (lit dressé, lumière douce) · enfant en cours de natation. | À GAGNER : **1 NUITÉE** ou **1 MOIS DE COURS DE NATATION** | Montée légère |
-| 22,0–26,0 | « Et qui sera Miss Wellbeing, notre ambassadrice pour toute l'année deux mille vingt-sept ? » | Une jeune femme reçoit l'écharpe « Miss Wellbeing », confettis dorés. | **MISS WELLBEING** · AMBASSADRICE 2027 · cours de natation, grande pizza et plein de gadgets | Montée de la musique |
+| 22,0–26,0 | « Et qui sera Miss Wellbeing, notre ambassadrice pour l'année deux mille vingt-sept ? » | Une jeune femme reçoit l'écharpe « Miss Wellbeing », confettis dorés. | **MISS WELLBEING** · AMBASSADRICE 2027 · cours de natation, grande pizza et plein de gadgets | Montée de la musique |
 | 26,0–28,0 | « L'entrée est gratuite ! » | Carte finale noir et or, neige dorée. | **ENTRÉE GRATUITE !!!** (slam or, secousse) | Gros impact |
 | 28,0–30,0 | « Wellbeing Resort, Cocody Riviera 3. » | Logo WBR, motif art déco en bas. | COCODY RIVIERA 3, ROUTE M'BADON · **07 47 79 95 07 / 05 66 92 33 91** | Clochettes, fondu |
 
