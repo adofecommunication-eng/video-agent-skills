@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Flyer « Splash Party » aux couleurs de la charte Wellbeing Resort.
+"""Flyer « Splash Party » (1500x1500), samedi 21 novembre 2026.
 
-Charte (brand/wellbeing-resort/README.md) : noir chaud + or, Anton en principale,
-Helvetica Neue en secondaire (TeX Gyre Heros tant que le fichier n'est pas fourni),
-photo cerclée d'un filet or sur fond flou assombri, motif art déco.
-Source photo : sources/flyer-splash-party-original.jpg (zones sans texte uniquement).
-Usage : python3 flyer.py -> rendu/flyer-splash-party-21-novembre-2026.jpg (1410x2000) + version 4:5
+Mise en page dans le style demandé par le client (références Robert's Hôtel) :
+fond blanc chaud, photo qui bord à droite et se fond en blanc vers la gauche,
+titre fort à gauche, filet or, bouton or, bandeau sombre d'infos en bas.
+Charte Wellbeing Resort conservée : Anton (titres, prix, numéros), Helvetica Neue
+(infos ; TeX Gyre Heros tant que le fichier n'est pas fourni), noir chaud + or.
+Usage : python3 flyer.py -> rendu/flyer-splash-party-21-novembre-2026.jpg
 """
 import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "well-brunch-reel"))
@@ -20,130 +21,122 @@ import render as R  # noqa: E402  (polices, dégradé or, logo, calques texte)
 OUT = HERE / "rendu"
 OUT.mkdir(exist_ok=True)
 SRC = Image.open(HERE / "sources" / "flyer-splash-party-original.jpg").convert("RGB")
-W, H = 1410, 2000
+W = H = 1500
+PAPER = (250, 248, 244)
+INK = (30, 24, 18)          # noir chaud lisible sur fond clair
+GREY = (70, 62, 54)
+LIGHT = (245, 240, 230)
+FOOT = 1325                 # haut du bandeau d'infos
 
-# zones photo du flyer d'origine sans aucun texte ni badge
-PANO = (40, 700, 1330, 1085)     # les deux adultes + l'enfant au bonnet
-KIDS = (315, 1100, 1115, 1560)   # les deux enfants aux lunettes
+# zone de la photo d'origine sans aucun texte ni badge : l'enfant au bonnet + les deux enfants
+PHOTO = (360, 700, 1084, 1560)
 
 
 def tl(text, font, **kw):
+    kw.setdefault("shadow", False)
     return R.text_layer(text, font, **kw)
 
 
-def place(c, layer, cx, cy, scale=1.0):
-    R.place(c, layer, cx, cy, scale=scale)
+def put_left(c, layer, x, cy):
+    """Aligne à gauche (le calque a 40 px de marge interne)."""
+    c.alpha_composite(layer, (int(x - 40), int(cy - layer.height / 2)))
 
 
-def framed(box, out_w):
-    x0, y0, x1, y1 = box
-    out_h = int(out_w * (y1 - y0) / (x1 - x0))
-    ph = SRC.resize((out_w, out_h), Image.LANCZOS, box=box)
-    return R.framed(ph)
+def photo_layer():
+    x0 = 380
+    w, h = W - x0, FOOT
+    full_h = int(w * (PHOTO[3] - PHOTO[1]) / (PHOTO[2] - PHOTO[0]))
+    ph = SRC.resize((w, full_h), Image.LANCZOS, box=PHOTO)
+    ph = ph.crop((0, full_h - h, w, full_h))  # garder le bas (les enfants)
+    ph = ImageEnhance.Sharpness(ph).enhance(1.25).convert("RGBA")
+    # fondu vers le blanc : large à gauche, léger en haut
+    ax = np.clip((np.linspace(0, 1, w) - 0.05) / 0.45, 0, 1) ** 1.6
+    ay = np.clip(np.linspace(0, 1, h) / 0.12, 0, 1)
+    ph.putalpha(Image.fromarray((np.outer(ay, ax) * 255).astype(np.uint8), "L"))
+    return ph, x0
 
 
-def gold_badge(text, font, pad_x=46, h=150, radius=20):
-    lab = tl(text, font, fill=R.INK, shadow=False)
-    w = lab.width - 80 + 2 * pad_x
+def gold_button(text, font, h=112, pad=44, radius=14):
+    lab = tl(text, font, fill=INK)
+    w = lab.width - 80 + 2 * pad
     b = R.gradient_fill((w, h), R.GOLD_STOPS).convert("RGBA")
     m = Image.new("L", (w, h), 0)
     ImageDraw.Draw(m).rounded_rectangle((0, 0, w - 1, h - 1), radius=radius, fill=255)
     b.putalpha(m)
-    b.alpha_composite(lab, ((w - lab.width) // 2, (h - lab.height) // 2 + 4))
-    return b
+    b.alpha_composite(lab, ((w - lab.width) // 2, (h - lab.height) // 2 + 3))
+    out = Image.new("RGBA", (w + 40, h + 40), (0, 0, 0, 0))
+    out.paste(Image.new("RGBA", (w, h), (80, 56, 10, 90)), (20, 30), m)
+    out = out.filter(ImageFilter.GaussianBlur(10))
+    out.alpha_composite(b, (20, 20))
+    return out
 
 
-def rule(c, cx, cy, width, thick=3):
-    ImageDraw.Draw(c).rectangle((cx - width // 2, cy - thick // 2, cx + width // 2, cy + thick // 2),
-                                fill=R.GOLD + (255,))
+def gold_icon(mask):
+    f = R.gradient_fill(mask.size, R.GOLD_STOPS).convert("RGBA")
+    f.putalpha(mask)
+    return f
 
 
-def pin(size=46):
-    """Pictogramme de localisation, en or."""
+def icon_pin(size=46):
     s = size * 4
     m = Image.new("L", (s, int(s * 1.35)), 0)
     d = ImageDraw.Draw(m)
     d.ellipse((0, 0, s, s), fill=255)
     d.polygon([(s * 0.13, s * 0.72), (s * 0.87, s * 0.72), (s / 2, s * 1.35)], fill=255)
     d.ellipse((s * 0.32, s * 0.32, s * 0.68, s * 0.68), fill=0)
-    m = m.resize((size, int(size * 1.35)), Image.LANCZOS)
-    face = R.gradient_fill(m.size, R.GOLD_STOPS).convert("RGBA")
-    face.putalpha(m)
-    return face
-
-
-def background():
-    bg = SRC.crop((0, 640, 1410, 1600)).resize((W // 4, H // 4))
-    bg = bg.filter(ImageFilter.GaussianBlur(16)).resize((W, H), Image.BICUBIC)
-    c = Image.blend(Image.new("RGB", (W, H), R.INK), bg, 0.30).convert("RGBA")
-    glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    ImageDraw.Draw(glow).ellipse((W / 2 - 700, 180, W / 2 + 700, 900), fill=(140, 98, 24, 120))
-    c.alpha_composite(glow.filter(ImageFilter.GaussianBlur(160)))
-    return c
-
-
-def finish(c):
-    yy, xx = np.mgrid[0:H, 0:W]
-    vig = 1 - 0.45 * np.clip(((xx - W / 2) / (W * 0.75)) ** 2 + ((yy - H / 2) / (H * 0.62)) ** 2, 0, 1)
-    a = np.asarray(c.convert("RGB")).astype(np.float32) * vig[..., None]
-    a += np.random.default_rng(7).normal(0, 2.0, (H, W, 1))
-    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+    return gold_icon(m.resize((size, int(size * 1.35)), Image.LANCZOS))
 
 
 def flyer():
-    c = background()
+    c = Image.new("RGBA", (W, H), PAPER + (255,))
+    ph, x0 = photo_layer()
+    c.alpha_composite(ph, (x0, 0))
+    veil = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(veil).rectangle((0, 0, 600, FOOT), fill=PAPER + (190,))
+    c.alpha_composite(veil.filter(ImageFilter.GaussianBlur(60)))
+    d = ImageDraw.Draw(c)
 
-    # en-tête
-    place(c, R.LOGO, W / 2, 125, scale=0.48)
-    place(c, tl("WELLBEING RESORT  ORGANISE", R.helv(30, bold=True), gold=True, tracking=10), W / 2, 262)
+    X = 75
+    # logo + signature
+    logo = R.LOGO.resize((int(R.LOGO.width * 0.42), int(R.LOGO.height * 0.42)), Image.LANCZOS)
+    c.alpha_composite(logo, (X - 22, 40))
+    put_left(c, tl("WELLBEING RESORT ORGANISE", R.helv(24, bold=True), fill=GREY, tracking=7), X, 228)
 
     # titre
-    place(c, tl("SPLASH", R.anton(225)), W / 2, 395)
-    place(c, tl("PARTY", R.anton(225), gold=True, tracking=6), W / 2, 595)
+    put_left(c, tl("SPLASH", R.anton(205), fill=INK), X, 375)
+    put_left(c, tl("PARTY", R.anton(205), gold=True, tracking=4), X, 580)
+    d.rectangle((X, 705, X + 120, 709), fill=R.GOLD + (255,))
 
     # date
-    rule(c, W / 2, 735, 900, 2)
-    place(c, tl("SAMEDI 21 NOVEMBRE 2026", R.anton(90)), W / 2, 795)
-    place(c, tl("DE 08H À 18H", R.helv(36, bold=True), gold=True, tracking=8), W / 2, 880)
+    put_left(c, tl("SAMEDI 21 NOVEMBRE 2026", R.anton(62), fill=INK), X, 775)
+    put_left(c, tl("DE 08H À 18H", R.helv(30, bold=True), gold=True, tracking=8), X, 842)
 
-    # photos
-    place(c, framed(PANO, 1310), W / 2, 1125)
-    place(c, framed(KIDS, 560), W - 330, 1405)
+    # animations (capitales espacées, comme les références)
+    for i, line in enumerate(["PISCINE, MISS SPLASH, KARAOKÉ,", "CONCOURS DE DANSES, BILLARD,",
+                              "BABY-FOOT, AMBIANCE DJ ET JEUX."]):
+        put_left(c, tl(line, R.helv(25, bold=True), fill=GREY, tracking=4), X, 912 + i * 40)
 
-    # tarif (colonne gauche, à côté des enfants)
-    cx = 370
-    place(c, tl("ENFANT & ADULTE", R.anton(54), gold=True, tracking=3), cx, 1360)
-    place(c, gold_badge("ENTRÉE 5.000 F", R.anton(88), h=132), cx, 1458)
-    place(c, tl("+ 01 RAFRAÎCHISSEMENT", R.anton(50)), cx, 1555)
+    # tarif
+    c.alpha_composite(gold_button("ENTRÉE 5.000 F  ·  ENFANT & ADULTE", R.anton(50)), (X - 20, 1045))
+    put_left(c, tl("+ 01 RAFRAÎCHISSEMENT, ACCÈS PISCINE INCLUS", R.helv(22, bold=True), fill=INK, tracking=3),
+             X, 1192)
+    put_left(c, tl("COCKTAIL 1.000 F  ·  POPCORN 500 F", R.anton(44), fill=INK, tracking=1), X, 1244)
+    put_left(c, tl("NOURRITURE À COMMANDER SUR PLACE", R.helv(20, bold=True), fill=GREY, tracking=3), X, 1291)
 
-    # infos pratiques
-    rule(c, W / 2, 1612, 1200, 2)
-    place(c, tl("CE TARIF VOUS DONNE DROIT À LA PISCINE", R.helv(32, bold=True), tracking=2), W / 2, 1652)
-    place(c, tl("COCKTAIL 1.000 F   ·   POPCORN 500 F", R.anton(66), gold=True, tracking=2), W / 2, 1716)
-    place(c, tl("POSSIBILITÉ DE COMMANDER LA NOURRITURE SUR PLACE", R.helv(26, bold=True), tracking=2),
-          W / 2, 1775)
-
-    # activités
-    act = dict(fill=(240, 228, 200), tracking=1)
-    place(c, tl("PISCINE  ·  MISS SPLASH  ·  KARAOKÉ  ·  CONCOURS DE DANSES", R.helv(30, bold=True), **act),
-          W / 2, 1818)
-    place(c, tl("BILLARD  ·  BABY-FOOT  ·  AMBIANCE DJ  ·  JEUX", R.helv(30, bold=True), **act), W / 2, 1856)
-
-    # bandeau bas : adresse + réservation
-    top = 1888
-    c.alpha_composite(Image.new("RGBA", (W, H - top), R.INK + (255,)), (0, top))
-    rule(c, W / 2, top, W, 4)
-    c.alpha_composite(pin(40), (64, 1918))
-    addr = tl("COCODY RIVIERA 3, ROUTE M'BADON", R.helv(28, bold=True), tracking=1)
-    c.alpha_composite(addr, (118 - 40, 1946 - addr.height // 2))
-    tel = tl("07 47 79 95 07  /  05 66 92 33 91", R.anton(50), gold=True)
-    tx = W - 64 - (tel.width - 80) / 2
-    place(c, tl("RÉSERVATION", R.helv(22, bold=True), tracking=6), tx, 1920)
-    place(c, tel, tx, 1960)
+    # bandeau d'infos
+    d.rectangle((0, FOOT, W, H), fill=(26, 22, 17, 255))
+    d.rectangle((0, FOOT, W, FOOT + 4), fill=R.GOLD + (255,))
+    cy = FOOT + (H - FOOT) // 2 + 2
+    p = icon_pin(46)
+    c.alpha_composite(p, (X, cy - p.height // 2))
+    put_left(c, tl("Cocody Riviera 3,", R.helv(30, bold=True), fill=LIGHT), X + 72, cy - 21)
+    put_left(c, tl("route M'Badon, Abidjan", R.helv(30, bold=True), fill=LIGHT), X + 72, cy + 21)
+    d.rectangle((640, cy - 48, 642, cy + 48), fill=R.GOLD + (200,))
+    put_left(c, tl("RÉSERVATION", R.helv(20, bold=True), gold=True, tracking=6), 700, cy - 30)
+    put_left(c, tl("07 47 79 95 07  /  05 66 92 33 91", R.anton(56), fill=LIGHT), 700, cy + 16)
     return c
 
 
 if __name__ == "__main__":
-    img = finish(flyer())
-    img.save(OUT / "flyer-splash-party-21-novembre-2026.jpg", quality=94)
+    flyer().convert("RGB").save(OUT / "flyer-splash-party-21-novembre-2026.jpg", quality=94)
     print("OK")
