@@ -10,13 +10,17 @@ SRC = Image.open(HERE / "sources" / "flyer-well-christmas.webp").convert("RGB")
 OUT = HERE / "elements"
 OUT.mkdir(exist_ok=True)
 
-HUMAN = new_session("u2net_human_seg")
 GEN = new_session("isnet-general-use")
 
 PIECES = {
-    "animateur": ((180, 820, 1300, 1578), HUMAN),
     "boule": ((1130, 230, 1340, 485), GEN),
 }
+
+# animateur : photo HD fournie par le client (fond blanc), modèle u2net pour garder les deux cadeaux
+hd = remove(Image.open(HERE / "sources" / "animateur-hd.jpg").convert("RGB"), session=new_session("u2net"),
+            post_process_mask=True)
+hd.crop(hd.getbbox()).save(OUT / "animateur.png")
+print("animateur", hd.getbbox())
 
 for name, (box, sess) in PIECES.items():
     im = remove(SRC.crop(box), session=sess, post_process_mask=True)

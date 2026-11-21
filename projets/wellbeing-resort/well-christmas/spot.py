@@ -177,7 +177,7 @@ def shining(layer, t, t0, period=2.6):
 
 # ---------------------------------------------------------------- éléments du flyer
 ANIM = Image.open(HERE / "elements" / "animateur.png").convert("RGBA")
-ANIM = ANIM.resize((int(ANIM.width * 1.25), int(ANIM.height * 1.25)), Image.LANCZOS)
+ANIM = ANIM.resize((1040, int(ANIM.height * 1040 / ANIM.width)), Image.LANCZOS)
 
 
 def sticker_outline(im, width=14, color=WHITE):
