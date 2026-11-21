@@ -253,8 +253,35 @@ for t0, g in [(C["noel"], 0.55), (C["piscine"], 0.45), (C["wellchristmas"], 0.45
 for t0 in [C["noel"], C["wellchristmas"] + 0.22, C["date"], C["miss"] + 0.2, C["gratuite"], C["prix_fin"]]:
     add(sparkle(), t0, 0.12, pan=float(rng.uniform(-0.3, 0.3)))
 add(splash_sfx(), C["piscine"] - 0.02, 0.5)
-for b in [CUTS[0], CUTS[1], CUTS[3], CUTS[5], CUTS[7]]:  # transitions « éclaboussure »
-    add(liquid_swoosh(), b - S.XD, 0.4)
+add(liquid_swoosh(), CUTS[0] - S.XD, 0.4)  # transition « éclaboussure » vers la piscine
+for b in [CUTS[1], CUTS[2], CUTS[3], CUTS[4], CUTS[5], CUTS[7], CUTS[8]]:  # rubans d'or
+    add(whoosh(0.4), b - S.XD, 0.35, pan=float(rng.uniform(-0.5, 0.5)))
+    add(sparkle(4), b - S.XD + 0.15, 0.08)
+
+
+def rattle(dur):
+    """Cadeau qui tremble : petits chocs secs rapprochés."""
+    out = np.zeros(int(dur * SR))
+    for t0 in np.arange(0, dur, 0.055):
+        n = rng.normal(0, 1, int(0.03 * SR))
+        n = lowpass(n, 2500) * np.exp(-np.arange(len(n)) / SR * 120)
+        j = int(t0 * SR)
+        out[j:j + len(n)] += n[: len(out) - j] * (0.4 + 0.6 * t0 / dur)
+    return out
+
+
+def curtain():
+    t = tt(0.9)
+    n = rng.normal(0, 1, len(t))
+    return lowpass(n, 900) * np.sin(np.pi * t / 0.9) ** 1.5 * 2.2
+
+
+add(rattle(C["noel"] - 0.06 - (C["cette"] + 0.1)), C["cette"] + 0.1, 0.35)
+add(pop(), C["noel"] - 0.06, 0.5)
+add(rattle(C["gratuite"] - 0.04 - (C["entree"] + 0.1)), C["entree"] + 0.1, 0.4)
+add(pop(), C["piscine"] + 0.45, 0.35)  # bonnet sur « PISCINE »
+add(curtain(), C["etqui"] - 0.05, 0.45)
+add(sparkle(8), C["etqui"] + 0.3, 0.1)
 add(riser(C["gratuite"] - CUTS[7] + 0.4), CUTS[7] - 0.4, 0.4)
 add(riser(CUE["piscine"] - CUTS[0]), CUTS[0], 0.25)
 for t0 in np.arange(C["prix"], C["prix_fin"], 0.06):
