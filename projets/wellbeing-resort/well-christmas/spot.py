@@ -1073,7 +1073,7 @@ def mux(video, dst):
     fc = (f"[1:a]adelay={d}|{d},highpass=f=90,equalizer=f=3500:t=q:w=1.2:g=2,"
           "acompressor=threshold=-20dB:ratio=3:attack=5:release=80:makeup=2,"
           f"pan=stereo|c0=c0|c1=c0,apad=whole_dur={DUR},asplit=2[v][key];"
-          "[2:a]aresample=44100,volume=0.62[m];"
+          "[2:a]aresample=44100,volume=0.42[m];"
           "[m][key]sidechaincompress=threshold=0.03:ratio=3:attack=20:release=300[md];"
           "[3:a]volume=0.38[fx];"
           "[v][md][fx]amix=inputs=3:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[a]")
