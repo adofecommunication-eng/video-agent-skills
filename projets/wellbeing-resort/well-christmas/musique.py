@@ -14,7 +14,13 @@ from pathlib import Path
 
 import numpy as np
 
+import sys
+
 import spot as S
+
+# --bruitages-seuls : n'exporte que les bruitages (la musique vient alors de bande_son.py)
+SFX_ONLY = "--bruitages-seuls" in sys.argv
+MUTE = False
 
 HERE = Path(__file__).resolve().parent
 SR, DUR, BPM = 44100, 30.0, 128
@@ -44,6 +50,8 @@ def lowpass(x, fc):
 
 
 def add(sig, t0, gain=1.0, pan=0.0):
+    if MUTE:
+        return
     i = int(round(t0 * SR))
     if i >= N or i + len(sig) <= 0:
         return
@@ -136,6 +144,7 @@ def grid_times(step, start=GRID0, end=END):
         k += 1
 
 
+MUTE = SFX_ONLY  # partie musique
 # intro : grelots + nappe de cloches en montée vers « NOËL »
 for k, t in grid_times(BEAT / 4, end=GRID0):
     add(sleigh(), t, 0.10 + 0.12 * t / GRID0, pan=0.3)
@@ -170,6 +179,7 @@ for k, t in grid_times(BEAT / 4):
     if note is not None and not in_break(t) and t > GRID0:
         add(bell(note, 0.9), t, 0.07, pan=-0.15)
 
+MUTE = False  # partie bruitages
 # ---------------------------------------------------------------- bruitages de Noël
 # Tous synthétisés ici (aucun son extrait d'une autre vidéo) :
 # grelots de traîneau secoués, carillon magique, cloches, boîte à musique, papier cadeau, étoiles.
@@ -350,7 +360,7 @@ add(twinkle(10), END, 0.15)
 f0 = int((END + 0.1) * SR)
 mix[f0:] *= np.linspace(1, 0, N - f0)[:, None] ** 2
 mix /= np.abs(mix).max() / 0.85
-dst = HERE / "sources" / "musique-et-bruitages.wav"
+dst = HERE / "sources" / ("bruitages-noel.wav" if SFX_ONLY else "musique-et-bruitages.wav")
 with wave.open(str(dst), "wb") as w:
     w.setnchannels(2)
     w.setsampwidth(2)

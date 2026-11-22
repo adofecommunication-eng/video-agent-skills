@@ -952,11 +952,24 @@ def shake(c, t):
     return c
 
 
+BEATS_FILE = HERE / "sources" / "temps-forts.json"
+BEATS = __import__("json").load(open(BEATS_FILE)) if BEATS_FILE.exists() else []
+
+
+def beat_pulse(t):
+    """Intensité (0-1) de la pulsation sur le dernier temps fort du son du client."""
+    k = 0.0
+    for b in BEATS:
+        if b <= t < b + 0.25:
+            k = max(k, math.exp(-(t - b) / 0.07))
+    return k
+
+
 def push_in(c, t):
     """Légère poussée de caméra continue dans chaque séquence (effet « vivant »)."""
     i = max(k for k in range(len(SCENES)) if BOUNDS[k] <= t) if t < DUR else len(SCENES) - 1
     p = prog(t, BOUNDS[i], BOUNDS[i + 1] - BOUNDS[i])
-    z = 1 + 0.035 * p
+    z = 1 + 0.035 * p + 0.022 * beat_pulse(t)
     big = c.resize((int(W * z), int(H * z)), Image.BILINEAR)
     ox, oy = (big.width - W) // 2, (big.height - H) // 2
     return big.crop((ox, oy, ox + W, oy + H))
@@ -1038,6 +1051,9 @@ def frame(t):
             if overlay is not None:
                 c.alpha_composite(overlay)
     c = push_in(c, t)
+    bp = beat_pulse(t)
+    if bp > 0.05:  # éclat chaud sur chaque temps fort
+        c.alpha_composite(Image.new("RGBA", (W, H), (255, 225, 170, int(38 * bp))))
     c = shake(c, t)
     if SUBS_ON:
         draw_sub(c, t)
@@ -1049,18 +1065,21 @@ def frame(t):
 
 
 def mux(video, dst):
+    """Voix off + son du client (calé par bande_son.py, s'efface sous la voix) + bruitages de Noël."""
     voice = HERE / "sources" / "voix-off-lola.mp3"
-    music = HERE / "sources" / "musique-et-bruitages.wav"
+    bed = HERE / "sources" / "musique-montage.wav"
+    sfx = HERE / "sources" / "bruitages-noel.wav"
     d = int(VOICE_DELAY * 1000)
     fc = (f"[1:a]adelay={d}|{d},highpass=f=90,equalizer=f=3500:t=q:w=1.2:g=2,"
           "acompressor=threshold=-20dB:ratio=3:attack=5:release=80:makeup=2,"
           f"pan=stereo|c0=c0|c1=c0,apad=whole_dur={DUR},asplit=2[v][key];"
-          "[2:a]volume=0.55[m];"
+          "[2:a]aresample=44100,volume=0.42[m];"
           "[m][key]sidechaincompress=threshold=0.03:ratio=3:attack=20:release=300[md];"
-          "[v][md]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[a]")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(video), "-i", str(voice), "-i", str(music),
-                    "-filter_complex", fc, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac",
-                    "-b:a", "192k", "-t", str(DUR), "-movflags", "+faststart", str(dst)], check=True)
+          "[3:a]volume=0.38[fx];"
+          "[v][md][fx]amix=inputs=3:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[a]")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(video), "-i", str(voice), "-i", str(bed),
+                    "-i", str(sfx), "-filter_complex", fc, "-map", "0:v", "-map", "[a]", "-c:v", "copy",
+                    "-c:a", "aac", "-b:a", "192k", "-t", str(DUR), "-movflags", "+faststart", str(dst)], check=True)
 
 
 def main():

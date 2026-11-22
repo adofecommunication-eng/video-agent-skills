@@ -9,7 +9,9 @@ Spot motion design de 30 s (9:16, 1080x1920, 30 i/s) pour la fête de Noël du 2
 | `rendu/planche-apercu.jpg` | Une image par séquence |
 | `script-spot-30s.md` | Script validé (voix off ElevenLabs, découpage minuté) |
 | `spot.py` | Animation et mixage (`python3 spot.py`, `--subs`, `--stills`) |
-| `musique.py` | Musique originale et bruitages de Noël (`sources/musique-et-bruitages.wav`) |
+| `bande_son.py` | Monte le son du client sous le spot (`sources/musique-montage.wav`) |
+| `musique.py` | Bruitages de Noël (`--bruitages-seuls`) ; sans option : musique originale de secours |
+| `remix.py` | Refait seulement le mixage audio des vidéos rendues |
 | `decoupe.py` | Détourage des éléments (animateur HD, boule dorée) vers `elements/` |
 | `sources/` | Flyer, photo HD de l'animateur, voix off « Lola » |
 
@@ -22,7 +24,9 @@ Spot motion design de 30 s (9:16, 1080x1920, 30 i/s) pour la fête de Noël du 2
 
 ## Son
 
-- Voix off ElevenLabs « Lola », décalée de 0,25 s ; texte calé mot à mot (table `CUE` dans `spot.py`).
-- Musique originale house festive 128 BPM (grelots, cloches, basse), silences avant « PISCINE » et « GRATUITE ».
-- Bruitages de Noël synthétisés : grelots de traîneau, carillons, cloche d'église, boîte à musique, papier cadeau, poussière d'étoiles.
-- Ducking de la musique sous la voix ; -14 LUFS, crête -1,5 dBFS.
+- **Voix off** ElevenLabs « Lola », décalée de 0,25 s ; texte calé mot à mot (table `CUE` dans `spot.py`).
+- **Musique : son fourni par le client** (`sources/son-montage-client.mp3`, 24,8 s, environ 123 BPM), monté par `bande_son.py` pour que sa reprise après coupure éclate deux fois : sur « PISCINE ! » et sur « GRATUITE !!! ». Raccord vers 19,1 s, fondu de sortie. Le client doit disposer des droits de diffusion de ce morceau.
+- **Pulsations d'image** : léger zoom et éclat chaud sur chaque temps fort du morceau (`sources/temps-forts.json`).
+- **Bruitages de Noël** synthétisés (`python3 musique.py --bruitages-seuls`) : grelots de traîneau, carillons, cloche d'église, boîte à musique, papier cadeau, poussière d'étoiles.
+- **Mixage** : musique baissée à la demande du client (volume 0,42), qui s'efface sous la voix ; -14 LUFS, crête -1,5 dBFS. `remix.py` refait seulement le mixage sans recalculer l'image.
+- `musique.py` sans option produit encore la musique originale de la première version (`sources/musique-et-bruitages.wav`), gardée en secours.
