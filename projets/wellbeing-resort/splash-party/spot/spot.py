@@ -379,7 +379,7 @@ T = {
     "splash": bloom(text3d("SPLASH !", F_A(250), face=WHITE, side=(20, 110, 170), depth=16), 22, 0.5),
     "samedi": tl("SAMEDI 05 DÉC. 2026", F_A(96), tracking=6),
     "wbr": tl("WELLBEING RESORT PRÉSENTE", F_H(38), tracking=10),
-    "titre1": bloom(text3d("SPLASH", F_A(270), depth=16, tracking=6), 24, 0.55),
+    "titre1": bloom(text3d("SPLASH", F_A(270), face=WHITE, side=(20, 110, 170), depth=16, tracking=6), 24, 0.5),
     "titre2": bloom(text3d("PARTY", F_A(270), face=WHITE, side=(20, 110, 170), depth=16, tracking=10), 24, 0.45),
     "heures": tl("08H – 18H", F_A(150), tracking=6),
     "journee": tl("UNE JOURNÉE DE FUN", F_H(42), tracking=10),
@@ -387,34 +387,35 @@ T = {
     "auprog": bloom(tl("AU PROGRAMME", F_A(130), tracking=10), 16, 0.4),
     "piscine": tl("PISCINE", F_A(190), tracking=4),
     "mousse": tl("& BAIN DE MOUSSE", F_A(96), tracking=4),
-    "miss": bloom(text3d("MISS SPLASH", F_A(170), depth=14, tracking=4), 20, 0.5),
+    "miss": bloom(text3d("MISS SPLASH", F_A(170), face=WHITE, side=(20, 110, 170), depth=14, tracking=4), 20, 0.5),
     "election": tl("L'ÉLECTION", F_H(40), tracking=14),
     "danses": tl("CONCOURS DE DANSES", F_A(120), tracking=3),
-    "karaoke": tl("KARAOKÉ", F_A(190), gold=True, tracking=6),
+    "karaoke": tl("KARAOKÉ", F_A(190), tracking=6),
     "billard": tl("BILLARD", F_A(170), tracking=6),
     "babyfoot": tl("BABY-FOOT", F_A(170), tracking=6),
     "jeux": tl("JEUX", F_A(170), tracking=6),
-    "dj": bloom(text3d("AMBIANCE DJ", F_A(160), depth=12, tracking=4), 20, 0.5),
+    "dj": bloom(text3d("AMBIANCE DJ", F_A(160), face=WHITE, side=(20, 110, 170), depth=12, tracking=4), 20, 0.5),
     "toutjour": tl("TOUTE LA JOURNÉE", F_H(40), tracking=12),
     "enfadu": tl("ENFANT & ADULTE", F_A(90), tracking=6),
     "rafr": tl("+ 01 RAFRAÎCHISSEMENT OFFERT", F_H(40), tracking=4),
-    "acces": tl("ACCÈS À LA PISCINE", F_A(80), gold=True, tracking=6),
+    "acces": tl("ACCÈS À LA PISCINE", F_A(80), tracking=6),
     "faims": tl("POUR LES PETITES FAIMS", F_H(40), tracking=10),
     "nourr": tl("NOURRITURE", F_A(170), tracking=6),
-    "surplace": tl("À COMMANDER SUR PLACE", F_A(86), gold=True, tracking=4),
+    "surplace": tl("À COMMANDER SUR PLACE", F_A(86), tracking=4),
     "famille": tl("EN FAMILLE OU ENTRE AMIS", F_H(44), tracking=8),
     "adorer": bloom(tl("LES ENFANTS VONT ADORER", F_A(86), tracking=3), 16, 0.45),
-    "resa": tl("RÉSERVATION", F_H(46), gold=True, tracking=16),
+    "resa": tl("RÉSERVATION", F_H(46), tracking=16),
     "tel2": tl("05 66 92 33 91", F_A(110)),
     "fin_date": tl("SAMEDI 05 DÉC. 2026  ·  08H – 18H", F_H(40), tracking=4),
     "fin_adr": tl("COCODY RIVIERA 3, ROUTE M'BADON", F_H(36), tracking=3),
-    "fin_tel": tl("07 47 79 95 07  ·  05 66 92 33 91", F_A(70), gold=True),
+    "fin_tel": tl("07 47 79 95 07  ·  05 66 92 33 91", F_A(70)),
     "fin_prix": tl("ENTRÉE 5.000 F  ·  ENFANT & ADULTE", F_H(38), tracking=3),
     "plouf": bloom(text3d("PLOUF !", F_A(300), face=WHITE, side=(20, 110, 170), depth=18), 26, 0.55),
 }
 NUM_GROUPS = ["07", "47", "79", "95", "07"]
-T_NUM = [bloom(text3d(g, F_A(220), depth=12), 16, 0.45) for g in NUM_GROUPS]
-LOGO = R.LOGO
+T_NUM = [bloom(text3d(g, F_A(220), face=WHITE, side=(20, 110, 170), depth=12), 16, 0.45) for g in NUM_GROUPS]
+LOGO = R.LOGO.copy()
+LOGO.paste(Image.new("RGBA", LOGO.size, WHITE + (255,)), (0, 0), LOGO.getchannel("A"))  # logo en blanc
 _TK = {}
 
 
@@ -426,13 +427,14 @@ def ticket(value):
     d = ImageDraw.Draw(m)
     d.ellipse((-50, h // 2 - 50, 50, h // 2 + 50), fill=0)
     d.ellipse((w - 50, h // 2 - 50, w + 50, h // 2 + 50), fill=0)
-    tk = gold_fill((w, h), m)
+    tk = Image.new("RGBA", (w, h), BLUE + (255,))
+    tk.putalpha(m)
     dd = ImageDraw.Draw(tk)
     for x in range(90, w - 90, 26):
         dd.line((x, 100, x + 12, 100), fill=(60, 40, 10, 140), width=3)
-    lab = tl("ENTRÉE", F_H(44), fill=INK, shadow=False, tracking=16)
+    lab = tl("ENTRÉE", F_H(44), fill=WHITE, shadow=False, tracking=16)
     tk.alpha_composite(lab, ((w - lab.width) // 2, 6))
-    val = tl(f"{value} F", F_A(210), fill=INK, shadow=False)
+    val = tl(f"{value} F", F_A(210), fill=WHITE, shadow=False)
     tk.alpha_composite(val, ((w - val.width) // 2, 100))
     out = Image.new("RGBA", (w + 80, h + 80), (0, 0, 0, 0))
     sh = Image.new("RGBA", (w, h), (0, 0, 0, 0))
@@ -629,14 +631,11 @@ def bar_layer(text, size, style="gold", helv=False):
     key = (text, size, style, helv)
     if key in _BARS:
         return _BARS[key]
-    fg = {"gold": INK, "blue": WHITE, "white": BLUE}[style]
+    fg = WHITE
     lab = tl(text, F_H(size) if helv else F_A(size), fill=fg, shadow=False, tracking=4 if helv else 3)
     w, h = lab.width - 80 + 70, lab.height - 80 + (34 if helv else 22)
-    if style == "gold":
-        panel = gold_fill((w, h))
-    else:
-        panel = Image.new("RGBA", (w, h), (BLUE if style == "blue" else WHITE) + (255,))
-    accent = Image.new("RGBA", (12, h), (WHITE if style == "gold" else GOLD) + (255,))
+    panel = Image.new("RGBA", (w, h), {"gold": (10, 32, 64, 235), "blue": BLUE + (255,), "white": (0, 0, 0, 165)}[style])
+    accent = Image.new("RGBA", (12, h), GOLD + (255,))
     out = Image.new("RGBA", (w + 12, h), (0, 0, 0, 0))
     out.alpha_composite(panel, (12, 0))
     out.alpha_composite(accent, (0, 0))
@@ -696,8 +695,8 @@ def s1_count(c, t):
     shot = [("foule", 1.5), ("bassin", 3.2), ("bassin", 1.0)][k]
     footage(c, shot[0], shot[1] + (t - t0))
     veil(c, 60)
-    circle_burst(c, W / 2, H / 2, t, t0 - 0.02, [BLUE, GOLD, WHITE][k], rmax=360)
-    num = T[str(3 - k)] if k < 2 else bloom(tl("1", F_A(560), fill=BLUE), 18, 0.3)
+    circle_burst(c, W / 2, H / 2, t, t0 - 0.02, [BLUE, GOLD, BLUE][k], rmax=360)
+    num = T[str(3 - k)]
     slam(c, num, W / 2, H / 2, t, t0, big=1.6, dur=0.14)
     flash(c, t, t0, 0.12, 0.45)
     foam_burst(c, t, CUE["splash"] - 0.18, seed=11)
@@ -769,11 +768,11 @@ def s4_programme(c, t):
         footage(c, "foule", 6.0 + (t - CUE["karaoke"]))
         veil(c, 70, (0, 10, 30))
         circle_burst(c, W / 2, 1000, t, CUE["karaoke"] - 0.02, BLUE, rmax=330)
-        kinetic(c, "KARAOKÉ", 200, W / 2, 1000, t, CUE["karaoke"], stagger=0.04, gold=True, mode="zoom")
+        kinetic(c, "KARAOKÉ", 200, W / 2, 1000, t, CUE["karaoke"], stagger=0.04, mode="zoom")
         eq_bars(c, t, beat_pulse(t), cy=1450, hmax=220 * clamp((t - CUE["karaoke"]) * 3))
     elif t < CUE["dj"] - 0.05:
         words = [("BILLARD", CUE["billard"], ("bassin", 4.0), BLUE), ("BABY-FOOT", CUE["babyfoot"], ("canon", 9.6), GOLD),
-                 ("JEUX", CUE["jeux"], ("bassin", 10.4), WHITE)]
+                 ("JEUX", CUE["jeux"], ("bassin", 10.4), BLUE)]
         for i, (wd, t0, shot, col) in enumerate(words):
             nxt = words[i + 1][1] if i + 1 < len(words) else 99
             if t0 - 0.05 <= t < nxt - 0.05 or (i == 0 and t < t0):
@@ -823,7 +822,7 @@ def miss_scene(c, t):
     ImageDraw.Draw(glow).polygon([(hx - 70, 0), (hx + 70, 0), (hx + 480, 1700), (hx - 480, 1700)],
                                  fill=(255, 220, 150, int(110 * k)))
     c.alpha_composite(glow.filter(ImageFilter.GaussianBlur(50)))
-    kinetic(c, "MISS", 280, 800, 760, t, t0 + 0.35, stagger=0.05, gold=True)
+    kinetic(c, "MISS", 280, 800, 760, t, t0 + 0.35, stagger=0.05)
     kinetic(c, "SPLASH", 190, 800, 990, t, t0 + 0.6, stagger=0.04)
     fg, _ = _miss_view(MISS_FG, z)
     c.alpha_composite(fg)
