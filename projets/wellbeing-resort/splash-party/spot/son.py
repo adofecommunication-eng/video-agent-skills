@@ -355,7 +355,6 @@ for t0 in [C["auprog"], C["piscine"], C["danses"], C["karaoke"], C["billard"], C
     add(sfx, impact(), t0, 0.22, send=0.3)
 add(sfx, bubbles_sfx(1.0, 20), C["auprog"], 0.3)
 add(sfx, water_splash(0.7), C["piscine"], 0.35)
-add(sfx, chime(), C["miss"] - 0.15, 0.3, send=0.6)
 add(sfx, scratch(), C["dj"] - 0.1, 0.45)
 add(sfx, scratch(), C["dj"] + 1.1, 0.3)
 for t0 in np.arange(C["prix"], C["prix"] + 0.9, 0.06):
@@ -365,10 +364,30 @@ for i, t0 in enumerate(C["nums"]):
     add(sfx, whoosh(0.25, 800, 6000), t0 - 0.12, 0.2)
     add(sfx, plop(500 + 90 * i), t0 + 0.2, 0.5, send=0.3)
     add(sfx, water_splash(0.25), t0 + 0.18, 0.3)
-for b in [CUTS[2], CUTS[4], CUTS[6], CUTS[8]]:     # transitions bulles
+for b in [CUTS[5], CUTS[6]]:                       # transitions bulles
     add(sfx, bubbles_sfx(0.5, 12), b - S.XD, 0.35)
-for b in [CUTS[3], CUTS[5], CUTS[7]]:              # panoramiques filés
+for b in [CUTS[3], CUTS[8]]:                       # panoramiques filés
     add(sfx, whoosh(0.4, 250, 6000), b - S.XD, 0.45, send=0.2)
+for b in [CUTS[2], CUTS[4], CUTS[7]] + S.INNER_CUTS:   # zooms traversants
+    add(sfx, whoosh(0.36, 200, 9000), b - 0.2, 0.4, send=0.25)
+
+
+def shutter():
+    """Déclic d'appareil photo (image arrêtée)."""
+    out = np.zeros(int(0.25 * SR))
+    for j0, f in ((0, 2400), (0.07, 1800)):
+        x = tt(0.04)
+        n = rng.normal(0, 1, len(x))
+        c_ = ((n - lowpass(n, 1500)) * 0.7 + np.sin(2 * np.pi * f * x) * 0.4) * np.exp(-x * 120)
+        j = int(j0 * SR)
+        out[j:j + len(c_)] += c_
+    return out
+
+
+add(sfx, shutter(), C["miss"] + 0.18, 0.6)
+add(sfx, impact(), C["miss"] + 0.2, 0.45, send=0.6)
+add(sfx, reverse_swell(0.6), C["miss"] - 0.45, 0.35, send=0.3)
+add(sfx, chime(), C["miss"] + 0.75, 0.3, send=0.6)
 add(sfx, reverse_swell(1.2), C["plouf"] - 1.2, 0.5, send=0.3)
 add(sfx, water_splash(1.6), C["plouf"] - 0.03, 0.8, send=0.5)
 add(sfx, impact(), C["plouf"], 0.7, send=0.7)

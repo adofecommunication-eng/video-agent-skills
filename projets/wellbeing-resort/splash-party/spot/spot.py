@@ -32,7 +32,20 @@ OUT.mkdir(exist_ok=True)
 W, H, FPS, DUR = 1080, 1920, 30, 60.0
 N = int(DUR * FPS)
 V = 2.0  # la voix démarre après 2 s d'ouverture à froid
-FRAMES_DIR = Path("/tmp/claude-0/-home-user-video-agent-skills/f000ac99-c2ab-59e9-bb38-e2dfc59cda23/scratchpad/sp/frames")
+FRAMES_DIR = HERE / ".images" / "frames"          # images extraites des vidéos (régénérées si absentes)
+
+
+def _extract(src, dst, extra=""):
+    if dst.exists() and any(dst.iterdir()):
+        return
+    dst.mkdir(parents=True, exist_ok=True)
+    vf = "scale=1080:1920:flags=lanczos" + extra
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-vf", vf, "-q:v", "2", str(dst / "f%04d.jpg")],
+                   check=True)
+
+
+_extract(HERE / "sources" / "video-piscine-wbr.mov", FRAMES_DIR)
+_extract(HERE / "sources" / "video-foule-mousse-wbr.mp4", FRAMES_DIR.parent / "frames2", ",unsharp=5:5:0.6")
 
 WHITE = (255, 255, 255)
 INK = (8, 10, 14)
@@ -484,129 +497,279 @@ def beat_pulse(t):
     return k
 
 
+# ---------------------------------------------------------------- vidéos réelles du Wellbeing Resort
+FRAMES2_DIR = FRAMES_DIR.parent / "frames2"   # sources/video-foule-mousse-wbr.mp4 (273 images)
+VIDS = {"piscine": (FRAMES_DIR, 230), "foule": (FRAMES2_DIR, 273)}
+_VCACHE = {}
+
+
+def _vframe(name, i):
+    key = (name, i)
+    if key not in _VCACHE:
+        if len(_VCACHE) > 40:
+            _VCACHE.pop(next(iter(_VCACHE)))
+        d, n = VIDS[name]
+        _VCACHE[key] = grade(Image.open(d / f"f{int(clamp(i, 1, n)):04d}.jpg"), contrast=1.15, sat=1.12)
+    return _VCACHE[key]
+
+
+def vid(name, ts):
+    """Image de la vidéo `name` à ts secondes ; fondu entre images voisines (ralentis fluides)."""
+    f = ts * 30 + 1
+    i = int(math.floor(f))
+    a = f - i
+    im = _vframe(name, i)
+    if a > 0.2:
+        im = Image.blend(im, _vframe(name, i + 1), a)
+    return im.convert("RGBA")
+
+
+def ramp(t, t0, segs):
+    """Rampe de vitesse : segs = [(durée vidéo-montage, vitesse), ...] -> temps source depuis 0."""
+    lt, src = t - t0, 0.0
+    for d, sp in segs:
+        if lt <= d:
+            return src + lt * sp
+        src += d * sp
+        lt -= d
+    return src + lt * segs[-1][1]
+
+
+def zoomed(im, z, cx=0.5, cy=0.5):
+    if z <= 1.001:
+        return im
+    big = im.resize((int(W * z), int(H * z)), Image.BILINEAR)
+    ox, oy = int((big.width - W) * cx), int((big.height - H) * cy)
+    return big.crop((ox, oy, ox + W, oy + H))
+
+
+# ---------------------------------------------------------------- typographie cinétique
+_GLYPHS = {}
+
+
+def glyphs(text, font_size, gold=False, tracking=4, face=WHITE):
+    key = (text, font_size, gold, tracking, face)
+    if key in _GLYPHS:
+        return _GLYPHS[key]
+    font = F_A(font_size)
+    out, x = [], 0.0
+    d = ImageDraw.Draw(Image.new("L", (1, 1)))
+    for ch in text:
+        w = d.textlength(ch, font=font)
+        lay = None if ch == " " else bloom(tl(ch, font, gold=gold, fill=face), 12, 0.35)
+        out.append((lay, x + w / 2))
+        x += w + tracking
+    res = (out, x - tracking)
+    _GLYPHS[key] = res
+    return res
+
+
+def kinetic(c, text, size, cx, cy, t, t0, stagger=0.035, gold=False, tracking=4, alpha=1.0, mode="drop"):
+    """Lettres qui arrivent une à une (chute avec rebond, ou zoom depuis la caméra)."""
+    if t < t0 - 0.02:
+        return
+    gl, total = glyphs(text, size, gold, tracking)
+    x0 = cx - total / 2
+    for k, (lay, xc) in enumerate(gl):
+        if lay is None:
+            continue
+        p = prog(t, t0 + k * stagger, 0.32)
+        if p <= 0:
+            continue
+        if mode == "drop":
+            e = back_out(p, 1.8)
+            place(c, lay, x0 + xc, cy - 160 * (1 - e), alpha=clamp(p * 3) * alpha, angle=(1 - e) * (-18 if k % 2 else 18))
+        else:
+            place(c, lay, x0 + xc, cy, alpha=clamp(p * 3) * alpha, scale=1 + 2.2 * (1 - ease_out(p)))
+
+
+def rgb_split(c, amount):
+    if amount < 0.5:
+        return c
+    a = np.asarray(c.convert("RGB"))
+    s = int(amount)
+    out = a.copy()
+    out[:, s:, 0] = a[:, :-s, 0]
+    out[:, :-s, 2] = a[:, s:, 2]
+    return Image.fromarray(out).convert("RGBA")
+
+
+def outline(im, width=10, color=WHITE):
+    a = im.getchannel("A").point(lambda v: 255 if v > 60 else 0)
+    big = a.filter(ImageFilter.MaxFilter(width * 2 + 1)).filter(ImageFilter.GaussianBlur(1.2))
+    out = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    out.paste(Image.new("RGBA", im.size, color + (255,)), (0, 0), big)
+    out.alpha_composite(im)
+    return out
+
+
+MISS_BG = grade(Image.open(HERE / "elements" / "miss-freeze-fond.jpg"))
+MISS_FG = outline(Image.open(HERE / "elements" / "miss-freeze.png").convert("RGBA"), 9)
+MISS_HEAD = (322, 590)
+
 # ---------------------------------------------------------------- séquences
 def s0_cold(c, t):
     """0 – 2,06 : ouverture à froid. Format cinéma, les yeux de la fillette, lente avancée."""
     p = prog(t, 0, CUTS[0])
-    box = view(1180, 965, 2000 / 260 * (1 + 0.08 * p), aspect=W / H)
-    img = crop_fill(PHOTO, box)
-    c.alpha_composite(img.convert("RGBA"))
+    c.alpha_composite(crop_fill(PHOTO, view(1180, 965, 2000 / 260 * (1 + 0.08 * p))).convert("RGBA"))
     veil(c, int(255 * (1 - prog(t, 0.15, 0.9))))
     letterbox(c, 1)
 
 
 def s1_count(c, t):
-    """2,06 – 4,46 : TROIS (sourire) · DEUX (mains dans la mousse) · UN (les yeux)."""
+    """2,06 – 4,46 : TROIS (la foule) · DEUX (les pieds dans l'eau) · UN (les yeux)."""
     k = 0 if t < CUE["deux"] else 1 if t < CUE["un"] else 2
     t0 = [CUE["trois"], CUE["deux"], CUE["un"]][k]
     p = prog(t, t0, 1.0)
     if k == 0:
-        img = crop_fill(PHOTO, view(530, 800, 2000 / 420 * (1 + 0.06 * p)))
+        img = zoomed(vid("foule", 1.6 + (t - t0) * 0.35), 1.35 + 0.08 * p, 0.45, 0.55)
     elif k == 1:
-        img = crop_fill(PHOTO, view(480, 990, 2000 / 560 * (1 + 0.06 * p)))
+        img = zoomed(vid("piscine", 6.3 + (t - t0) * 0.4), 1.5 + 0.08 * p, 0.75, 0.85)
     else:
-        img = crop_fill(PHOTO, view(1180, 962, 2000 / 230 * (1 + 0.05 * p)))
-    c.alpha_composite(img.convert("RGBA"))
-    veil(c, 90)
+        img = crop_fill(PHOTO, view(1180, 962, 2000 / 230 * (1 + 0.05 * p))).convert("RGBA")
+    c.alpha_composite(img)
+    veil(c, 80)
     slam(c, T[str(3 - k)], W / 2, H / 2, t, t0, big=1.5, dur=0.16)
     flash(c, t, t0, 0.18, 0.5)
     letterbox(c, 1 - ease_in_out(prog(t, CUE["splash"] - 0.25, 0.25)))
     foam_burst(c, t, CUE["splash"] - 0.18, seed=11)
 
 
+def text_behind(t, t0, dur, title_alpha=1.0, z0=1.02, z1=1.2, y_title=880, **kw):
+    """Travelling sur la photo avec le titre glissé DERRIÈRE les fillettes."""
+    p = ease_in_out(prog(t, t0, dur))
+    z = z0 + (z1 - z0) * p
+    cx, cy = kw.get("x0", 700) + (kw.get("x1", 820) - kw.get("x0", 700)) * p, kw.get("y0", 1080) + (kw.get("y1", 1000) - kw.get("y0", 1080)) * p
+    bg = crop_fill(PHOTO_BLUR, view(cx, cy, 1 + (z - 1) * 0.65)).convert("RGBA")
+    fg = FG.resize((W, H), Image.LANCZOS, box=view(cx, cy, z))
+    return bg, fg
+
+
 def s2_hero(c, t):
-    """4,46 – 10,3 : transformation terminée, travelling Nolan sur la photo ; SPLASH ! puis le titre."""
-    img = parallax(t, CUTS[1], CUTS[2] - CUTS[1], z0=1.02, z1=1.22, x0=700, x1=820, y0=1080, y1=1000)
-    c.alpha_composite(img)
-    grad_bottom(c, 1000, 200)
-    veil(c, 40)
-    foam_burst(c, t, CUE["splash"] - 0.18, seed=11)
-    a1 = fade_out_after(t, CUE["samedi"] - 0.3)
-    slam(c, T["splash"], W / 2, 780, t, CUE["splash"] + 0.05, big=2.0, dur=0.18, alpha=a1)
-    droplets(c, t, CUE["splash"] + 0.05, W / 2, 900, n=90, seed=3)
-    a2 = fade_out_after(t, CUE["party"] - 0.4)
-    reveal(c, T["samedi"], W / 2, 1180, t, CUE["samedi"], alpha=a2)
-    reveal(c, T["wbr"], W / 2, 1290, t, CUE["wbr"], alpha=a2)
-    slam(c, shining(T["titre1"], t, CUE["party"]), W / 2, 1060, t, CUE["party"], big=1.8, dur=0.16)
-    slam(c, shining(T["titre2"], t, CUE["party"] + 0.25), W / 2, 1290, t, CUE["party"] + 0.25, big=1.8, dur=0.16)
-    droplets(c, t, CUE["party"] + 0.25, W / 2, 1300, n=90, seed=4)
-    light_leak(c, t, CUE["party"] + 0.2, 1.4)
+    """4,46 – 10,3 : chute ! Canon à mousse au ralenti puis accéléré, date, invitation ;
+    puis zoom traversant vers la photo, titre SPLASH PARTY derrière les fillettes."""
+    if t < CUE["party"] - 0.35:
+        ts = ramp(t, CUE["splash"], [(0.9, 0.3), (1.2, 1.6), (9, 1.0)])
+        c.alpha_composite(zoomed(vid("foule", ts), 1.12 - 0.08 * prog(t, CUE["splash"], 1.0)))
+        grad_bottom(c, 900, 200)
+        foam_burst(c, t, CUE["splash"] - 0.18, seed=11)
+        a1 = fade_out_after(t, CUE["samedi"] - 0.3)
+        kinetic(c, "SPLASH !", 250, W / 2, 760, t, CUE["splash"] + 0.02, stagger=0.03, mode="zoom", alpha=a1)
+        droplets(c, t, CUE["splash"] + 0.05, W / 2, 860, n=90, seed=3)
+        kinetic(c, "SAMEDI 05 DÉC. 2026", 104, W / 2, 1150, t, CUE["samedi"], stagger=0.03)
+        reveal(c, T["wbr"], W / 2, 1290, t, CUE["wbr"])
+    else:
+        bg, fg = text_behind(t, CUE["party"] - 0.35, CUTS[2] - CUE["party"] + 0.35)
+        c.alpha_composite(bg)
+        veil(c, 35)
+        slam(c, shining(T["titre1"], t, CUE["party"]), W / 2, 300, t, CUE["party"], big=1.8, dur=0.16)
+        slam(c, shining(T["titre2"], t, CUE["party"] + 0.25), W / 2, 495, t, CUE["party"] + 0.25, big=1.8, dur=0.16)
+        c.alpha_composite(fg)
+        light_leak(c, t, CUE["party"] + 0.2, 1.4)
 
 
 def s3_footage(c, t):
-    """10,3 – 15,1 : la vraie fête au Wellbeing Resort, 08H – 18H, pour petits et grands."""
-    lt = t - CUTS[2]
-    img = frame_video(2.0 + lt * 1.0)
-    z = 1.0 + 0.04 * prog(t, CUTS[2], 5)
-    img = img.resize((int(W * z), int(H * z)), Image.BILINEAR).crop((int(W * (z - 1) / 2), int(H * (z - 1) / 2),
-                                                                     int(W * (z - 1) / 2) + W, int(H * (z - 1) / 2) + H))
-    c.alpha_composite(img.convert("RGBA"))
+    """10,3 – 15,1 : la vraie piscine du WBR ; ralenti sur les pieds qui éclaboussent."""
+    ts = ramp(t, CUTS[2], [(3.0, 1.0), (9, 0.45)])
+    img = vid("piscine", 1.6 + ts)
+    c.alpha_composite(zoomed(img, 1.02 + 0.06 * prog(t, CUTS[2], 4.8)))
     grad_bottom(c, 900, 190)
-    reveal(c, T["heures"], W / 2, 1140, t, CUE["heures"] + 0.2)
-    reveal(c, T["journee"], W / 2, 1270, t, CUE["heures"] + 1.2)
-    a = 1 - prog(t, CUE["petits"] - 0.4, 0.3)
-    if a < 1:
-        pass
-    reveal(c, T["petits"], W / 2, 1380, t, CUE["petits"])
+    kinetic(c, "08H – 18H", 170, W / 2, 1140, t, CUE["heures"] + 0.15, stagger=0.04)
+    reveal(c, T["journee"], W / 2, 1290, t, CUE["heures"] + 1.2)
+    kinetic(c, "POUR PETITS ET GRANDS", 84, W / 2, 1400, t, CUE["petits"], stagger=0.025)
 
 
 def s4_programme(c, t):
-    """15,1 – 26,5 : le programme, une coupe par activité."""
-    if t < CUE["piscine"] - 0.05:  # AU PROGRAMME sur l'eau
-        c.alpha_composite(caustics_bg(t))
-        bubbles(c, t, n=50, seed=8)
-        slam(c, T["auprog"], W / 2, H / 2, t, CUE["auprog"], big=1.4)
-    elif t < CUE["miss"] - 0.05:  # piscine & mousse
-        p = prog(t, CUE["piscine"], 1.8)
-        c.alpha_composite(crop_fill(PHOTO, view(760, 1250 - 120 * p, 1.35 + 0.15 * p)).convert("RGBA"))
-        grad_bottom(c, 1000, 235)
-        slam(c, T["piscine"], W / 2, 1250, t, CUE["piscine"], big=1.5)
-        reveal(c, T["mousse"], W / 2, 1400, t, CUE["piscine"] + 0.45, dur=0.4)
-        bubbles(c, t, n=30, seed=9)
-    elif t < CUE["danses"] - 0.05:  # Miss Splash
-        c.alpha_composite(caustics_bg(t, base=(4, 30, 60)))
-        glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-        a = int(140 * clamp((t - CUE["miss"]) * 3))
-        ImageDraw.Draw(glow).polygon([(W / 2 - 70, 0), (W / 2 + 70, 0), (W / 2 + 520, 1350), (W / 2 - 520, 1350)],
-                                     fill=(255, 220, 150, a))
-        c.alpha_composite(glow.filter(ImageFilter.GaussianBlur(50)))
-        k = prog(t, CUE["miss"] - 0.15, 0.5)
-        if k > 0:
-            place(c, CROWN, W / 2, -200 + (720 + 200) * ease_out(k), angle=6 * (1 - k) * math.sin(t * 9))
-        reveal(c, T["election"], W / 2, 900, t, CUE["miss"] - 0.1, dur=0.35)
-        slam(c, shining(T["miss"], t, CUE["miss"] + 0.1), W / 2, 1040, t, CUE["miss"] + 0.1, big=1.7)
-        droplets(c, t, CUE["miss"] + 0.1, W / 2, 1050, n=60, seed=5)
-    elif t < CUE["billard"] - 0.05:  # danses + karaoké : la vraie foule, floutée
-        img = frame_video(5.4 + (t - CUE["danses"]) * 0.6).filter(ImageFilter.GaussianBlur(6))
-        c.alpha_composite(img.convert("RGBA"))
-        veil(c, 120, (4, 20, 40))
-        slam(c, T["danses"], W / 2, 860, t, CUE["danses"], big=1.4)
-        slam(c, T["karaoke"], W / 2, 1060, t, CUE["karaoke"], big=1.6)
-        eq_bars(c, t, beat_pulse(t), cy=1420, hmax=200 * clamp((t - CUE["karaoke"]) * 3))
-    elif t < CUE["dj"] - 0.05:  # billard, baby-foot, jeux : un mot par temps
-        img = crop_fill(PHOTO_BLUR, view(750, 700, 1.0))
-        c.alpha_composite(img.convert("RGBA"))
-        veil(c, 140, (2, 20, 40))
-        words = [("billard", CUE["billard"]), ("babyfoot", CUE["babyfoot"]), ("jeux", CUE["jeux"])]
-        for i, (k, t0) in enumerate(words):
+    """15,1 – 26,5 : le programme, en coupes rapides sur les vraies images."""
+    if t < CUE["piscine"] - 0.05:
+        c.alpha_composite(zoomed(vid("foule", 0.6 + (t - CUTS[3]) * 0.5), 1.3).filter(ImageFilter.GaussianBlur(8)))
+        veil(c, 110, (0, 20, 40))
+        kinetic(c, "AU PROGRAMME", 140, W / 2, H / 2, t, CUE["auprog"], stagger=0.03, mode="zoom")
+    elif t < CUE["miss"] - 0.05:
+        c.alpha_composite(zoomed(vid("foule", 3.4 + (t - CUE["piscine"]) * 0.8), 1.08))
+        grad_bottom(c, 900, 220)
+        kinetic(c, "PISCINE", 190, W / 2, 1220, t, CUE["piscine"], stagger=0.04)
+        kinetic(c, "& BAIN DE MOUSSE", 96, W / 2, 1380, t, CUE["piscine"] + 0.4, stagger=0.025, gold=True)
+    elif t < CUE["danses"] - 0.05:
+        miss_scene(c, t)
+    elif t < CUE["karaoke"] - 0.05:
+        c.alpha_composite(zoomed(vid("foule", 1.5 + (t - CUE["danses"]) * 1.0), 1.15, 0.3, 0.5))
+        grad_bottom(c, 900, 200)
+        kinetic(c, "CONCOURS", 170, W / 2, 1180, t, CUE["danses"], stagger=0.035)
+        kinetic(c, "DE DANSES", 170, W / 2, 1360, t, CUE["danses"] + 0.3, stagger=0.035, gold=True)
+    elif t < CUE["billard"] - 0.05:
+        c.alpha_composite(zoomed(vid("foule", 6.0 + (t - CUE["karaoke"]) * 0.9), 1.1))
+        veil(c, 70, (0, 10, 30))
+        kinetic(c, "KARAOKÉ", 210, W / 2, 1000, t, CUE["karaoke"], stagger=0.04, gold=True, mode="zoom")
+        eq_bars(c, t, beat_pulse(t), cy=1450, hmax=220 * clamp((t - CUE["karaoke"]) * 3))
+    elif t < CUE["dj"] - 0.05:
+        words = [("BILLARD", CUE["billard"]), ("BABY-FOOT", CUE["babyfoot"]), ("JEUX", CUE["jeux"])]
+        shots = [lambda: crop_fill(PHOTO, view(1300, 600, 2.2)).convert("RGBA"),
+                 lambda: zoomed(vid("foule", 4.4 + (t - CUE["babyfoot"]) * 1.2), 1.4, 0.7, 0.4),
+                 lambda: crop_fill(PHOTO, view(700, 650, 1.9)).convert("RGBA")]
+        for i, (wd, t0) in enumerate(words):
             nxt = words[i + 1][1] if i + 1 < len(words) else 99
-            if t0 - 0.05 <= t < nxt - 0.05:
-                slam(c, T[k], W / 2, H / 2, t, t0, big=1.7)
-        bubbles(c, t, n=24, seed=12)
-    else:  # ambiance DJ : vinyle qui tourne, égaliseur sur la musique
-        c.alpha_composite(caustics_bg(t, base=(2, 18, 40)))
+            if t0 - 0.05 <= t < nxt - 0.05 or (i == 0 and t < t0):
+                c.alpha_composite(shots[i]())
+                veil(c, 90, (0, 15, 35))
+                kinetic(c, wd, 190, W / 2, H / 2, t, t0, stagger=0.03, mode="zoom")
+                flash(c, t, t0, 0.15, 0.4)
+    else:
         bp = beat_pulse(t)
-        place(c, VINYL.rotate(-t * 220 % 360, resample=Image.BICUBIC), W / 2, 760, scale=1 + 0.04 * bp)
+        c.alpha_composite(zoomed(vid("foule", 0.2 + (t - CUE["dj"]) * 1.1), 1.08 + 0.03 * bp))
+        veil(c, 90, (0, 10, 30))
+        if bp > 0.7:  # stroboscope sur les temps forts
+            c.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, int(110 * bp))))
+        place(c, VINYL.rotate(-t * 220 % 360, resample=Image.BICUBIC), W / 2, 700, scale=0.75 + 0.03 * bp)
         slam(c, T["dj"], W / 2, 1150, t, CUE["dj"] + 0.4, big=1.5)
         reveal(c, T["toutjour"], W / 2, 1290, t, CUE["dj"] + 1.0)
         eq_bars(c, t, bp, cy=1600, hmax=220)
 
 
+MISS_Z, MISS_C = 1.6, (480, 900)          # cadrage serré sur la jeune femme
+
+
+def _miss_view(im, z):
+    """Recadre l'image arrêtée sur la jeune femme (zoom z autour de MISS_C)."""
+    w, h = W / z, H / z
+    x0 = clamp(MISS_C[0] - w / 2, 0, W - w)
+    y0 = clamp(MISS_C[1] - h / 2, 0, H - h)
+    return im.resize((W, H), Image.LANCZOS, box=(x0, y0, x0 + w, y0 + h)), (x0, y0)
+
+
+def miss_scene(c, t):
+    """Image arrêtée : la scène se fige, la jeune femme se détache (contour blanc),
+    MISS SPLASH passe derrière elle façon couverture de magazine, la couronne descend sur sa tête."""
+    t0 = CUE["miss"]
+    if t < t0 + 0.2:   # quelques images de mouvement avant le gel
+        c.alpha_composite(vid("foule", 7.75 + (t - (t0 - 0.05))))
+        flash(c, t, t0 + 0.15, 0.25, 0.8)
+        return
+    k = ease_out(prog(t, t0 + 0.2, 0.5))
+    z = 1 + (MISS_Z - 1) * k + 0.04 * prog(t, t0 + 0.7, 1.3)
+    bg, (x0, y0) = _miss_view(MISS_BG.convert("RGBA"), z)
+    c.alpha_composite(bg.filter(ImageFilter.GaussianBlur(9 * k)))
+    veil(c, int(150 * k), (0, 10, 25))
+    hx, hy = (MISS_HEAD[0] - x0) * z, (MISS_HEAD[1] - y0) * z
+    glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(glow).polygon([(hx - 70, 0), (hx + 70, 0), (hx + 480, 1700), (hx - 480, 1700)],
+                                 fill=(255, 220, 150, int(110 * k)))
+    c.alpha_composite(glow.filter(ImageFilter.GaussianBlur(50)))
+    kinetic(c, "MISS", 280, 800, 760, t, t0 + 0.35, stagger=0.05, gold=True)
+    kinetic(c, "SPLASH", 190, 800, 990, t, t0 + 0.6, stagger=0.04)
+    fg, _ = _miss_view(MISS_FG, z)
+    c.alpha_composite(fg)
+    kc = prog(t, t0 + 0.75, 0.5)
+    if kc > 0:
+        place(c, CROWN, hx + 10, -200 + (hy - 120 + 200) * ease_out(kc), scale=0.75, angle=6 * (1 - kc) * math.sin(t * 9))
+    sparkle_y = hy - 120
+    droplets(c, t, t0 + 1.25, hx, sparkle_y, n=50, seed=41)
+
+
 def s5_prix(c, t):
-    """26,5 – 32,8 : le ticket or ENTRÉE 5.000 F, enfant & adulte, rafraîchissement, accès piscine."""
-    c.alpha_composite(crop_fill(PHOTO_BLUR, view(760, 1350, 1.2)).convert("RGBA"))
-    veil(c, 150, (2, 16, 30))
-    bubbles(c, t, n=30, seed=14, alpha=0.6)
+    """26,5 – 32,8 : le ticket or ENTRÉE 5.000 F sur la foule au ralenti."""
+    c.alpha_composite(zoomed(vid("foule", 2.0 + (t - CUTS[4]) * 0.3), 1.2).filter(ImageFilter.GaussianBlur(7)))
+    veil(c, 140, (0, 12, 28))
     k = prog(t, CUE["entree"] + 0.1, 0.5)
     if k > 0:
         cp = prog(t, CUE["prix"], 0.9)
@@ -617,24 +780,23 @@ def s5_prix(c, t):
         tk = tk.resize((max(2, int(tk.width * flip)), tk.height), Image.BILINEAR)
         place(c, tk, W / 2, 760 + 10 * math.sin(t * 2.2), alpha=clamp(k * 3), angle=-3)
     flash(c, t, CUE["prix"] + 0.9, 0.3, 0.35, (255, 230, 170))
-    slam(c, T["enfadu"], W / 2, 1110, t, CUE["enfant"], big=1.4)
+    kinetic(c, "ENFANT & ADULTE", 96, W / 2, 1110, t, CUE["enfant"], stagger=0.025)
     reveal(c, T["rafr"], W / 2, 1240, t, CUE["rafr"])
-    reveal(c, T["acces"], W / 2, 1350, t, CUE["acces"])
+    kinetic(c, "ACCÈS À LA PISCINE", 84, W / 2, 1350, t, CUE["acces"], stagger=0.025, gold=True)
 
 
 def s6_food(c, t):
-    """32,8 – 36,0 : nourriture à commander sur place (la vraie piscine en fond)."""
-    img = frame_video(0.3 + (t - CUTS[5]) * 0.5).filter(ImageFilter.GaussianBlur(10))
-    c.alpha_composite(img.convert("RGBA"))
+    """32,8 – 36,0 : nourriture à commander sur place."""
+    c.alpha_composite(vid("piscine", 0.3 + (t - CUTS[5]) * 0.5).filter(ImageFilter.GaussianBlur(10)))
     veil(c, 130, (10, 8, 4))
     reveal(c, T["faims"], W / 2, 820, t, CUE["faims"])
-    slam(c, T["nourr"], W / 2, 980, t, CUE["nourriture"], big=1.4)
-    reveal(c, T["surplace"], W / 2, 1130, t, CUE["nourriture"] + 0.6)
+    kinetic(c, "NOURRITURE", 170, W / 2, 980, t, CUE["nourriture"], stagger=0.035)
+    kinetic(c, "À COMMANDER SUR PLACE", 86, W / 2, 1130, t, CUE["nourriture"] + 0.6, stagger=0.02, gold=True)
     light_leak(c, t, CUE["nourriture"], 1.6, color=(255, 190, 110), alpha=110)
 
 
 def s7_emotion(c, t):
-    """36,0 – 39,6 : révélation émotionnelle. Mise au point qui se fait sur les sourires."""
+    """36,0 – 39,6 : révélation émotionnelle. La mise au point se fait sur les sourires."""
     p = prog(t, CUTS[6], CUTS[7] - CUTS[6])
     box = view(800, 1000, 1.25 + 0.12 * p)
     sharp = crop_fill(PHOTO, box)
@@ -649,29 +811,28 @@ def s7_emotion(c, t):
 
 
 def s8_resa(c, t):
-    """39,6 – 45,9 : réservation. Chaque groupe de chiffres tombe dans l'eau."""
-    c.alpha_composite(caustics_bg(t))
-    bubbles(c, t, n=40, seed=16)
+    """39,6 – 45,9 : réservation sur la foule au ralenti ; les chiffres tombent dans l'eau."""
+    c.alpha_composite(zoomed(vid("foule", 5.0 + (t - CUTS[7]) * 0.35), 1.15))
+    veil(c, 150, (0, 14, 32))
+    bubbles(c, t, n=30, seed=16, alpha=0.6)
     reveal(c, T["resa"], W / 2, 520, t, CUE["resa"], dur=0.5)
-    xs = [190, 390, 540, 690, 890]
+    xs = [210, 365, 540, 715, 870]
     for i, t0 in enumerate(CUE["nums"]):
         if t < t0 - 0.05:
             continue
         p = prog(t, t0 - 0.05, 0.3)
-        y = 820 - 500 * (1 - back_out(p, 1.6))
-        place(c, T_NUM[i], [210, 365, 540, 715, 870][i], y, alpha=clamp(p * 3), scale=0.62)
-        if p > 0.9 and t < t0 + 0.6:  # ondes à l'impact
+        place(c, T_NUM[i], xs[i], 820 - 500 * (1 - back_out(p, 1.6)), alpha=clamp(p * 3), scale=0.62)
+        if p > 0.9 and t < t0 + 0.6:
             rr = (t - t0) * 300
-            ImageDraw.Draw(c).ellipse(([210, 365, 540, 715, 870][i] - rr, 920 - rr * 0.25,
-                                       [210, 365, 540, 715, 870][i] + rr, 920 + rr * 0.25),
+            ImageDraw.Draw(c).ellipse((xs[i] - rr, 920 - rr * 0.25, xs[i] + rr, 920 + rr * 0.25),
                                       outline=(230, 250, 255, int(200 * clamp(1 - rr / 180))), width=4)
     reveal(c, T["tel2"], W / 2, 1060, t, CUE["nums"][-1] + 0.8)
-    del xs
 
 
 def finale_card(c, t, t0):
-    c.alpha_composite(caustics_bg(t, base=(2, 14, 30)))
-    bubbles(c, t, n=50, seed=21, alpha=0.7)
+    c.alpha_composite(zoomed(vid("foule", 0.4 + (t - t0) * 0.3), 1.25).filter(ImageFilter.GaussianBlur(12)))
+    veil(c, 175, (0, 10, 24))
+    bubbles(c, t, n=40, seed=21, alpha=0.6)
     pop = prog(t, t0, 0.5)
     place(c, LOGO.resize((int(LOGO.width * 0.55), int(LOGO.height * 0.55)), Image.LANCZOS), W / 2, 330,
           alpha=pop, scale=0.8 + 0.2 * back_out(pop))
@@ -684,29 +845,33 @@ def finale_card(c, t, t0):
 
 
 def s9_final(c, t):
-    """45,9 – 60 : travelling final sur la photo puis « PLOUF ! » et la carte finale."""
+    """45,9 – 60 : titre derrière les fillettes (travelling), « PLOUF ! », carte finale."""
     if t < CUE["plouf"]:
-        img = parallax(t, CUTS[8], CUE["plouf"] - CUTS[8], z0=1.25, z1=1.0, x0=820, x1=750, y0=980, y1=1060)
-        c.alpha_composite(img)
-        grad_bottom(c, 1100, 225)
+        bg, fg = text_behind(t, CUTS[8], CUE["plouf"] - CUTS[8], z0=1.25, z1=1.02, x0=820, x1=740, y0=980, y1=1060)
+        c.alpha_composite(bg)
         veil(c, 30)
-        slam(c, shining(T["titre1"], t, CUTS[8] + 0.2), W / 2, 1000, t, CUTS[8], big=1.6)
-        slam(c, shining(T["titre2"], t, CUTS[8] + 0.4), W / 2, 1220, t, CUTS[8] + 0.2, big=1.6)
-        reveal(c, T["fin_date"], W / 2, 1400, t, CUE["fin"] + 1.1)
-        reveal(c, T["fin_adr"], W / 2, 1470, t, CUE["fin"] + 3.0)
+        slam(c, shining(T["titre1"], t, CUTS[8] + 0.2), W / 2, 300, t, CUTS[8], big=1.6)
+        slam(c, shining(T["titre2"], t, CUTS[8] + 0.4), W / 2, 495, t, CUTS[8] + 0.2, big=1.6)
+        c.alpha_composite(fg)
+        grad_bottom(c, 650, 220)
+        reveal(c, T["fin_date"], W / 2, 1500, t, CUE["fin"] + 1.1)
+        reveal(c, T["fin_adr"], W / 2, 1570, t, CUE["fin"] + 3.0)
         foam_burst(c, t, CUE["plouf"] - 0.12, cy=H * 0.55, dur=0.5, seed=31)
     else:
         finale_card(c, t, CUE["plouf"] + 0.35)
         foam_burst(c, t, CUE["plouf"] - 0.12, cy=H * 0.55, dur=0.5, seed=31)
         a = 1 - prog(t, CUE["plouf"] + 0.9, 0.4)
-        slam(c, T["plouf"], W / 2, H / 2, t, CUE["plouf"] + 0.05, big=2.2, dur=0.16, alpha=a)
+        kinetic(c, "PLOUF !", 300, W / 2, H / 2, t, CUE["plouf"] + 0.03, stagger=0.03, mode="zoom", alpha=a)
         droplets(c, t, CUE["plouf"] + 0.05, W / 2, 1000, n=140, seed=33)
 
 
 SCENES = [s0_cold, s1_count, s2_hero, s3_footage, s4_programme, s5_prix, s6_food, s7_emotion, s8_resa, s9_final]
 BOUNDS = [0.0] + CUTS[:-1] + [DUR]
-TRANS = {3: "bubbles", 5: "bubbles", 7: "bubbles", 9: "bubbles", 4: "whip", 6: "whip", 8: "whip"}
-XD = 0.36
+TRANS = {3: "zoom", 4: "whip", 5: "zoom", 6: "bubbles", 7: "bubbles", 8: "zoom", 9: "whip"}
+XD = 0.34
+# coupes rapides internes au programme : zoom traversant aussi
+INNER_CUTS = [CUE["piscine"] - 0.05, CUE["danses"] - 0.05, CUE["karaoke"] - 0.05, CUE["billard"] - 0.05,
+              CUE["dj"] - 0.05]
 
 
 def scene_frame(i, t):
@@ -715,8 +880,20 @@ def scene_frame(i, t):
     return c
 
 
+def zoom_through(cur, nxt, p):
+    """Zoom traversant : on fonce dans l'image, la suivante arrive depuis l'avant."""
+    if p < 0.5:
+        q = ease_in_out(p * 2)
+        im = zoomed(cur, 1 + 1.6 * q)
+        acc = Image.blend(im, zoomed(cur, 1 + 1.9 * q), 0.5)
+    else:
+        q = ease_in_out((p - 0.5) * 2)
+        im = zoomed(nxt, 1 + 0.8 * (1 - q))
+        acc = Image.blend(im, zoomed(nxt, 1 + 1.0 * (1 - q)), 0.5)
+    return acc
+
+
 def whip(c, nxt, p):
-    """Panoramique filé : flou de bougé horizontal entre deux plans."""
     e = ease_in_out(p)
     src = c if e < 0.5 else nxt
     shift = int((e if e < 0.5 else e - 1) * W * 0.9)
@@ -742,15 +919,24 @@ def shake(c, t):
     return c
 
 
+GLITCH = IMPACTS + [CUE["auprog"], CUE["piscine"], CUE["danses"], CUE["karaoke"], CUE["billard"], CUE["babyfoot"],
+                    CUE["jeux"], CUE["dj"] + 0.4]
+
+
+def glitch_amount(t):
+    a = 0.0
+    for g in GLITCH:
+        if 0 <= t - g < 0.15:
+            a = max(a, 14 * (1 - (t - g) / 0.15))
+    return a
+
+
 def pulse(c, t):
     bp = beat_pulse(t) if CUE["splash"] < t < CUTS[6] or CUTS[7] < t else 0
     if bp < 0.05:
         return c
-    z = 1 + 0.018 * bp
-    big = c.resize((int(W * z), int(H * z)), Image.BILINEAR)
-    ox, oy = (big.width - W) // 2, (big.height - H) // 2
-    c = big.crop((ox, oy, ox + W, oy + H))
-    c.alpha_composite(Image.new("RGBA", (W, H), (255, 235, 200, int(28 * bp))))
+    c = zoomed(c, 1 + 0.02 * bp)
+    c.alpha_composite(Image.new("RGBA", (W, H), (255, 235, 200, int(26 * bp))))
     return c
 
 
@@ -834,12 +1020,23 @@ def frame(t):
     if nxt < len(SCENES) and t > BOUNDS[nxt] - XD and nxt in TRANS:
         p = (t - (BOUNDS[nxt] - XD)) / XD
         nf = scene_frame(nxt, t)
-        if TRANS[nxt] == "bubbles":
+        kind = TRANS[nxt]
+        if kind == "bubbles":
             c.paste(nf, (0, 0), bubble_mask(p, seed=nxt))
+        elif kind == "zoom":
+            c = zoom_through(c, nf, p)
         else:
             c = whip(c, nf, p)
+    for ic in INNER_CUTS:  # zooms traversants entre les activités du programme
+        if ic - 0.18 <= t < ic:
+            p = (t - ic + 0.18) / 0.36
+            c = zoomed(c, 1 + 1.4 * ease_in_out(p * 2) * 0.5)
+        elif ic <= t < ic + 0.18:
+            p = (t - ic) / 0.18
+            c = zoomed(c, 1 + 0.6 * (1 - ease_out(p)))
     c = pulse(c, t)
     c = shake(c, t)
+    c = rgb_split(c, glitch_amount(t))
     if SUBS_ON:
         draw_sub(c, t)
     a = np.asarray(c.convert("RGB")).astype(np.float32) * VIG
