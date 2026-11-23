@@ -879,7 +879,7 @@ def main():
     name = "splash-party-60s-sous-titres" if SUBS_ON else "splash-party-60s"
     silent = OUT / f".{name}-video.mp4"
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
-           "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-pix_fmt", "yuv420p",
+           "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium", "-b:v", "8M", "-maxrate", "10M", "-bufsize", "16M", "-pix_fmt", "yuv420p",
            str(silent)]
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     for n in range(N):
