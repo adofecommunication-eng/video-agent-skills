@@ -52,8 +52,9 @@ _extract(HERE / "sources" / "video-bassin-wbr.mp4", FRAMES_DIR.parent / "frames5
 
 WHITE = (255, 255, 255)
 INK = (8, 10, 14)
-GOLD = R.GOLD
-WATER = (40, 170, 230)
+# demande du client : tout en blanc (ni or ni bleu) ; les panneaux sous le texte sont noirs translucides
+GOLD = WHITE
+WATER = (190, 190, 196)
 clamp, prog, ease_out, ease_in_out, back_out = R.clamp, R.prog, R.ease_out, R.ease_in_out, R.back_out
 
 # ---------------------------------------------------------------- calage voix (délai inclus)
@@ -114,7 +115,8 @@ def rrect_mask(size, r):
 
 
 def gold_fill(size, mask=None):
-    g = R.gradient_fill(size, R.GOLD_STOPS).convert("RGBA")
+    """(Anciennement or) : remplissage blanc."""
+    g = Image.new("RGBA", size, WHITE + (255,))
     if mask is not None:
         g.putalpha(mask)
     return g
@@ -260,7 +262,7 @@ def letterbox(c, amount):
     d.rectangle((0, H - bar, W, H), fill=(0, 0, 0, 255))
 
 
-def light_leak(c, t, t0, dur=1.2, color=(255, 170, 90), x0=-300, x1=1400, alpha=150):
+def light_leak(c, t, t0, dur=1.2, color=(255, 250, 240), x0=-300, x1=1400, alpha=150):
     p = prog(t, t0, dur)
     if p <= 0 or p >= 1:
         return
@@ -376,25 +378,25 @@ F_A = R.anton
 F_H = lambda s: R.helv(s, bold=True)  # noqa: E731
 T = {
     "3": bloom(tl("3", F_A(560))), "2": bloom(tl("2", F_A(560))), "1": bloom(tl("1", F_A(560))),
-    "splash": bloom(text3d("SPLASH !", F_A(250), face=WHITE, side=(20, 110, 170), depth=16), 22, 0.5),
+    "splash": bloom(text3d("SPLASH !", F_A(250), face=WHITE, side=(95, 95, 104), depth=16), 22, 0.5),
     "samedi": tl("SAMEDI 05 DÉC. 2026", F_A(96), tracking=6),
     "wbr": tl("WELLBEING RESORT PRÉSENTE", F_H(38), tracking=10),
-    "titre1": bloom(text3d("SPLASH", F_A(270), face=WHITE, side=(20, 110, 170), depth=16, tracking=6), 24, 0.5),
-    "titre2": bloom(text3d("PARTY", F_A(270), face=WHITE, side=(20, 110, 170), depth=16, tracking=10), 24, 0.45),
+    "titre1": bloom(text3d("SPLASH", F_A(270), face=WHITE, side=(95, 95, 104), depth=16, tracking=6), 24, 0.5),
+    "titre2": bloom(text3d("PARTY", F_A(270), face=WHITE, side=(95, 95, 104), depth=16, tracking=10), 24, 0.45),
     "heures": tl("08H – 18H", F_A(150), tracking=6),
     "journee": tl("UNE JOURNÉE DE FUN", F_H(42), tracking=10),
     "petits": tl("POUR PETITS ET GRANDS", F_A(84), tracking=4),
     "auprog": bloom(tl("AU PROGRAMME", F_A(130), tracking=10), 16, 0.4),
     "piscine": tl("PISCINE", F_A(190), tracking=4),
     "mousse": tl("& BAIN DE MOUSSE", F_A(96), tracking=4),
-    "miss": bloom(text3d("MISS SPLASH", F_A(170), face=WHITE, side=(20, 110, 170), depth=14, tracking=4), 20, 0.5),
+    "miss": bloom(text3d("MISS SPLASH", F_A(170), face=WHITE, side=(95, 95, 104), depth=14, tracking=4), 20, 0.5),
     "election": tl("L'ÉLECTION", F_H(40), tracking=14),
     "danses": tl("CONCOURS DE DANSES", F_A(120), tracking=3),
     "karaoke": tl("KARAOKÉ", F_A(190), tracking=6),
     "billard": tl("BILLARD", F_A(170), tracking=6),
     "babyfoot": tl("BABY-FOOT", F_A(170), tracking=6),
     "jeux": tl("JEUX", F_A(170), tracking=6),
-    "dj": bloom(text3d("AMBIANCE DJ", F_A(160), face=WHITE, side=(20, 110, 170), depth=12, tracking=4), 20, 0.5),
+    "dj": bloom(text3d("AMBIANCE DJ", F_A(160), face=WHITE, side=(95, 95, 104), depth=12, tracking=4), 20, 0.5),
     "toutjour": tl("TOUTE LA JOURNÉE", F_H(40), tracking=12),
     "enfadu": tl("ENFANT & ADULTE", F_A(90), tracking=6),
     "rafr": tl("+ 01 RAFRAÎCHISSEMENT OFFERT", F_H(40), tracking=4),
@@ -410,10 +412,10 @@ T = {
     "fin_adr": tl("COCODY RIVIERA 3, ROUTE M'BADON", F_H(36), tracking=3),
     "fin_tel": tl("07 47 79 95 07  ·  05 66 92 33 91", F_A(70)),
     "fin_prix": tl("ENTRÉE 5.000 F  ·  ENFANT & ADULTE", F_H(38), tracking=3),
-    "plouf": bloom(text3d("PLOUF !", F_A(300), face=WHITE, side=(20, 110, 170), depth=18), 26, 0.55),
+    "plouf": bloom(text3d("PLOUF !", F_A(300), face=WHITE, side=(95, 95, 104), depth=18), 26, 0.55),
 }
 NUM_GROUPS = ["07", "47", "79", "95", "07"]
-T_NUM = [bloom(text3d(g, F_A(220), face=WHITE, side=(20, 110, 170), depth=12), 16, 0.45) for g in NUM_GROUPS]
+T_NUM = [bloom(text3d(g, F_A(220), face=WHITE, side=(95, 95, 104), depth=12), 16, 0.45) for g in NUM_GROUPS]
 LOGO = R.LOGO.copy()
 LOGO.paste(Image.new("RGBA", LOGO.size, WHITE + (255,)), (0, 0), LOGO.getchannel("A"))  # logo en blanc
 _TK = {}
@@ -427,8 +429,9 @@ def ticket(value):
     d = ImageDraw.Draw(m)
     d.ellipse((-50, h // 2 - 50, 50, h // 2 + 50), fill=0)
     d.ellipse((w - 50, h // 2 - 50, w + 50, h // 2 + 50), fill=0)
-    tk = Image.new("RGBA", (w, h), BLUE + (255,))
+    tk = Image.new("RGBA", (w, h), (14, 14, 18, 255))
     tk.putalpha(m)
+    ImageDraw.Draw(tk).rounded_rectangle((3, 3, w - 4, h - 4), radius=34, outline=WHITE + (255,), width=6)
     dd = ImageDraw.Draw(tk)
     for x in range(90, w - 90, 26):
         dd.line((x, 100, x + 12, 100), fill=(60, 40, 10, 140), width=3)
@@ -623,7 +626,7 @@ MISS_HEAD = (322, 590)
 
 # ---------------------------------------------------------------- séquences
 # ---------------------------------------------------------------- habillage TV
-BLUE = (0, 104, 190)
+BLUE = (16, 16, 20)  # panneaux neutres (noir) sous le texte blanc
 _BARS = {}
 
 
@@ -634,7 +637,7 @@ def bar_layer(text, size, style="gold", helv=False):
     fg = WHITE
     lab = tl(text, F_H(size) if helv else F_A(size), fill=fg, shadow=False, tracking=4 if helv else 3)
     w, h = lab.width - 80 + 70, lab.height - 80 + (34 if helv else 22)
-    panel = Image.new("RGBA", (w, h), {"gold": (10, 32, 64, 235), "blue": BLUE + (255,), "white": (0, 0, 0, 165)}[style])
+    panel = Image.new("RGBA", (w, h), {"gold": (14, 14, 18, 225), "blue": (14, 14, 18, 225), "white": (0, 0, 0, 165)}[style])
     accent = Image.new("RGBA", (12, h), GOLD + (255,))
     out = Image.new("RGBA", (w + 12, h), (0, 0, 0, 0))
     out.alpha_composite(panel, (12, 0))
@@ -666,6 +669,7 @@ def circle_burst(c, cx, cy, t, t0, color=GOLD, rmax=430):
     if p <= 0:
         return
     r = rmax * back_out(p, 1.6)
+    color = (14, 14, 18)
     d = ImageDraw.Draw(c)
     d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=color + (235,))
     r2 = r * (0.86 + 0.5 * prog(t, t0 + 0.1, 0.4))
@@ -820,7 +824,7 @@ def miss_scene(c, t):
     hx, hy = (MISS_HEAD[0] - x0) * z, (MISS_HEAD[1] - y0) * z
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).polygon([(hx - 70, 0), (hx + 70, 0), (hx + 480, 1700), (hx - 480, 1700)],
-                                 fill=(255, 220, 150, int(110 * k)))
+                                 fill=(255, 255, 255, int(110 * k)))
     c.alpha_composite(glow.filter(ImageFilter.GaussianBlur(50)))
     kinetic(c, "MISS", 280, 800, 760, t, t0 + 0.35, stagger=0.05)
     kinetic(c, "SPLASH", 190, 800, 990, t, t0 + 0.6, stagger=0.04)
@@ -846,7 +850,7 @@ def s5_prix(c, t):
         flip = abs(math.cos((1 - ease_out(k)) * math.pi * 1.5)) if k < 1 else 1.0
         tk = tk.resize((max(2, int(tk.width * flip)), tk.height), Image.BILINEAR)
         place(c, tk, W / 2, 760, alpha=clamp(k * 3), angle=-3)
-    flash(c, t, CUE["prix"] + 0.9, 0.3, 0.35, (255, 230, 170))
+    flash(c, t, CUE["prix"] + 0.9, 0.3, 0.35, WHITE)
     bar_text(c, "ENFANT & ADULTE", 100, W / 2, 1110, t, CUE["enfant"], "blue")
     bar_text(c, "+ 01 RAFRAÎCHISSEMENT OFFERT", 42, W / 2, 1240, t, CUE["rafr"], "white", helv=True)
     bar_text(c, "ACCÈS À LA PISCINE", 84, W / 2, 1360, t, CUE["acces"], "gold")
@@ -869,7 +873,7 @@ def s7_emotion(c, t):
     focus = ease_in_out(prog(t, CUTS[6] + 0.2, 1.4))
     c.alpha_composite(Image.blend(blur, sharp, focus).convert("RGBA"))
     grad_bottom(c, 800, 170)
-    light_leak(c, t, CUTS[6] + 0.3, 2.6, color=(255, 175, 95), alpha=170)
+    light_leak(c, t, CUTS[6] + 0.3, 2.6, color=(255, 250, 240), alpha=120)
     bar_text(c, "EN FAMILLE OU ENTRE AMIS", 46, W / 2, 1180, t, CUE["famille"], "white", helv=True)
     reveal(c, T["adorer"], W / 2, 1310, t, CUE["adorer"], dur=0.5)
 
@@ -961,7 +965,7 @@ def scene_frame(i, t):
 
 def panels(cur, nxt, p, k=0):
     """Transition TV : trois bandeaux (bleu, or, blanc) recouvrent l'écran puis découvrent le plan suivant."""
-    cols = [Image.new("RGBA", (W, H), BLUE + (255,)), gold_fill((W, H)), Image.new("RGBA", (W, H), WHITE + (255,))]
+    cols = [Image.new("RGBA", (W, H), (230, 230, 232, 255)), Image.new("RGBA", (W, H), (14, 14, 18, 255)), Image.new("RGBA", (W, H), WHITE + (255,))]
     left = k % 2 == 0
     if p < 0.5:
         base, q = cur.copy(), p / 0.5
