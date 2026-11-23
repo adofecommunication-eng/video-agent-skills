@@ -161,39 +161,34 @@ def braam(root=33, d=2.2):
 
 
 # ---------------------------------------------------------------- musique
-# ouverture : nappe grave + battements de cœur + tic-tac
-t = tt(GRID0 + 0.2)
-drone = (np.sin(2 * np.pi * 41.2 * t) + 0.5 * np.sin(2 * np.pi * 61.7 * t)) * np.minimum(1, t / 1.5) * 0.5
-add(music, drone[int(INTRO * SR):], INTRO, 0.6)
-for hb in np.arange(INTRO + 0.35, CUE_UN := C["un"], 0.8):
-    for k, dt_ in enumerate((0, 0.18)):
-        tk = tt(0.25)
-        add(music, np.sin(2 * np.pi * np.cumsum(55 + 40 * np.exp(-tk * 30)) / SR) * np.exp(-tk * 16), hb + dt_,
-            0.7 if k == 0 else 0.45)
-for tk_ in np.arange(INTRO + 0.2, GRID0 - 0.2, 0.25):
-    x = tt(0.02)
-    add(music, np.sin(2 * np.pi * 2600 * x) * np.exp(-x * 300), tk_, 0.12, pan=0.3)
-for t0, root in [(C["trois"], 33), (C["deux"], 34), (C["un"], 36)]:
-    add(music, braam(root, 2.0), t0, 0.55, send=0.5)
-
-# ouverture : même groove, plein volume, puis coupure nette avant les yeux
-for t0 in S.INTRO_BEATS:
-    add(music, kick(), t0, 0.66)
-    add(music, clap(), t0, 0.22, send=0.2)
-for k, t0 in grid(BEAT / 4, 0.0, S.INTRO_BEATS[-1]):
+# ouverture (0 – 2 s) : le groove démarre tout de suite, puis se coupe pour le compte à rebours
+OPEN_END = C["trois"] - 0.05
+for k, t0 in grid(BEAT, 0.0, OPEN_END):
+    if t0 >= 0:
+        add(music, kick(), t0, 0.62)
+        if k % 2:
+            add(music, clap(), t0, 0.3, send=0.2)
+for k, t0 in grid(BEAT / 4, 0.0, OPEN_END):
     if t0 >= 0:
         add(music, shaker(), t0, 0.07 if k % 2 else 0.04, pan=0.35)
-for k, t0 in grid(BAR, -BAR, S.INTRO_BEATS[-1]):
+for k, t0 in grid(BAR, -BAR, OPEN_END):
     for s16 in (0, 3, 6, 10, 11, 14):
         tj = t0 + s16 * BEAT / 4
-        if 0 <= tj < S.INTRO_BEATS[-1]:
+        if 0 <= tj < OPEN_END:
             add(music, logdrum(45 + (12 if s16 in (10, 11) else 0)), tj, 0.3)
+# compte à rebours : roulement de caisse claire qui accélère vers « SPLASH »
+d_roll = C["splash"] - C["trois"]
+for i in range(60):
+    tr = C["trois"] + d_roll * (1 - (1 - i / 60) ** 1.6)
+    if tr >= C["splash"] - 0.03:
+        break
+    add(music, clap(), tr, 0.05 + 0.25 * (i / 60), send=0.2)
 
 # groove afro-house
 CH = [[57, 60, 64], [55, 59, 62], [53, 57, 60], [55, 59, 62]]   # La m · Sol · Fa · Sol
 ROOT = [45, 43, 41, 43]
 MEL = [76, None, 72, 74, None, 76, 79, None, 76, None, 74, 72, None, 69, None, None]
-beats_out = list(S.INTRO_BEATS)
+beats_out = [round(t0, 3) for k, t0 in grid(BEAT, 0.0, OPEN_END) if t0 >= 0]
 for k, t0 in grid(BEAT, GRID0, END_HIT):
     if not groove_on(t0):
         continue
@@ -352,48 +347,7 @@ def cheer(d=2.5):
     return s / 10 * env
 
 
-# placement des bruitages
-for b_ in S.INTRO_CUTS[1:]:
-    add(sfx, whoosh(0.3, 300, 8000), b_ - 0.15, 0.28, pan=float(rng.uniform(-0.5, 0.5)))
-    add(sfx, impact(), b_, 0.25, send=0.3)
-add(sfx, water_splash(1.2), 0.0, 0.6, send=0.4)
-add(sfx, impact(), S.INTRO_BEATS[1], 0.45, send=0.5)
-add(sfx, water_splash(1.0), S.INTRO_CUTS[7], 0.4)
-add(sfx, reverse_swell(1.0), S.INTRO_BEATS[-1] - 1.0, 0.5, send=0.3)
-add(sfx, impact(), S.INTRO_BEATS[-1], 0.75, send=0.9)
-add(sfx, reverse_swell(1.0), C["splash"] - 1.0, 0.5, send=0.3)
-add(sfx, water_splash(1.3), C["splash"] - 0.05, 0.65, send=0.4)
-add(sfx, impact(), C["splash"], 0.6, send=0.6)
-for t0 in [C["samedi"], C["wbr"], C["heures"] + 0.2, C["heures"] + 1.2, C["petits"], C["famille"], C["adorer"],
-           C["faims"], C["nourriture"] + 0.6, C["rafr"], C["acces"], C["fin"] + 1.1]:
-    add(sfx, whoosh(0.4, 400, 5000), t0 - 0.15, 0.22, pan=float(rng.uniform(-0.4, 0.4)), send=0.2)
-for t0 in [C["party"], C["party"] + 0.25, C["miss"] + 0.1, C["dj"] + 0.4, C["entree"] + 0.1, C["enfant"],
-           CUTS[8], CUTS[8] + 0.2]:
-    add(sfx, impact(), t0, 0.4, send=0.5)
-add(sfx, water_splash(1.0), C["party"] + 0.25, 0.4, send=0.3)
-for t0 in [C["auprog"], C["piscine"], C["danses"], C["karaoke"], C["billard"], C["babyfoot"], C["jeux"],
-           C["nourriture"]]:
-    add(sfx, whoosh(0.35, 600, 7000), t0 - 0.13, 0.3, pan=float(rng.uniform(-0.5, 0.5)), send=0.15)
-    add(sfx, impact(), t0, 0.22, send=0.3)
-add(sfx, bubbles_sfx(1.0, 20), C["auprog"], 0.3)
-add(sfx, water_splash(0.7), C["piscine"], 0.35)
-add(sfx, scratch(), C["dj"] - 0.1, 0.45)
-add(sfx, scratch(), C["dj"] + 1.1, 0.3)
-for t0 in np.arange(C["prix"], C["prix"] + 0.9, 0.06):
-    add(sfx, tick(), t0, 0.3, pan=-0.2)
-add(sfx, chime(), C["prix"] + 0.9, 0.25, send=0.5)
-for i, t0 in enumerate(C["nums"]):
-    add(sfx, whoosh(0.25, 800, 6000), t0 - 0.12, 0.2)
-    add(sfx, plop(500 + 90 * i), t0 + 0.2, 0.5, send=0.3)
-    add(sfx, water_splash(0.25), t0 + 0.18, 0.3)
-for b in [CUTS[5], CUTS[6]]:                       # transitions bulles
-    add(sfx, bubbles_sfx(0.5, 12), b - S.XD, 0.35)
-for b in [CUTS[3], CUTS[8]]:                       # panoramiques filés
-    add(sfx, whoosh(0.4, 250, 6000), b - S.XD, 0.45, send=0.2)
-for b in [CUTS[2], CUTS[4], CUTS[7]] + S.INNER_CUTS:   # zooms traversants
-    add(sfx, whoosh(0.36, 200, 9000), b - 0.2, 0.4, send=0.25)
-
-
+# ---------------------------------------------------------------- bruitages façon « MrBeast » (recréés ici)
 def shutter():
     """Déclic d'appareil photo (image arrêtée)."""
     out = np.zeros(int(0.25 * SR))
@@ -406,16 +360,131 @@ def shutter():
     return out
 
 
-add(sfx, shutter(), C["miss"] + 0.18, 0.6)
-add(sfx, impact(), C["miss"] + 0.2, 0.45, send=0.6)
-add(sfx, reverse_swell(0.6), C["miss"] - 0.45, 0.35, send=0.3)
-add(sfx, chime(), C["miss"] + 0.75, 0.3, send=0.6)
-add(sfx, reverse_swell(1.2), C["plouf"] - 1.2, 0.5, send=0.3)
-add(sfx, water_splash(1.6), C["plouf"] - 0.03, 0.8, send=0.5)
-add(sfx, impact(), C["plouf"], 0.7, send=0.7)
-add(sfx, applause(DUR - C["plouf"] - 0.2), C["plouf"] + 0.3, 0.3, send=0.2)
-add(sfx, cheer(2.5), C["plouf"] + 0.35, 0.18, send=0.3)
-add(sfx, impact(), END_HIT, 0.5, send=0.7)
+def boom():
+    """Boom grave très saturé (type « vine boom ») pour les grandes révélations."""
+    t = tt(1.4)
+    body = np.sin(2 * np.pi * np.cumsum(38 + 120 * np.exp(-t * 22)) / SR)
+    s_ = np.tanh(4.0 * body) * np.exp(-t * 3.2)
+    n = rng.normal(0, 1, len(t))
+    click = (n - lowpass(n, 2500)) * np.exp(-t * 90) * 0.8
+    return (s_ + click) * 0.9
+
+
+def ka_ching():
+    """Caisse enregistreuse : clac mécanique + clochette brillante."""
+    out = np.zeros(int(1.2 * SR))
+    for j0 in (0.0, 0.06):
+        x = tt(0.05)
+        n = rng.normal(0, 1, len(x))
+        c_ = (lowpass(n, 3000) * 1.2 + np.sin(2 * np.pi * 900 * x)) * np.exp(-x * 90)
+        j = int(j0 * SR)
+        out[j:j + len(c_)] += c_ * 0.6
+    x = tt(1.0)
+    bell_ = sum(np.sin(2 * np.pi * f * x) * a_ for f, a_ in ((2637, 1), (3951, .6), (5274, .35), (6580, .2)))
+    j = int(0.11 * SR)
+    out[j:j + len(x)] += bell_ * np.exp(-x * 4.5) * 0.5
+    return out
+
+
+def ding(f=1760):
+    """Ding brillant (apparition de texte / notification)."""
+    x = tt(0.9)
+    return (np.sin(2 * np.pi * f * x) + 0.5 * np.sin(2 * np.pi * f * 2.01 * x) * np.exp(-x * 8)) * np.exp(-x * 5)
+
+
+def pop_toon():
+    """Pop de bulle cartoon."""
+    x = tt(0.09)
+    return np.sin(2 * np.pi * np.cumsum(400 + 1800 * x / 0.09) / SR) * np.exp(-x * 45)
+
+
+def swish(d=0.22):
+    """Swoosh court et sec des coupes rapides."""
+    x = tt(d)
+    n = rng.normal(0, 1, len(x))
+    hp = n - lowpass(n, 2500)
+    env = (x / d) ** 2 * np.exp(-((x - d * 0.75) / (d * 0.2)) ** 2) * 3
+    return hp * env
+
+
+def riser_fast(d=1.0):
+    x = tt(d)
+    n = rng.normal(0, 1, len(x))
+    tone = np.sin(2 * np.pi * np.cumsum(300 + 2200 * (x / d) ** 2) / SR)
+    return ((n - lowpass(n, 1500)) * 0.5 + tone * 0.35) * (x / d) ** 2.5
+
+
+def glitch_sfx(d=0.16):
+    x = tt(d)
+    s_ = np.sign(np.sin(2 * np.pi * 180 * x)) * (rng.random(len(x)) < 0.6)
+    s_ = np.repeat(s_[::300], 300)[:len(x)]
+    return s_ * 0.5 * np.exp(-x * 10)
+
+
+def cartoon_boing():
+    x = tt(0.45)
+    f = 220 + 160 * np.sin(2 * np.pi * 9 * x) * np.exp(-x * 5)
+    return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-x * 6)
+
+
+B = C
+# accroche : boom sur l'ouverture, dings sur les bandeaux
+add(sfx, boom(), 0.0, 0.55, send=0.3)
+add(sfx, ding(1568), 0.3, 0.25)
+add(sfx, ding(2093), 0.62, 0.22)
+# compte à rebours : boom + glitch sur chaque chiffre, montée vers SPLASH
+for t0 in (B["trois"], B["deux"], B["un"]):
+    add(sfx, boom(), t0, 0.6, send=0.3)
+    add(sfx, glitch_sfx(), t0, 0.25)
+add(sfx, riser_fast(B["splash"] - B["trois"]), B["trois"], 0.35)
+# SPLASH : plouf + gros boom
+add(sfx, water_splash(1.3), B["splash"] - 0.05, 0.7, send=0.4)
+add(sfx, boom(), B["splash"], 0.75, send=0.5)
+# titres et grands moments : boom
+for t0 in [B["party"], B["party"] + 0.25, B["dj"] + 0.4, CUTS[8], B["miss"] + 0.2]:
+    add(sfx, boom(), t0, 0.55, send=0.4)
+# bandeaux et textes : dings et pops
+for t0, f in [(B["samedi"], 1760), (B["wbr"], 2093), (B["heures"] + 0.15, 1568), (B["heures"] + 1.2, 2349),
+              (B["petits"], 1760), (B["auprog"], 2093), (B["piscine"] + 0.4, 2349), (B["danses"] + 0.3, 1760),
+              (B["dj"] + 1.0, 2093), (B["enfant"], 1568), (B["rafr"], 2093), (B["acces"], 2349), (B["faims"], 1760),
+              (B["nourriture"] + 0.6, 2093), (B["famille"], 1568), (B["resa"], 2093), (B["nums"][-1] + 0.8, 2349),
+              (B["fin"] + 1.1, 1760), (B["fin"] + 3.0, 2093)]:
+    add(sfx, ding(f), t0, 0.2, pan=float(rng.uniform(-0.3, 0.3)))
+# programme : swoosh + boom à chaque mot, pop sur les disques de couleur
+for t0 in [B["piscine"], B["danses"], B["karaoke"], B["billard"], B["babyfoot"], B["jeux"], B["nourriture"]]:
+    add(sfx, swish(), t0 - 0.2, 0.5, pan=float(rng.uniform(-0.5, 0.5)))
+    add(sfx, boom(), t0, 0.4, send=0.3)
+for t0 in [B["karaoke"], B["billard"], B["babyfoot"], B["jeux"]]:
+    add(sfx, pop_toon(), t0 - 0.02, 0.4)
+add(sfx, water_splash(0.8), B["piscine"], 0.4)
+add(sfx, scratch(), B["dj"] - 0.1, 0.5)
+add(sfx, scratch(), B["dj"] + 1.1, 0.35)
+# Miss Splash : déclic, boom, carillon, boing sur la couronne
+add(sfx, riser_fast(0.6), B["miss"] - 0.4, 0.35)
+add(sfx, shutter(), B["miss"] + 0.18, 0.6)
+add(sfx, chime(), B["miss"] + 0.75, 0.3, send=0.5)
+add(sfx, cartoon_boing(), B["miss"] + 1.2, 0.25)
+# prix : compteur + caisse enregistreuse
+for t0 in np.arange(B["prix"], B["prix"] + 0.9, 0.06):
+    add(sfx, tick(), t0, 0.3, pan=-0.2)
+add(sfx, ka_ching(), B["prix"] + 0.88, 0.6, send=0.3)
+# numéros : un pop par groupe de chiffres
+for i, t0 in enumerate(B["nums"]):
+    add(sfx, pop_toon(), t0 - 0.05, 0.45)
+    add(sfx, ding(1568 + 196 * i), t0, 0.15)
+# coupes franches et transitions à bandeaux : swoosh
+for b_ in S.INNER_CUTS:
+    add(sfx, swish(), b_ - 0.18, 0.45)
+for b_ in [CUTS[2], CUTS[3], CUTS[4], CUTS[5], CUTS[6], CUTS[7], CUTS[8]]:
+    add(sfx, swish(0.3), b_ - S.XD * 0.6, 0.55, pan=-0.3)
+    add(sfx, swish(0.3), b_ - S.XD * 0.1, 0.45, pan=0.3)
+# final : montée, plouf, boom, applaudissements et cris de joie
+add(sfx, riser_fast(1.2), B["plouf"] - 1.2, 0.4)
+add(sfx, water_splash(1.6), B["plouf"] - 0.03, 0.8, send=0.5)
+add(sfx, boom(), B["plouf"], 0.8, send=0.5)
+add(sfx, applause(DUR - B["plouf"] - 0.2), B["plouf"] + 0.3, 0.32, send=0.2)
+add(sfx, cheer(2.5), B["plouf"] + 0.35, 0.2, send=0.3)
+add(sfx, boom(), END_HIT, 0.5, send=0.5)
 
 # ---------------------------------------------------------------- réverbération (convolution)
 ir_t = tt(2.2)
