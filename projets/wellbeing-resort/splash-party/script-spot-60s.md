@@ -9,7 +9,7 @@ Palette proposée : noir chaud + or de la charte, avec du **bleu piscine** et du
 
 ## 1. Voix off : texte à coller dans ElevenLabs (voix « Lola », style enjoué)
 
-Nombres en toutes lettres et pauses balisées pour une diction propre. Environ 150 mots, durée visée : 55 à 57 s.
+Nombres en toutes lettres et pauses balisées pour une diction propre. Environ 136 mots, durée visée : 55 à 57 s avec les pauses.
 
 ```
 Trois… deux… un… SPLASH ! <break time="0.5s" />
