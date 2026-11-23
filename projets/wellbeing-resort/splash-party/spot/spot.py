@@ -584,10 +584,10 @@ def kinetic(c, text, size, cx, cy, t, t0, stagger=0.035, gold=False, tracking=4,
 
 
 def rgb_split(c, amount):
-    if amount < 0.5:
+    s = int(round(amount))
+    if s < 1:
         return c
     a = np.asarray(c.convert("RGB"))
-    s = int(amount)
     out = a.copy()
     out[:, s:, 0] = a[:, :-s, 0]
     out[:, :-s, 2] = a[:, s:, 2]
