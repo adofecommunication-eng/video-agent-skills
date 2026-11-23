@@ -22,14 +22,15 @@ import numpy as np
 import spot as S
 
 HERE = Path(__file__).resolve().parent
-SR, DUR, BPM = 44100, 60.0, 120
+SR, DUR, BPM = 44100, S.DUR, 120
+INTRO = S.INTRO
 BEAT = 60 / BPM
 BAR = 4 * BEAT
 N = int(SR * DUR)
 C, CUTS = S.CUE, S.CUTS
 GRID0 = C["splash"]
 EMO = (CUTS[6], CUTS[7])            # section émotion : pas de batterie
-END_HIT = 58.4
+END_HIT = 58.4 + INTRO
 rng = np.random.default_rng(9)
 music = np.zeros((N, 2))
 sfx = np.zeros((N, 2))
@@ -163,23 +164,36 @@ def braam(root=33, d=2.2):
 # ouverture : nappe grave + battements de cœur + tic-tac
 t = tt(GRID0 + 0.2)
 drone = (np.sin(2 * np.pi * 41.2 * t) + 0.5 * np.sin(2 * np.pi * 61.7 * t)) * np.minimum(1, t / 1.5) * 0.5
-add(music, drone, 0, 0.6)
-for hb in np.arange(0.35, CUE_UN := C["un"], 0.8):
+add(music, drone[int(INTRO * SR):], INTRO, 0.6)
+for hb in np.arange(INTRO + 0.35, CUE_UN := C["un"], 0.8):
     for k, dt_ in enumerate((0, 0.18)):
         tk = tt(0.25)
         add(music, np.sin(2 * np.pi * np.cumsum(55 + 40 * np.exp(-tk * 30)) / SR) * np.exp(-tk * 16), hb + dt_,
             0.7 if k == 0 else 0.45)
-for tk_ in np.arange(0.2, GRID0 - 0.2, 0.25):
+for tk_ in np.arange(INTRO + 0.2, GRID0 - 0.2, 0.25):
     x = tt(0.02)
     add(music, np.sin(2 * np.pi * 2600 * x) * np.exp(-x * 300), tk_, 0.12, pan=0.3)
 for t0, root in [(C["trois"], 33), (C["deux"], 34), (C["un"], 36)]:
     add(music, braam(root, 2.0), t0, 0.55, send=0.5)
 
+# ouverture : même groove, plein volume, puis coupure nette avant les yeux
+for t0 in S.INTRO_BEATS:
+    add(music, kick(), t0, 0.66)
+    add(music, clap(), t0, 0.22, send=0.2)
+for k, t0 in grid(BEAT / 4, 0.0, S.INTRO_BEATS[-1]):
+    if t0 >= 0:
+        add(music, shaker(), t0, 0.07 if k % 2 else 0.04, pan=0.35)
+for k, t0 in grid(BAR, -BAR, S.INTRO_BEATS[-1]):
+    for s16 in (0, 3, 6, 10, 11, 14):
+        tj = t0 + s16 * BEAT / 4
+        if 0 <= tj < S.INTRO_BEATS[-1]:
+            add(music, logdrum(45 + (12 if s16 in (10, 11) else 0)), tj, 0.3)
+
 # groove afro-house
 CH = [[57, 60, 64], [55, 59, 62], [53, 57, 60], [55, 59, 62]]   # La m · Sol · Fa · Sol
 ROOT = [45, 43, 41, 43]
 MEL = [76, None, 72, 74, None, 76, 79, None, 76, None, 74, 72, None, 69, None, None]
-beats_out = []
+beats_out = list(S.INTRO_BEATS)
 for k, t0 in grid(BEAT, GRID0, END_HIT):
     if not groove_on(t0):
         continue
@@ -339,6 +353,14 @@ def cheer(d=2.5):
 
 
 # placement des bruitages
+for b_ in S.INTRO_CUTS[1:]:
+    add(sfx, whoosh(0.3, 300, 8000), b_ - 0.15, 0.28, pan=float(rng.uniform(-0.5, 0.5)))
+    add(sfx, impact(), b_, 0.25, send=0.3)
+add(sfx, water_splash(1.2), 0.0, 0.6, send=0.4)
+add(sfx, impact(), S.INTRO_BEATS[1], 0.45, send=0.5)
+add(sfx, water_splash(1.0), S.INTRO_CUTS[7], 0.4)
+add(sfx, reverse_swell(1.0), S.INTRO_BEATS[-1] - 1.0, 0.5, send=0.3)
+add(sfx, impact(), S.INTRO_BEATS[-1], 0.75, send=0.9)
 add(sfx, reverse_swell(1.0), C["splash"] - 1.0, 0.5, send=0.3)
 add(sfx, water_splash(1.3), C["splash"] - 0.05, 0.65, send=0.4)
 add(sfx, impact(), C["splash"], 0.6, send=0.6)

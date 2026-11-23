@@ -29,9 +29,10 @@ import render as R  # noqa: E402
 
 OUT = HERE / "rendu"
 OUT.mkdir(exist_ok=True)
-W, H, FPS, DUR = 1080, 1920, 30, 60.0
+INTRO = 8.0  # ouverture : montage nerveux sur les vidéos de la fête de la mousse au WBR
+W, H, FPS, DUR = 1080, 1920, 30, 60.0 + INTRO
 N = int(DUR * FPS)
-V = 2.0  # la voix démarre après 2 s d'ouverture à froid
+V = INTRO + 2.0  # la voix démarre après l'ouverture et 2 s sur les yeux
 FRAMES_DIR = HERE / ".images" / "frames"          # images extraites des vidéos (régénérées si absentes)
 
 
@@ -46,6 +47,7 @@ def _extract(src, dst, extra=""):
 
 _extract(HERE / "sources" / "video-piscine-wbr.mov", FRAMES_DIR)
 _extract(HERE / "sources" / "video-foule-mousse-wbr.mp4", FRAMES_DIR.parent / "frames2", ",unsharp=5:5:0.6")
+_extract(HERE / "sources" / "video-fete-mousse-wbr-2.mp4", FRAMES_DIR.parent / "frames3", ",unsharp=5:5:0.8")
 
 WHITE = (255, 255, 255)
 INK = (8, 10, 14)
@@ -499,7 +501,7 @@ def beat_pulse(t):
 
 # ---------------------------------------------------------------- vidéos réelles du Wellbeing Resort
 FRAMES2_DIR = FRAMES_DIR.parent / "frames2"   # sources/video-foule-mousse-wbr.mp4 (273 images)
-VIDS = {"piscine": (FRAMES_DIR, 230), "foule": (FRAMES2_DIR, 273)}
+VIDS = {"piscine": (FRAMES_DIR, 230), "foule": (FRAMES2_DIR, 273), "fete": (FRAMES_DIR.parent / "frames3", 839)}
 _VCACHE = {}
 
 
@@ -610,9 +612,9 @@ MISS_HEAD = (322, 590)
 # ---------------------------------------------------------------- séquences
 def s0_cold(c, t):
     """0 – 2,06 : ouverture à froid. Format cinéma, les yeux de la fillette, lente avancée."""
-    p = prog(t, 0, CUTS[0])
+    p = prog(t, INTRO, CUTS[0] - INTRO)
     c.alpha_composite(crop_fill(PHOTO, view(1180, 965, 2000 / 260 * (1 + 0.08 * p))).convert("RGBA"))
-    veil(c, int(255 * (1 - prog(t, 0.15, 0.9))))
+    veil(c, int(255 * (1 - prog(t, INTRO + 0.15, 0.9))))
     letterbox(c, 1)
 
 
@@ -865,9 +867,39 @@ def s9_final(c, t):
         droplets(c, t, CUE["plouf"] + 0.05, W / 2, 1000, n=140, seed=33)
 
 
-SCENES = [s0_cold, s1_count, s2_hero, s3_footage, s4_programme, s5_prix, s6_food, s7_emotion, s8_resa, s9_final]
-BOUNDS = [0.0] + CUTS[:-1] + [DUR]
-TRANS = {3: "zoom", 4: "whip", 5: "zoom", 6: "bubbles", 7: "bubbles", 8: "zoom", 9: "whip"}
+# ---------------------------------------------------------------- ouverture : la fête de la mousse au WBR
+BEAT0 = V + 2.46 - 8 * 0.5 * 4          # grille à 120 BPM alignée sur « SPLASH »
+INTRO_BEATS = [round(BEAT0 + 0.5 * k, 3) for k in range(40) if 0 < BEAT0 + 0.5 * k < INTRO]
+# (temps source dans video-fete-mousse-wbr-2.mp4, vitesse, zoom) ; une entrée par coupe, coupes sur les temps
+INTRO_SHOTS = [(25.2, 0.45, 1.05), (3.5, 1.0, 1.08), (0.0, 1.0, 1.12), (13.6, 1.0, 1.0), (18.4, 1.0, 1.06),
+               (14.5, 0.8, 1.1), (5.5, 1.0, 1.0), (8.0, 0.45, 1.12), (21.4, 1.0, 1.05), (16.5, 1.0, 1.1),
+               (19.5, 1.0, 1.05), (25.0, 0.3, 1.0)]
+INTRO_CUTS = [0.0] + [b for i, b in enumerate(INTRO_BEATS) if i in (1, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14)]
+
+
+def s_intro(c, t):
+    """0 – 8 s : montage nerveux, une coupe par temps fort, ralentis sur la mousse ; sortie au blanc puis noir."""
+    i = max(k for k, b in enumerate(INTRO_CUTS) if b <= t)
+    src, sp, z = INTRO_SHOTS[min(i, len(INTRO_SHOTS) - 1)]
+    lt = t - INTRO_CUTS[i]
+    c.alpha_composite(zoomed(vid("fete", src + lt * sp), z + 0.05 * lt))
+    if i == 0:
+        veil(c, int(255 * (1 - prog(t, 0.0, 0.35))))
+    flash(c, t, INTRO_CUTS[i], 0.1, 0.35)
+    grad_bottom(c, 700, 150)
+    kinetic(c, "WELLBEING RESORT", 120, W / 2, 1300, t, INTRO_BEATS[1], stagger=0.03, gold=True,
+            alpha=1 - prog(t, INTRO_BEATS[7], 0.2))
+    kinetic(c, "ORGANISE", 96, W / 2, 1440, t, INTRO_BEATS[3], stagger=0.04, alpha=1 - prog(t, INTRO_BEATS[7], 0.2))
+    if t > INTRO_BEATS[-1] - 0.1:  # coup de blanc puis noir avant les yeux
+        k = prog(t, INTRO_BEATS[-1] - 0.1, 0.12)
+        c.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, int(255 * k))))
+        if t > INTRO_BEATS[-1] + 0.05:
+            c.alpha_composite(Image.new("RGBA", (W, H), (0, 0, 0, 255)))
+
+
+SCENES = [s_intro, s0_cold, s1_count, s2_hero, s3_footage, s4_programme, s5_prix, s6_food, s7_emotion, s8_resa, s9_final]
+BOUNDS = [0.0, INTRO] + CUTS[:-1] + [DUR]
+TRANS = {4: "zoom", 5: "whip", 6: "zoom", 7: "bubbles", 8: "bubbles", 9: "zoom", 10: "whip"}
 XD = 0.34
 # coupes rapides internes au programme : zoom traversant aussi
 INNER_CUTS = [CUE["piscine"] - 0.05, CUE["danses"] - 0.05, CUE["karaoke"] - 0.05, CUE["billard"] - 0.05,
@@ -932,7 +964,7 @@ def glitch_amount(t):
 
 
 def pulse(c, t):
-    bp = beat_pulse(t) if CUE["splash"] < t < CUTS[6] or CUTS[7] < t else 0
+    bp = beat_pulse(t) if t < INTRO - 0.05 or CUE["splash"] < t < CUTS[6] or CUTS[7] < t else 0
     if bp < 0.05:
         return c
     c = zoomed(c, 1 + 0.02 * bp)
@@ -1072,8 +1104,8 @@ def main():
         for t in ts:
             Image.fromarray(frame(t)).save(OUT / f"apercu-{t:04.1f}s.png")
         return
-    write_srt(OUT / "splash-party-60s.srt")
-    name = "splash-party-60s-sous-titres" if SUBS_ON else "splash-party-60s"
+    write_srt(OUT / "splash-party-spot.srt")
+    name = "splash-party-spot-sous-titres" if SUBS_ON else "splash-party-spot"
     silent = OUT / f".{name}-video.mp4"
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
            "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium", "-b:v", "8M", "-maxrate", "10M", "-bufsize", "16M", "-pix_fmt", "yuv420p",
