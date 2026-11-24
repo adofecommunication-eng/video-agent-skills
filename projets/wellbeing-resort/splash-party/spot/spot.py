@@ -1188,7 +1188,19 @@ def main():
     proc.wait()
     mux(silent, OUT / f"{name}.mp4")
     silent.unlink()
-    print("OK", OUT / f"{name}.mp4")
+    export_4k(OUT / f"{name}.mp4", OUT / f"{name}-4k.mp4")
+    (OUT / f"{name}.mp4").unlink()          # livrable : la version 4K uniquement
+    print("OK", OUT / f"{name}-4k.mp4")
+
+
+def export_4k(src, dst):
+    """Livrable 4K (2160x3840) demandé par le client : mise à l'échelle Lanczos + léger renforcement,
+    H.264 High 5.2 à ~12 Mb/s (assez haut pour que Facebook garde une bonne qualité, et < 100 Mo pour GitHub)."""
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(src),
+                    "-vf", "scale=2160:3840:flags=lanczos,unsharp=5:5:0.5:5:5:0.0",
+                    "-c:v", "libx264", "-preset", "slow", "-profile:v", "high", "-level", "5.2",
+                    "-b:v", "12M", "-maxrate", "14M", "-bufsize", "24M", "-pix_fmt", "yuv420p",
+                    "-c:a", "aac", "-b:a", "320k", "-movflags", "+faststart", str(dst)], check=True)
 
 
 if __name__ == "__main__":

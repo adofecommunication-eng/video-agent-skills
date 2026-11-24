@@ -28,7 +28,7 @@ Client d'ADOFE Communication. Lire ce fichier avant toute création pour Wellbei
 
 Projet de référence : `projets/wellbeing-resort/well-brunch-reel/` (le client a dit « c'est très bien fait »). Réutiliser cette structure pour les prochains Reels WBR.
 
-- Format 9:16, 1080x1920, 30 i/s, textes entre 250 px et 1 560 px du haut ; sous-titres à 1 610 px.
+- Format 9:16, **livré en 4K 2160x3840** (composition 1080x1920 exportée en 4K), 30 i/s, textes entre 250 px et 1 560 px du haut ; sous-titres à 1 610 px.
 - Structure calée sur la voix : accroche + suspense + PAR / QUOI / COMMENCER mot à mot (0–4,1 s) · buffet + horaires (4,1–7 s) · activités au mot près (7–11,6 s) · groupe + prix qui défile (11,6–15,4 s) · carte finale (15,4–18 s).
 - Son : voix off ElevenLabs « Lola » (féminine, posée, assurée) ; musique légère lounge/amapiano à 100 BPM, silence de suspense avant la question, impacts sur les mots clés ; ducking ~10 dB sous la voix ; -14 LUFS, crête -1,5 dBFS.
 - Livrer 2 versions : avec sous-titres incrustés (version principale) et sans, + le `.srt`.
