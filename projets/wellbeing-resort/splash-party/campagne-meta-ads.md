@@ -39,33 +39,60 @@ Ces seuils sont des repères de départ pour Abidjan ; les ajuster avec les vrai
 
 ## 3. Ciblage
 
+### Zone : Cocody uniquement (les 3 ensembles)
+
+Meta ne propose pas toujours « Cocody » comme lieu sélectionnable : on couvre la commune avec des **épingles** (« Déposer une épingle ») de **1 à 2 km de rayon** sur chaque quartier, et on **exclut** le reste d'Abidjan.
+
+| Quartier (épingle) | Rayon |
+|---|---|
+| Riviera 3 / route M'Badon (le resort) | 2 km |
+| Riviera 2, Riviera Golf | 1,5 km |
+| Riviera Palmeraie, Riviera Faya | 2 km |
+| Angré (7e et 8e tranche, Château) | 2 km |
+| II Plateaux, Vallon, Sideci | 1,5 km |
+| Cocody Centre, Danga, Blockhauss | 1,5 km |
+| Attoban, Mermoz | 1 km |
+| Bonoumin, Bingerville route (côté Cocody) | 1,5 km |
+| Saint-Jean, Ambassades | 1 km |
+
+- **Type de lieu** : « Personnes qui vivent dans ce lieu » (pour viser les habitants de Cocody) ; passer à « vivent ou se sont trouvées récemment » seulement si l'audience est trop petite (moins de 50 000 personnes).
+- **Exclure** : Plateau, Adjamé, Yopougon, Abobo, Marcory, Treichville, Koumassi, Port-Bouët (pour éviter que les épingles débordent).
+
 ### Ensemble A : Parents (50 %)
 
-- **Lieu** : rayon de **15 km** autour de Cocody Riviera 3 (épingle route M'Badon), « personnes qui vivent ici ou s'y sont trouvées récemment ».
-- **Âge** : 25 – 50 ans · **Genre** : tous (les mères décident souvent des sorties des enfants : surveiller les résultats par genre).
-- **Langue** : français.
-- **Ciblage détaillé** (suggestions pour Advantage+) :
-  - Parents : *Parents (tous)*, *Parents d'enfants de 3 à 5 ans*, *6 à 8 ans*, *8 à 12 ans*
-  - Loisirs : *Activités familiales*, *Parcs aquatiques*, *Natation*, *Fêtes d'enfants*, *Anniversaires*
-- **Accroche à privilégier** : la vidéo, puis le flyer.
+- **Âge** : 25 – 50 ans · **Genre** : tous · **Langue** : français.
+- **Centres d'intérêt et profils** (ciblage détaillé, en mode « suggestions » pour Advantage+) :
+  - **Statut parental** : Parents (tous) ; Parents d'enfants de 3 à 5 ans ; de 6 à 8 ans ; de 8 à 12 ans ; de 13 à 17 ans
+  - **Famille** : Famille ; Activités familiales ; Maternité / Paternité ; Éducation des enfants
+  - **Loisirs enfants** : Parcs aquatiques ; Parcs d'attractions ; Fêtes d'anniversaire ; Fêtes d'enfants ; Jeux pour enfants
+  - **Eau et détente** : Piscine ; Natation ; Vacances en famille ; Hôtels ; Complexes hôteliers (resorts)
+  - **Sorties** : Restaurants ; Brunch ; Week-end ; Sorties en famille
+- **Comportements** : Utilisateurs d'appareils mobiles haut de gamme (optionnel, si l'audience reste assez grande).
 
 ### Ensemble B : Jeunes adultes (30 %)
 
-- **Lieu** : même zone, 15 km.
-- **Âge** : 18 – 30 ans (Miss Splash, concours de danses, DJ, karaoké).
-- **Ciblage détaillé** : *Fêtes*, *Vie nocturne*, *Musique électronique / DJ*, *Danse*, *Karaoké*, *Piscine*, *Sorties à Abidjan*.
+- **Âge** : 18 – 30 ans · **Genre** : tous · **Langue** : français.
+- **Centres d'intérêt** :
+  - **Fête** : Fêtes ; Vie nocturne ; Boîtes de nuit ; Événements
+  - **Musique** : Musique électronique ; DJ ; Afrobeats ; Coupé-décalé ; Musique africaine
+  - **Danse et scène** : Danse ; Concours de danse ; Karaoké ; Concours de beauté (Miss Splash)
+  - **Eau et loisirs** : Piscine ; Plage ; Parcs aquatiques ; Billard ; Baby-foot ; Jeux
+  - **Style de vie** : Sorties entre amis ; Mode ; Selfies / Photographie (contenus partagés sur Instagram et TikTok)
 
 ### Ensemble C : Reciblage (20 %)
 
 - **Audiences personnalisées** :
-  - Personnes ayant regardé **au moins 50 %** du spot (dès qu'il a tourné 2 – 3 jours)
+  - Personnes ayant regardé **au moins 50 %** du spot (à lancer quand la vidéo a tourné 2 – 3 jours)
   - Personnes ayant interagi avec la page Facebook ou le compte Instagram WBR (365 jours)
   - Personnes ayant envoyé un message à la page (365 jours)
   - Personnes ayant interagi avec les posts Well Brunch et Well Christmas
-- **Âge** : 18 – 55 ans, même zone.
+- **Âge** : 18 – 55 ans · même zone Cocody.
 - **Exclure** ces audiences des ensembles A et B.
 
-**Important** : Meta ne permet pas de cibler les mineurs avec ce type de publicité ; on touche les enfants **via leurs parents**. Toutes les audiences restent à 18 ans et plus.
+**Important** :
+- Meta ne permet pas de cibler les mineurs avec ce type de publicité : on touche les enfants **via leurs parents**. Toutes les audiences restent à 18 ans et plus.
+- Les intitulés exacts varient selon la langue de l'interface Meta : taper le mot clé dans « Ciblage détaillé » et choisir la suggestion la plus proche (en anglais si besoin : *Parents*, *Water parks*, *Swimming pools*, *Nightlife*, *Dance*, *Karaoke*).
+- Avec Cocody seul, l'audience est plus petite : garder **Advantage+ audience** activé pour que Meta trouve des personnes proches des centres d'intérêt, tout en restant dans la zone.
 
 ---
 
@@ -122,7 +149,7 @@ Indicateurs :
 
 1. **+ Créer** → objectif **Interaction** → Continuer.
 2. Nom : `WBR – Splash Party – Messages – Déc. 2026`. Budget au niveau des ensembles de publicités.
-3. **Ensemble A « Parents 15 km »** : emplacement de conversion **Applications de messagerie** ; budget phase 1 : 2 000 F/jour ; dates du 25 nov. 8h au 5 déc. 11h ; audience section 3 A ; placements Advantage+.
+3. **Ensemble A « Parents Cocody »** : emplacement de conversion **Applications de messagerie** ; budget phase 1 : 2 000 F/jour ; dates du 25 nov. 8h au 5 déc. 11h ; audience section 3 A ; placements Advantage+.
 4. **Publicité A1** : identité Page + Instagram WBR ; vidéo pour Reels/Stories, flyer pour le fil ; textes section 5 ; message d'accueil section 6.
 5. **Publicité A2** : dupliquer A1 et mettre la vidéo partout.
 6. **Ensemble B « Jeunes adultes »** : dupliquer A, 1 200 F/jour en phase 1, audience section 3 B.
