@@ -429,7 +429,7 @@ def ticket(value):
     d = ImageDraw.Draw(m)
     d.ellipse((-50, h // 2 - 50, 50, h // 2 + 50), fill=0)
     d.ellipse((w - 50, h // 2 - 50, w + 50, h // 2 + 50), fill=0)
-    tk = Image.new("RGBA", (w, h), (14, 14, 18, 255))
+    tk = Image.new("RGBA", (w, h), (195, 158, 110, 255))
     tk.putalpha(m)
     ImageDraw.Draw(tk).rounded_rectangle((3, 3, w - 4, h - 4), radius=34, outline=WHITE + (255,), width=6)
     dd = ImageDraw.Draw(tk)
@@ -626,7 +626,8 @@ MISS_HEAD = (322, 590)
 
 # ---------------------------------------------------------------- séquences
 # ---------------------------------------------------------------- habillage TV
-BLUE = (16, 16, 20)  # panneaux neutres (noir) sous le texte blanc
+BLUE = (195, 158, 110)  # couleur des panneaux demandée par le client (beige doré #C39E6E)
+SAND = BLUE
 _BARS = {}
 
 
@@ -637,7 +638,7 @@ def bar_layer(text, size, style="gold", helv=False):
     fg = WHITE
     lab = tl(text, F_H(size) if helv else F_A(size), fill=fg, shadow=False, tracking=4 if helv else 3)
     w, h = lab.width - 80 + 70, lab.height - 80 + (34 if helv else 22)
-    panel = Image.new("RGBA", (w, h), {"gold": (14, 14, 18, 225), "blue": (14, 14, 18, 225), "white": (0, 0, 0, 165)}[style])
+    panel = Image.new("RGBA", (w, h), {"gold": SAND + (255,), "blue": SAND + (255,), "white": SAND + (255,)}[style])
     accent = Image.new("RGBA", (12, h), GOLD + (255,))
     out = Image.new("RGBA", (w + 12, h), (0, 0, 0, 0))
     out.alpha_composite(panel, (12, 0))
@@ -669,7 +670,7 @@ def circle_burst(c, cx, cy, t, t0, color=GOLD, rmax=430):
     if p <= 0:
         return
     r = rmax * back_out(p, 1.6)
-    color = (14, 14, 18)
+    color = (195, 158, 110)
     d = ImageDraw.Draw(c)
     d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=color + (235,))
     r2 = r * (0.86 + 0.5 * prog(t, t0 + 0.1, 0.4))
@@ -965,7 +966,7 @@ def scene_frame(i, t):
 
 def panels(cur, nxt, p, k=0):
     """Transition TV : trois bandeaux (bleu, or, blanc) recouvrent l'écran puis découvrent le plan suivant."""
-    cols = [Image.new("RGBA", (W, H), (230, 230, 232, 255)), Image.new("RGBA", (W, H), (14, 14, 18, 255)), Image.new("RGBA", (W, H), WHITE + (255,))]
+    cols = [Image.new("RGBA", (W, H), (230, 230, 232, 255)), Image.new("RGBA", (W, H), (195, 158, 110, 255)), Image.new("RGBA", (W, H), WHITE + (255,))]
     left = k % 2 == 0
     if p < 0.5:
         base, q = cur.copy(), p / 0.5
