@@ -5,6 +5,7 @@ fournie par le client (flyer animé de resort) : apparition du titre avec flou, 
 infos qui s'inscrivent ligne à ligne, pastille, macaron qui se décolle, flous de mouvement réguliers sur le titre.
 Contenu : uniquement les informations du flyer Splash Party. Charte : textes blancs, beige doré #C39E6E,
 Anton + Helvetica, logo WBR blanc. Rendu 1080x1920 puis livraison 4K.
+Bande-son : musique et bruitages fournis par le client (voir musique.py).
 Usage : python3 musique.py && python3 pub.py [--stills t1 t2 ...]
 """
 import math
@@ -249,9 +250,9 @@ def frame(t):
 
 
 def mux(video, dst):
-    music = HERE / "musique.wav"
+    music = HERE / "bande-son.wav"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(video), "-i", str(music),
-                    "-filter_complex", "[1:a]loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[a]",
+                    "-filter_complex", "[1:a]loudnorm=I=-14:TP=-2:LRA=11,alimiter=limit=0.83:level=disabled,aresample=48000[a]",
                     "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "320k", "-t", str(DUR),
                     "-movflags", "+faststart", str(dst)], check=True)
 
@@ -261,7 +262,9 @@ def export_4k(src, dst):
                     "-vf", "scale=2160:3840:flags=lanczos,unsharp=5:5:0.5:5:5:0.0",
                     "-c:v", "libx264", "-preset", "slow", "-profile:v", "high", "-level", "5.2",
                     "-b:v", "20M", "-maxrate", "24M", "-bufsize", "40M", "-pix_fmt", "yuv420p",
-                    "-c:a", "copy", "-movflags", "+faststart", str(dst)], check=True)
+                    "-c:a", "copy", "-map_metadata", "-1", "-map_chapters", "-1",
+                    "-metadata:s:v:0", "handler_name=Video", "-metadata:s:a:0", "handler_name=Audio",
+                    "-fflags", "+bitexact", "-movflags", "+faststart", str(dst)], check=True)  # métadonnées neutres
 
 
 def main():
