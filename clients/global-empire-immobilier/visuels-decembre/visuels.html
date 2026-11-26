@@ -1,0 +1,330 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Visuels GEI décembre</title><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet"><style>
+:root{--navy:#0A1496;--blue:#1F5BE0;--green:#6B8E23;--lime:#D4E021;--ink:#141B3D;--cream:#F1F4FC}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Montserrat,sans-serif;background:#ddd}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;background:#fff;margin:0 0 20px}
+.blue{background:linear-gradient(180deg,var(--navy) 0%,#0B1FB0 60%,var(--blue) 100%);color:#fff}
+.logo{position:absolute;top:44px;left:56px;background:#fff;border-radius:18px;padding:10px 14px;z-index:5}
+.logo img{height:96px;display:block}
+.brand{position:absolute;top:66px;right:56px;text-align:right;z-index:5}
+.brand b{display:block;font-size:20px;letter-spacing:.24em;font-weight:800;color:var(--navy)}
+.brand span{font-size:17px;font-weight:700;color:var(--green);letter-spacing:.06em}
+.blue .brand b{color:#fff}.blue .brand span{color:var(--lime)}
+.kick{font-size:24px;font-weight:800;letter-spacing:.22em;color:var(--green);text-transform:uppercase;margin-bottom:22px}
+.blue .kick{color:var(--lime)}
+h1{font-weight:900;text-transform:uppercase;line-height:1.02;letter-spacing:-.01em;color:var(--navy)}
+.blue h1{color:#fff}
+h1 em{font-style:normal;color:var(--green)}
+.blue h1 em{color:var(--lime)}
+p.t{font-size:32px;line-height:1.45;font-weight:500;color:var(--ink)}
+.blue p.t{color:#E3E8F7}
+.cta{position:absolute;left:0;right:0;bottom:0;height:140px;background:var(--green);display:flex;align-items:center;justify-content:space-between;padding:0 56px;color:#fff;z-index:6}
+.cta .l b{display:block;font-size:28px;font-weight:900;text-transform:uppercase}
+.cta .l span{font-size:19px;font-weight:600}
+.cta .r{font-size:32px;font-weight:900;display:flex;align-items:center;gap:12px}
+.cta .r svg{width:34px;height:34px}
+.photo{position:absolute;left:0;right:0;background-size:cover;background-position:center}
+.ov:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,150,0) 30%,rgba(10,20,150,.8) 75%,var(--navy) 100%)}
+.tag{display:inline-block;background:var(--lime);color:var(--navy);font-weight:900;font-size:24px;letter-spacing:.14em;padding:12px 22px;border-radius:6px}
+.check{list-style:none}
+.check li{font-size:31px;font-weight:700;padding-left:58px;position:relative;margin-bottom:22px;line-height:1.3}
+.check li:before{content:"✓";position:absolute;left:0;top:-2px;width:40px;height:40px;border-radius:50%;background:var(--lime);color:var(--navy);display:grid;place-items:center;font-size:22px;font-weight:900}
+/* carrousel */
+.dots{position:absolute;bottom:60px;left:56px;display:flex;gap:10px;z-index:6}
+.dots i{width:14px;height:14px;border-radius:50%;background:rgba(10,20,150,.18)}
+.dots i.on{background:var(--green);width:40px;border-radius:7px}
+.blue .dots i{background:rgba(255,255,255,.3)}.blue .dots i.on{background:var(--lime)}
+.swipe{position:absolute;bottom:46px;right:56px;font-size:22px;font-weight:800;letter-spacing:.14em;color:var(--green);z-index:6}
+.blue .swipe{color:var(--lime)}
+.big{font-size:230px;font-weight:900;line-height:.8;color:var(--lime);opacity:.95}
+.card{background:var(--cream);border-radius:22px;padding:34px 38px;border-top:10px solid var(--green)}
+.blue .card{background:rgba(255,255,255,.08);border-top-color:var(--lime)}
+.ph{position:absolute;border:5px dashed rgba(10,20,150,.35);border-radius:22px;display:grid;place-items:center;text-align:center;color:rgba(10,20,150,.55);font-size:26px;font-weight:800;letter-spacing:.08em;background:repeating-linear-gradient(45deg,#F1F4FC 0 24px,#E7ECF9 24px 48px)}
+.fill{background:#FFF7C2;color:#8A6D00;padding:0 10px;border-radius:6px}
+.play{width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.play:after{content:"";border-left:52px solid var(--navy);border-top:32px solid transparent;border-bottom:32px solid transparent;margin-left:14px}
+.dur{display:inline-block;background:var(--navy);color:#fff;font-weight:800;font-size:22px;padding:8px 16px;border-radius:30px;letter-spacing:.08em}
+.price{background:#fff;border-radius:18px;padding:24px 30px;color:var(--navy)}
+.price span{font-size:19px;font-weight:800;letter-spacing:.18em;color:var(--green)}
+.price b{display:block;font-size:96px;font-weight:900;line-height:.95;margin-top:6px}
+.fact{border:2px solid rgba(255,255,255,.35);border-radius:14px;padding:16px 22px;color:#fff}
+.fact span{display:block;font-size:16px;letter-spacing:.16em;font-weight:700;color:#C9D3F5}
+.fact b{font-size:31px;font-weight:900}
+.wm{position:absolute;right:-120px;bottom:-110px;width:640px;opacity:.07;z-index:0}
+.star{position:absolute;color:var(--lime);font-weight:900}
+</style></head><body><section class="s blue" data-name="01_07dec_carrousel-qui-est-gei_1"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div class="photo ov" style="top:0;height:1350px;background-image:url(../presentation/img/villa-adiake.jpg)"></div>
+<div style="position:absolute;left:56px;right:56px;bottom:200px;z-index:4">
+  <div class="kick" style="color:var(--lime)">Faisons connaissance</div>
+  <h1 style="font-size:96px;color:#fff">Qui est<br>Global Empire<br><em style="color:var(--lime)">Immobilier ?</em></h1>
+</div><div class="dots"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="01_07dec_carrousel-qui-est-gei_2"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:300px">
+  <div class="kick">Notre mission</div>
+  <h1 style="font-size:84px">Vous rendre<br><em>propriétaire</em><br>en toute sécurité.</h1>
+  <p class="t" style="margin-top:44px;max-width:900px">Acheter un terrain ou une maison est l'un des plus grands projets d'une vie. Notre rôle : vous accompagner à chaque étape, avec clarté et honnêteté.</p>
+</div><div class="dots"><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s blue" data-name="01_07dec_carrousel-qui-est-gei_3"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:280px">
+  <div class="kick">Ce que nous proposons</div>
+  <h1 style="font-size:80px;margin-bottom:56px">Du terrain<br>à la <em>villa</em>.</h1>
+  <div style="display:grid;gap:26px">
+    <div class="card"><b style="font-size:38px;font-weight:900;color:#fff">Terrains</b><p class="t" style="font-size:27px;margin-top:8px">Des lots dans des zones d'avenir pour bâtir ou investir.</p></div>
+    <div class="card"><b style="font-size:38px;font-weight:900;color:#fff">Villas</b><p class="t" style="font-size:27px;margin-top:8px">Des maisons prêtes à habiter, comme à la Cité Les Rives de l'Opulence, à Adiaké.</p></div>
+  </div>
+</div><div class="dots"><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="01_07dec_carrousel-qui-est-gei_4"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:300px">
+  <div class="kick">Nos engagements</div>
+  <h1 style="font-size:80px;margin-bottom:60px">Avec GEI,<br>vous <em>savez</em><br>où vous allez.</h1>
+  <ul class="check" style="color:var(--navy)">
+    <li>Une visite accompagnée du bien</li>
+    <li>Un paiement progressif, à votre rythme</li>
+    <li>Une situation du bien présentée avant signature</li>
+    <li>Un conseiller joignable sur WhatsApp</li>
+  </ul>
+</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s blue" data-name="01_07dec_carrousel-qui-est-gei_5"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:330px">
+  <div class="kick">Venez nous rencontrer</div>
+  <h1 style="font-size:92px">Parlons de<br>votre <em>projet</em>.</h1>
+  <p class="t" style="margin-top:48px;font-size:36px;line-height:1.6">📍 Cocody, Cité des Arts, Abidjan<br>🌐 geisarl.com<br>💬 (+225) 07 10 29 67 20</p>
+</div><div class="cta"><div class="l"><b>Écrivez-nous sur WhatsApp</b><span>Cocody, Cité des Arts · geisarl.com</span></div><div class="r"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>(+225) 07 10 29 67 20</div></div></section>
+<section class="s " data-name="02_09dec_affiche-rives-opulence"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div class="photo ov" style="top:0;height:820px;background-image:url(../presentation/img/villa-adiake.jpg);background-position:center 40%"></div>
+<div style="position:absolute;top:190px;left:56px;z-index:4"><span class="tag">VILLA EN VENTE</span></div>
+<div style="position:absolute;left:56px;right:56px;top:560px;z-index:4">
+  <div class="kick" style="color:var(--lime);margin-bottom:10px">Cité Les Rives de l'Opulence</div>
+  <h1 style="font-size:68px;color:#fff">Devenez propriétaire<br>de votre villa</h1>
+</div>
+<div style="position:absolute;top:820px;left:0;right:0;bottom:140px;padding:30px 56px 0" class="blue">
+  <div style="font-size:28px;font-weight:800;letter-spacing:.06em;margin-bottom:24px">📍 ADIAKÉ · CÔTE D'IVOIRE</div>
+  <div style="display:grid;grid-template-columns:1.05fr 1fr;gap:26px">
+    <div class="price"><span>PRIX D'ACQUISITION</span><b>45 M</b><span style="letter-spacing:.06em;font-size:24px">FCFA</span></div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="fact"><span>APPORT INITIAL</span><b>15 000 000 FCFA</b></div>
+      <div class="fact"><span>FRAIS DE DOSSIER</span><b>300 000 FCFA</b></div>
+    </div>
+  </div>
+  <div style="margin-top:22px;font-size:25px;font-weight:700">✓ Paiement progressif &nbsp;&nbsp; ✓ Habitation immédiate</div>
+</div><div class="cta"><div class="l"><b>Réservez votre visite</b><span>Cocody, Cité des Arts · geisarl.com</span></div><div class="r"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>(+225) 07 10 29 67 20</div></div></section>
+<section class="s blue" data-name="03_11dec_video1-couverture-rives-30s"><div class="photo" style="top:0;height:1350px;background-image:url(../presentation/img/villa-adiake.jpg)"></div><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,150,.25),rgba(10,20,150,.55) 45%,var(--navy) 88%)"></div><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;top:430px;left:0;right:0;display:grid;place-items:center;z-index:4"><div class="play"></div></div>
+<div style="position:absolute;left:56px;right:56px;bottom:200px;z-index:4">
+  <span class="dur" style="background:var(--lime);color:var(--navy)">▶ VIDÉO · 30 S</span>
+  <div class="kick" style="color:var(--lime);margin:26px 0 12px">Cité Les Rives de l'Opulence</div>
+  <h1 style="font-size:78px;color:#fff">Votre villa<br>à <em>Adiaké</em></h1>
+  <p class="t" style="color:#E3E8F7;margin-top:18px">Visitez-la en 30 secondes.</p>
+</div></section>
+<section class="s blue" data-name="04_12dec_carrousel-5-verifications_1"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:300px">
+  <span class="tag">GEI VOUS EXPLIQUE</span>
+  <div class="big" style="margin-top:40px">5</div>
+  <h1 style="font-size:84px;margin-top:10px">vérifications<br>avant d'acheter<br>un <em>terrain</em>.</h1>
+</div><div class="dots"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="04_12dec_carrousel-5-verifications_2"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:300px">
+  <div class="big" style="color:var(--green);font-size:200px">1</div>
+  <div class="kick" style="margin-top:20px">Vérification 1 sur 5</div>
+  <h1 style="font-size:86px">Le vendeur</h1>
+  <p class="t" style="margin-top:40px;font-size:36px;max-width:920px">Qui vend ? Demandez l'identité du vendeur ou les documents de la société (registre du commerce, agrément pour un promoteur).</p>
+</div><div class="dots"><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="04_12dec_carrousel-5-verifications_3"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:300px">
+  <div class="big" style="color:var(--green);font-size:200px">2</div>
+  <div class="kick" style="margin-top:20px">Vérification 2 sur 5</div>
+  <h1 style="font-size:86px">Le document</h1>
+  <p class="t" style="margin-top:40px;font-size:36px;max-width:920px">Quel est le statut du terrain : ACD, lettre d'attribution, attestation villageoise ? Demandez à consulter les originaux.</p>
+</div><div class="dots"><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="04_12dec_carrousel-5-verifications_4"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:300px">
+  <div class="big" style="color:var(--green);font-size:200px">3</div>
+  <div class="kick" style="margin-top:20px">Vérification 3 sur 5</div>
+  <h1 style="font-size:86px">Le terrain lui-même</h1>
+  <p class="t" style="margin-top:40px;font-size:36px;max-width:920px">Visitez sur place. Vérifiez les bornes, les limites et l'accès. Un géomètre peut confirmer la superficie.</p>
+</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="04_12dec_carrousel-5-verifications_5"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:300px">
+  <div class="big" style="color:var(--green);font-size:200px">4</div>
+  <div class="kick" style="margin-top:20px">Vérification 4 sur 5</div>
+  <h1 style="font-size:86px">Le lotissement</h1>
+  <p class="t" style="margin-top:40px;font-size:36px;max-width:920px">Le lotissement est-il approuvé ? Le terrain n'est-il pas sur une réserve, une voie ou une zone non constructible ?</p>
+</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="04_12dec_carrousel-5-verifications_6"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:300px">
+  <div class="big" style="color:var(--green);font-size:200px">5</div>
+  <div class="kick" style="margin-top:20px">Vérification 5 sur 5</div>
+  <h1 style="font-size:86px">Le paiement</h1>
+  <p class="t" style="margin-top:40px;font-size:36px;max-width:920px">Payez de façon traçable, avec reçu et contrat écrit. Faites-vous accompagner par un notaire.</p>
+</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s blue" data-name="04_12dec_carrousel-5-verifications_7"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:320px">
+  <div class="kick">Une question ?</div>
+  <h1 style="font-size:84px">Chez GEI,<br>on vous <em>explique</em><br>tout avant<br>de signer.</h1>
+  <p class="t" style="margin-top:40px">Enregistrez ce post et partagez-le à un proche qui veut acheter.</p>
+</div><div class="cta"><div class="l"><b>Posez votre question</b><span>Cocody, Cité des Arts · geisarl.com</span></div><div class="r"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>(+225) 07 10 29 67 20</div></div></section>
+<section class="s " data-name="05_14dec_photo-equipe_GABARIT"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div class="ph" style="left:56px;right:56px;top:190px;height:700px">PHOTO DE L'ÉQUIPE GEI<br>(tournage du 5 décembre)</div>
+<div style="position:absolute;left:56px;right:56px;top:930px">
+  <div class="kick">Ceux qui vous accompagnent</div>
+  <h1 style="font-size:66px">Une équipe <em>à vos côtés</em>,<br>de la visite aux documents.</h1>
+</div><div class="cta"><div class="l"><b>Rencontrez-nous</b><span>Cocody, Cité des Arts · geisarl.com</span></div><div class="r"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>(+225) 07 10 29 67 20</div></div></section>
+<section class="s " data-name="06_16dec_affiche-programme-2_GABARIT"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div class="ph" style="left:0;right:0;top:170px;height:640px;border-radius:0;border-left:0;border-right:0">PHOTO DU PROGRAMME</div>
+<div style="position:absolute;top:210px;left:56px"><span class="tag">TERRAINS / MAISONS EN VENTE</span></div>
+<div style="position:absolute;top:810px;left:0;right:0;bottom:140px;padding:40px 56px 0" class="blue">
+  <div class="kick" style="margin-bottom:10px"><span class="fill">[NOM DU PROGRAMME]</span></div>
+  <h1 style="font-size:64px;color:#fff">Votre <em>terrain</em><br>à <span class="fill">[ZONE]</span></h1>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:30px">
+    <div class="fact"><span>SUPERFICIE</span><b><span class="fill">[ ] m²</span></b></div>
+    <div class="fact"><span>PRIX / APPORT</span><b><span class="fill">[ ] FCFA</span></b></div>
+  </div>
+</div><div class="cta"><div class="l"><b>Réservez votre visite</b><span>Cocody, Cité des Arts · geisarl.com</span></div><div class="r"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>(+225) 07 10 29 67 20</div></div></section>
+<section class="s blue" data-name="07_18dec_video2-couverture-acd-45s"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;top:250px;left:56px;right:56px">
+  <span class="tag">GEI VOUS EXPLIQUE</span>
+  <h1 style="font-size:150px;margin-top:50px;color:#fff">L'ACD,</h1>
+  <h1 style="font-size:92px;color:var(--lime)">c'est quoi ?</h1>
+  <p class="t" style="margin-top:40px;max-width:860px">Le document que vous devez connaître avant d'acheter un terrain.</p>
+</div>
+<div style="position:absolute;right:70px;bottom:150px"><div class="play"></div></div>
+<div style="position:absolute;left:56px;bottom:180px"><span class="dur" style="background:var(--lime);color:var(--navy)">▶ VIDÉO · 45 S</span></div></section>
+<section class="s " data-name="08_19dec_photo-remise-documents_GABARIT"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div class="ph" style="left:56px;right:56px;top:190px;height:720px">PHOTO : REMISE DE DOCUMENTS<br>OU DE CLÉS À UN CLIENT<br>(avec son autorisation écrite)</div>
+<div style="position:absolute;left:56px;right:56px;top:950px">
+  <div class="kick">Un moment qui compte</div>
+  <h1 style="font-size:60px">Félicitations à <span class="fill">[prénom]</span>,<br><em>nouveau propriétaire</em> !</h1>
+</div><div class="cta"><div class="l"><b>À qui le tour ?</b><span>Cocody, Cité des Arts · geisarl.com</span></div><div class="r"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>(+225) 07 10 29 67 20</div></div></section>
+<section class="s blue" data-name="09_21dec_carrousel-paiement-progressif_1">
+<div class="photo ov" style="top:0;height:1350px;background-image:url(../presentation/img/villa-adiake.jpg)"></div><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;bottom:200px;z-index:4">
+  <span class="tag">CITÉ LES RIVES DE L'OPULENCE</span>
+  <h1 style="font-size:88px;color:#fff;margin-top:30px">Le paiement<br><em>progressif</em>,<br>comment ça marche ?</h1>
+</div><div class="dots"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="09_21dec_carrousel-paiement-progressif_2"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:320px">
+  <div class="kick">Étape 1</div>
+  <h1 style="font-size:82px">Les frais de dossier</h1>
+  <div class="price" style="background:var(--navy);color:#fff;margin-top:50px;padding:40px 44px"><b style="font-size:84px;color:var(--lime)">300 000 FCFA</b></div>
+  <p class="t" style="margin-top:40px;font-size:36px">Pour ouvrir votre dossier d'acquisition.</p>
+</div><div class="dots"><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="09_21dec_carrousel-paiement-progressif_3"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:320px">
+  <div class="kick">Étape 2</div>
+  <h1 style="font-size:82px">L'apport initial</h1>
+  <div class="price" style="background:var(--navy);color:#fff;margin-top:50px;padding:40px 44px"><b style="font-size:84px;color:var(--lime)">15 000 000 FCFA</b></div>
+  <p class="t" style="margin-top:40px;font-size:36px">Votre premier versement sur le prix de la villa.</p>
+</div><div class="dots"><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="09_21dec_carrousel-paiement-progressif_4"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:320px">
+  <div class="kick">Étape 3</div>
+  <h1 style="font-size:82px">Le solde</h1>
+  <div class="price" style="background:var(--navy);color:#fff;margin-top:50px;padding:40px 44px"><b style="font-size:84px;color:var(--lime)">30 000 000 FCFA</b></div>
+  <p class="t" style="margin-top:40px;font-size:36px">Réglé progressivement, selon l'échéancier convenu avec votre conseiller GEI.</p>
+</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="09_21dec_carrousel-paiement-progressif_5"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:320px">
+  <div class="kick">Le +</div>
+  <h1 style="font-size:82px">Habitation immédiate</h1>
+  <div class="price" style="background:var(--navy);color:#fff;margin-top:50px;padding:40px 44px"><b style="font-size:84px;color:var(--lime)">Prête à habiter</b></div>
+  <p class="t" style="margin-top:40px;font-size:36px">La villa est déjà construite. Votre conseiller vous détaille toutes les conditions.</p>
+</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s blue" data-name="09_21dec_carrousel-paiement-progressif_6"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:330px">
+  <div class="kick">Prix d'acquisition : 45 M FCFA</div>
+  <h1 style="font-size:88px">Recevez<br>votre <em>échéancier</em><br>personnalisé.</h1>
+  <p class="t" style="margin-top:40px">Un conseiller GEI vous répond sur WhatsApp et vous propose une visite de la cité.</p>
+</div><div class="cta"><div class="l"><b>Demandez votre échéancier</b><span>Cocody, Cité des Arts · geisarl.com</span></div><div class="r"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>(+225) 07 10 29 67 20</div></div></section>
+<section class="s blue" data-name="10_23dec_visuel-2027-annee-maison"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div class="star" style="top:250px;right:120px;font-size:90px">✦</div>
+<div class="star" style="top:420px;right:260px;font-size:44px">✦</div>
+<div style="position:absolute;left:56px;right:56px;top:330px">
+  <div class="kick">Votre résolution 2027</div>
+  <h1 style="font-size:104px">Et si<br><em>2027</em><br>était l'année<br>de votre<br>maison ?</h1>
+</div><div class="cta"><div class="l"><b>Commencez votre projet</b><span>Terrains et villas · geisarl.com</span></div><div class="r"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>(+225) 07 10 29 67 20</div></div></section>
+<section class="s blue" data-name="11_25dec_visuel-joyeux-noel"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div class="star" style="top:240px;left:50%;transform:translateX(-50%);font-size:120px">✦</div>
+<div style="position:absolute;left:56px;right:56px;top:420px;text-align:center">
+  <h1 style="font-size:130px">Joyeux<br><em>Noël</em></h1>
+  <p class="t" style="margin-top:50px;font-size:36px">Que la paix, la joie et l'amour remplissent<br>chaque foyer en ce jour de fête.</p>
+  <p class="t" style="margin-top:30px;font-size:28px;font-weight:700;color:var(--lime)">— Toute l'équipe Global Empire Immobilier</p>
+</div></section>
+<section class="s blue" data-name="12_26dec_video3-couverture-diaspora-30s"><div class="photo" style="top:0;height:1350px;background-image:url(../presentation/img/villa-adiake.jpg)"></div><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,150,.25),rgba(10,20,150,.55) 45%,var(--navy) 88%)"></div><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;top:430px;left:0;right:0;display:grid;place-items:center;z-index:4"><div class="play"></div></div>
+<div style="position:absolute;left:56px;right:56px;bottom:200px;z-index:4">
+  <span class="dur" style="background:var(--lime);color:var(--navy)">▶ VIDÉO · 30 S</span>
+  <div class="kick" style="color:var(--lime);margin:26px 0 12px">Diaspora</div>
+  <h1 style="font-size:78px;color:#fff">Vous êtes loin ?<br>On vous fait <em>visiter</em>.</h1>
+  <p class="t" style="color:#E3E8F7;margin-top:18px">Investir au pays, même depuis l'étranger.</p>
+</div></section>
+<section class="s blue" data-name="13_28dec_carrousel-vrai-cout_1"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:320px">
+  <span class="tag">GEI VOUS EXPLIQUE</span>
+  <h1 style="font-size:96px;margin-top:44px">Le <em>vrai coût</em><br>d'un achat<br>immobilier.</h1>
+  <p class="t" style="margin-top:36px">Le prix du bien n'est pas la seule dépense. Voici ce qu'il faut prévoir.</p>
+</div><div class="dots"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="13_28dec_carrousel-vrai-cout_2"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:320px">
+  <div class="big" style="color:var(--green);font-size:180px">1</div>
+  <h1 style="font-size:74px;margin-top:20px">Le prix du bien</h1>
+  <p class="t" style="margin-top:40px;font-size:36px;max-width:930px">C'est le montant principal. Avec un paiement progressif, il se règle en plusieurs fois : un apport, puis des échéances.</p>
+</div><div class="dots"><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="13_28dec_carrousel-vrai-cout_3"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:320px">
+  <div class="big" style="color:var(--green);font-size:180px">2</div>
+  <h1 style="font-size:74px;margin-top:20px">Les frais de dossier</h1>
+  <p class="t" style="margin-top:40px;font-size:36px;max-width:930px">Ils ouvrent votre dossier d'acquisition. Exemple : 300 000 FCFA à la Cité Les Rives de l'Opulence.</p>
+</div><div class="dots"><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="13_28dec_carrousel-vrai-cout_4"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:320px">
+  <div class="big" style="color:var(--green);font-size:180px">3</div>
+  <h1 style="font-size:74px;margin-top:20px">Les frais de notaire et d'enregistrement</h1>
+  <p class="t" style="margin-top:40px;font-size:36px;max-width:930px">Ils sécurisent la vente. Leur montant varie selon le bien : demandez toujours un devis au notaire.</p>
+</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s " data-name="13_28dec_carrousel-vrai-cout_5"><img class="wm" src="../presentation/img/logo-gei.png" alt=""><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:320px">
+  <div class="big" style="color:var(--green);font-size:180px">4</div>
+  <h1 style="font-size:74px;margin-top:20px">Les frais liés aux documents</h1>
+  <p class="t" style="margin-top:40px;font-size:36px;max-width:930px">Selon la situation du terrain, l'obtention ou la mutation du titre peut entraîner des frais. Renseignez-vous avant de signer.</p>
+</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i></div><div class="swipe">GLISSEZ →</div></section>
+<section class="s blue" data-name="13_28dec_carrousel-vrai-cout_6"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;left:56px;right:56px;top:330px">
+  <div class="kick">Zéro surprise</div>
+  <h1 style="font-size:86px">On vous<br>détaille <em>tout</em><br>avant de<br>signer.</h1>
+  <p class="t" style="margin-top:40px">Demandez le récapitulatif complet des coûts à un conseiller GEI.</p>
+</div><div class="cta"><div class="l"><b>Demandez le détail</b><span>Cocody, Cité des Arts · geisarl.com</span></div><div class="r"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>(+225) 07 10 29 67 20</div></div></section>
+<section class="s " data-name="14_30dec_affiche-commencez-2027-proprietaire"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div class="photo ov" style="top:0;height:820px;background-image:url(../presentation/img/villa-adiake.jpg);background-position:center 40%"></div>
+<div style="position:absolute;top:190px;left:56px;z-index:4"><span class="tag">VILLA EN VENTE</span></div>
+<div style="position:absolute;left:56px;right:56px;top:560px;z-index:4">
+  <div class="kick" style="color:var(--lime);margin-bottom:10px">Cité Les Rives de l'Opulence</div>
+  <h1 style="font-size:68px;color:#fff">Commencez 2027<br><em>propriétaire</em></h1>
+</div>
+<div style="position:absolute;top:820px;left:0;right:0;bottom:140px;padding:30px 56px 0" class="blue">
+  <div style="font-size:28px;font-weight:800;letter-spacing:.06em;margin-bottom:24px">📍 ADIAKÉ · CÔTE D'IVOIRE</div>
+  <div style="display:grid;grid-template-columns:1.05fr 1fr;gap:26px">
+    <div class="price"><span>PRIX D'ACQUISITION</span><b>45 M</b><span style="letter-spacing:.06em;font-size:24px">FCFA</span></div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="fact"><span>APPORT INITIAL</span><b>15 000 000 FCFA</b></div>
+      <div class="fact"><span>FRAIS DE DOSSIER</span><b>300 000 FCFA</b></div>
+    </div>
+  </div>
+  <div style="margin-top:22px;font-size:25px;font-weight:700">✓ Paiement progressif &nbsp;&nbsp; ✓ Habitation immédiate</div>
+</div><div class="cta"><div class="l"><b>Réservez votre visite</b><span>Cocody, Cité des Arts · geisarl.com</span></div><div class="r"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>(+225) 07 10 29 67 20</div></div></section>
+<section class="s blue" data-name="15_01jan_visuel-bonne-annee-2027"><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div class="star" style="top:250px;left:120px;font-size:70px">✦</div>
+<div class="star" style="top:300px;right:140px;font-size:46px">✦</div>
+<div style="position:absolute;left:56px;right:56px;top:380px;text-align:center">
+  <div class="kick">Bonne et heureuse année</div>
+  <div style="font-size:300px;font-weight:900;line-height:.9;color:var(--lime)">2027</div>
+  <p class="t" style="margin-top:50px;font-size:36px">Que cette nouvelle année vous apporte<br>la santé, la paix… et votre chez-vous.</p>
+  <p class="t" style="margin-top:30px;font-size:28px;font-weight:700;color:var(--lime)">— Toute l'équipe Global Empire Immobilier</p>
+</div></section>
+<section class="s blue" data-name="16_02jan_video4-couverture-journee-visite-45s"><div class="photo" style="top:0;height:1350px;background-image:url(../presentation/img/villa-adiake.jpg)"></div><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,150,.25),rgba(10,20,150,.55) 45%,var(--navy) 88%)"></div><div class="logo"><img src="../presentation/img/logo-gei.png" alt=""></div><div class="brand"><b>GLOBAL EMPIRE IMMOBILIER</b><span>Achetez en toute sécurité</span></div>
+<div style="position:absolute;top:430px;left:0;right:0;display:grid;place-items:center;z-index:4"><div class="play"></div></div>
+<div style="position:absolute;left:56px;right:56px;bottom:200px;z-index:4">
+  <span class="dur" style="background:var(--lime);color:var(--navy)">▶ VIDÉO · 45 S</span>
+  <div class="kick" style="color:var(--lime);margin:26px 0 12px">Dans les coulisses</div>
+  <h1 style="font-size:78px;color:#fff">Une journée<br>de <em>visite</em><br>avec GEI</h1>
+  <p class="t" style="color:#E3E8F7;margin-top:18px">Suivez nos clients jusqu'à leur futur chez-eux.</p>
+</div></section></body></html>
