@@ -1,0 +1,23 @@
+1
+00:00:00,000 --> 00:00:03,000
+Nouvelle année, nouvelle adresse.
+
+2
+00:00:03,000 --> 00:00:09,000
+Global Empire Immobilier vous présente [nom du programme], à [zone].
+
+3
+00:00:09,000 --> 00:00:16,000
+[Atout 1 : par exemple l'accès ou la proximité d'un axe]. [Atout 2 : environnement, équipements].
+
+4
+00:00:16,000 --> 00:00:23,000
+Des [terrains / maisons] de [superficie], à partir de [prix] francs CFA, [modalités de paiement].
+
+5
+00:00:23,000 --> 00:00:27,000
+La situation du programme vous est présentée avant toute signature.
+
+6
+00:00:27,000 --> 00:00:30,000
+Réservez votre visite sur WhatsApp. Global Empire Immobilier.
