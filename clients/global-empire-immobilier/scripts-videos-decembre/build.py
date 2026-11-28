@@ -3,7 +3,7 @@ import os
 
 D = os.path.dirname(os.path.abspath(__file__))
 IMG = "../presentation/img/"
-WA = "(+225) 07 10 29 67 20"
+WA = "(+225) 07 04 75 53 06"
 
 # ------------------------------------------------------------------ données
 # Chaque plan : (début, fin, cadrage/mouvement, image, voix off, texte écran, son/motion)

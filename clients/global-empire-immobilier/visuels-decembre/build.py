@@ -2,7 +2,7 @@
 Chaque visuel est un <section class="s" data-name="..."> rendu en PNG par render.js."""
 
 IMG = "../presentation/img/"
-WA = "(+225) 07 10 29 67 20"
+WA = "(+225) 07 04 75 53 06"
 SITE = "geisarl.com"
 ADDR = "Cocody, Cité des Arts"
 

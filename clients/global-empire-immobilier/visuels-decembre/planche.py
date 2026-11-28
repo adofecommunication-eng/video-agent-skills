@@ -2,7 +2,7 @@
 import glob, os
 
 D = os.path.dirname(os.path.abspath(__file__))
-WA = "(+225) 07 10 29 67 20"
+WA = "(+225) 07 04 75 53 06"
 TAGS = "#GlobalEmpireImmobilier #ImmobilierCI #Abidjan #Propriétaire"
 
 posts = [

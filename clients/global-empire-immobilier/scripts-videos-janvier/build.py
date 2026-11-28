@@ -3,7 +3,7 @@ import os
 
 D = os.path.dirname(os.path.abspath(__file__))
 IMG = "../presentation/img/"
-WA = "(+225) 07 10 29 67 20"
+WA = "(+225) 07 04 75 53 06"
 
 # ------------------------------------------------------------------ données
 # Chaque plan : (début, fin, cadrage/mouvement, image, voix off, texte écran, son/motion)
@@ -26,12 +26,12 @@ VIDEOS = [
    ("0:10", "0:16", "Drone puis plan moyen stabilisé", "La villa des Rives de l'Opulence au soleil ; Awa franchit le portail, émerveillée.", "Avec Global Empire Immobilier, je deviens propriétaire de ma villa à Adiaké, avec un paiement progressif.", "✓ PAIEMENT PROGRESSIF", "Musique lumineuse, transition par balayage bleu."),
    ("0:16", "0:23", "Motion design sur façade floutée", "Bloc prix blanc : prix puis apport.", "Prix d'acquisition : quarante-cinq millions de francs CFA. Apport initial : quinze millions.", "45 M FCFA · APPORT 15 M", "Compteur animé, rebond."),
    ("0:23", "0:27", "Plan serré · ralenti léger", "Awa ouvre la porte d'entrée et se retourne vers la caméra, rayonnante.", "Cette année, c'est décidé : j'arrête de louer.", "CETTE ANNÉE, J'ARRÊTE DE LOUER", "Titre en masque, Montserrat Black."),
-   ("0:27", "0:30", "Écran de fin", "Logo GEI, bandeau vert, WhatsApp.", "Réservez votre visite sur WhatsApp. Global Empire Immobilier.", "RÉSERVEZ VOTRE VISITE · (+225) 07 10 29 67 20", "Dernière note, fondu."),
+   ("0:27", "0:30", "Écran de fin", "Logo GEI, bandeau vert, WhatsApp.", "Réservez votre visite sur WhatsApp. Global Empire Immobilier.", "RÉSERVEZ VOTRE VISITE · (+225) 07 04 75 53 06", "Dernière note, fondu."),
   ],
   accroches=["« Chaque mois, le même rituel : je paie mon loyer… » (version principale)",
              "« 12 loyers par an. Et à la fin, rien ne vous appartient. »",
              "« Ma résolution 2027 ? Arrêter de louer. »"],
-  legende="Cette année, c'est décidé : j'arrête de louer 🔑\nDevenez propriétaire de votre villa à Adiaké, avec un paiement progressif.\n✔ 45 M FCFA · Apport 15 M\n👉 Réservez votre visite : (+225) 07 10 29 67 20\n#GlobalEmpireImmobilier #ImmobilierCI #Adiaké #Résolution2027",
+  legende="Cette année, c'est décidé : j'arrête de louer 🔑\nDevenez propriétaire de votre villa à Adiaké, avec un paiement progressif.\n✔ 45 M FCFA · Apport 15 M\n👉 Réservez votre visite : (+225) 07 04 75 53 06\n#GlobalEmpireImmobilier #ImmobilierCI #Adiaké #Résolution2027",
   notes=["Ne pas laisser entendre que les échéances équivalent à un loyer : le script compare des situations, pas des montants.",
          "L'écran de paiement du loyer est une maquette : ni vraie application, ni vraie donnée bancaire.",
          "Prévoir une version 15 s pour la publicité : plans 1, 3, 4 et 7."],
@@ -54,12 +54,12 @@ VIDEOS = [
    ("0:16", "0:23", "Motion design plein écran", "Étape 2 : une barre de progression qui se remplit au tiers.", "Étape deux : l'apport initial, quinze millions, votre premier versement sur le prix de la villa.", "② APPORT INITIAL · 15 M FCFA", "Barre remplie à 33 %."),
    ("0:23", "0:32", "Motion design plein écran", "Étape 3 : la barre se remplit par petits paliers jusqu'à 100 %.", "Étape trois : le solde, trente millions, réglé en plusieurs échéances, selon l'échéancier convenu avec votre conseiller.", "③ SOLDE · 30 M EN ÉCHÉANCES", "Paliers animés, la maison se dessine à côté de la barre."),
    ("0:32", "0:40", "Retour plan serré", "Le conseiller, sourire.", "Et la villa est déjà construite : l'habitation est immédiate. Chaque échéancier est personnalisé : on l'établit ensemble.", "✓ HABITATION IMMÉDIATE", ""),
-   ("0:40", "0:45", "Écran de fin", "Logo GEI, bandeau vert, WhatsApp.", "Demandez votre échéancier personnalisé sur WhatsApp.", "DEMANDEZ VOTRE ÉCHÉANCIER · (+225) 07 10 29 67 20", "Fondu sur le logo."),
+   ("0:40", "0:45", "Écran de fin", "Logo GEI, bandeau vert, WhatsApp.", "Demandez votre échéancier personnalisé sur WhatsApp.", "DEMANDEZ VOTRE ÉCHÉANCIER · (+225) 07 04 75 53 06", "Fondu sur le logo."),
   ],
   accroches=["« 45 millions pour une villa… vous vous dites que c'est impossible ? Attendez. » (version principale)",
              "« Le paiement progressif, expliqué en 45 secondes. »",
              "« Comment devenir propriétaire sans tout payer d'un coup ? »"],
-  legende="45 millions pour une villa… impossible ? Pas avec le paiement progressif 💡\n① Frais de dossier ② Apport initial ③ Solde en échéances\n👉 Demandez votre échéancier personnalisé : (+225) 07 10 29 67 20\n#GlobalEmpireImmobilier #ImmobilierCI #GEIvousExplique #Adiaké",
+  legende="45 millions pour une villa… impossible ? Pas avec le paiement progressif 💡\n① Frais de dossier ② Apport initial ③ Solde en échéances\n👉 Demandez votre échéancier personnalisé : (+225) 07 04 75 53 06\n#GlobalEmpireImmobilier #ImmobilierCI #GEIvousExplique #Adiaké",
   notes=["GEI doit confirmer les conditions exactes du solde (nombre d'échéances, durée, éventuels frais) et le moment de l'entrée dans les lieux.",
          "Ne citer aucune durée ni montant d'échéance tant que GEI ne les a pas validés par écrit.",
          "À tourner le même jour que la vidéo n° 4 si le conseiller est disponible."],
@@ -81,12 +81,12 @@ VIDEOS = [
    ("0:09", "0:25", "Interview · alternance des 2 caméras", "Le client raconte son projet, ses craintes, sa rencontre avec GEI.", "(Son direct : réponses aux questions 1 à 4)", "Sous-titres de la réponse exacte", "Plans d'illustration en surimpression : visite, documents, remise des clés."),
    ("0:25", "0:45", "Interview + plans d'illustration", "Le client parle de l'accompagnement et de sa vie aujourd'hui.", "(Son direct : réponses aux questions 5 à 7)", "Sous-titres de la réponse exacte", "Musique qui remonte doucement."),
    ("0:45", "0:52", "Plan serré · regard caméra", "Le conseil du client à ceux qui hésitent.", "(Son direct : réponse à la question 8)", "Sous-titres", ""),
-   ("0:52", "0:60", "Écran de fin", "Logo GEI, bandeau vert, WhatsApp.", "Vous aussi, devenez propriétaire en toute sérénité. Écrivez-nous sur WhatsApp.", "À VOTRE TOUR · (+225) 07 10 29 67 20", "Fondu final."),
+   ("0:52", "0:60", "Écran de fin", "Logo GEI, bandeau vert, WhatsApp.", "Vous aussi, devenez propriétaire en toute sérénité. Écrivez-nous sur WhatsApp.", "À VOTRE TOUR · (+225) 07 04 75 53 06", "Fondu final."),
   ],
   accroches=["La meilleure phrase spontanée du client (version principale)",
              "« Il y a un an, j'étais locataire. »",
              "« Voici ce que nos clients disent de GEI. »"],
-  legende="« [phrase du client] » 🗣️\nMerci [prénom] pour votre confiance et pour ce témoignage 🙏\nVous aussi, devenez propriétaire en toute sérénité.\n👉 (+225) 07 10 29 67 20\n#GlobalEmpireImmobilier #ImmobilierCI #Témoignage #Propriétaire",
+  legende="« [phrase du client] » 🗣️\nMerci [prénom] pour votre confiance et pour ce témoignage 🙏\nVous aussi, devenez propriétaire en toute sérénité.\n👉 (+225) 07 04 75 53 06\n#GlobalEmpireImmobilier #ImmobilierCI #Témoignage #Propriétaire",
   interview=["Pouvez-vous vous présenter en quelques mots ?",
              "Où en étiez-vous avant votre projet d'achat ?",
              "Qu'est-ce qui vous faisait peur dans l'achat d'un bien ?",
@@ -116,12 +116,12 @@ VIDEOS = [
    ("0:09", "0:16", "Plans au sol · 3 × 2 s", "Route d'accès, environnement proche (écoles, commerces, axes), bornes.", "[Atout 1 : par exemple l'accès ou la proximité d'un axe]. [Atout 2 : environnement, équipements].", "✓ [ATOUT 1] · ✓ [ATOUT 2]", "Coupes sur le rythme."),
    ("0:16", "0:23", "Motion design sur vue drone floutée", "Bloc blanc : superficie et prix.", "Des [terrains / maisons] de [superficie], à partir de [prix] francs CFA, [modalités de paiement].", "[SUPERFICIE] · DÈS [PRIX] FCFA", "Compteur animé."),
    ("0:23", "0:27", "Plan au sol · conseiller GEI sur le site", "Le conseiller désigne le site d'un geste, sourire.", "La situation du programme vous est présentée avant toute signature.", "✓ [SITUATION JURIDIQUE VALIDÉE PAR GEI]", ""),
-   ("0:27", "0:30", "Écran de fin", "Logo GEI, bandeau vert, WhatsApp.", "Réservez votre visite sur WhatsApp. Global Empire Immobilier.", "RÉSERVEZ VOTRE VISITE · (+225) 07 10 29 67 20", "Fondu."),
+   ("0:27", "0:30", "Écran de fin", "Logo GEI, bandeau vert, WhatsApp.", "Réservez votre visite sur WhatsApp. Global Empire Immobilier.", "RÉSERVEZ VOTRE VISITE · (+225) 07 04 75 53 06", "Fondu."),
   ],
   accroches=["« Nouvelle année, nouvelle adresse. » (version principale)",
              "« [Zone] : la zone qui monte en 2027. » (seulement si GEI peut l'étayer)",
              "« Votre terrain à [zone], dès [prix] FCFA. »"],
-  legende="Nouveau programme GEI 📍 [Nom du programme], à [zone]\n✔ [superficie] · ✔ dès [prix] FCFA · ✔ [modalités]\n👉 Réservez votre visite : (+225) 07 10 29 67 20\n#GlobalEmpireImmobilier #ImmobilierCI #[Zone]",
+  legende="Nouveau programme GEI 📍 [Nom du programme], à [zone]\n✔ [superficie] · ✔ dès [prix] FCFA · ✔ [modalités]\n👉 Réservez votre visite : (+225) 07 04 75 53 06\n#GlobalEmpireImmobilier #ImmobilierCI #[Zone]",
   notes=["Tous les champs entre crochets sont à remplir avec la fiche du programme fournie par GEI avant le 15 janvier.",
          "Aucune promesse de plus-value ni de « zone qui monte » sans élément vérifiable fourni par GEI.",
          "La mention sur la situation juridique n'est utilisée que si GEI la confirme par écrit."],
