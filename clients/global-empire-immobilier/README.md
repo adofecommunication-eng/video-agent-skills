@@ -12,7 +12,7 @@
 
 ## Contacts
 - 7CREATIVE : WhatsApp (+225) 07 08 49 69 01 · contact.sevencreative@gmail.com (numéro réservé aux documents 7CREATIVE).
-- GEI : Cocody, Cité des Arts, Abidjan · site **geisarl.com** (nouveau site ; ancien : gei-sarl.ci) · téléphones de leur affiche : (+225) 07 10 29 67 20 · 01 51 75 72 00 · 07 09 71 85 30 · 01 42 51 85 90 · 07 08 62 30 38 · 07 04 75 53 06. **Numéro officiel de GEI (confirmé par l'utilisateur le 28/11/2026) : (+225) 07 04 75 53 06** — à utiliser dans tous les visuels, vidéos, formulaires et messages. Attention : les livrables produits avant cette date affichent encore le 07 10 29 67 20.
+- GEI : Cocody, Cité des Arts, Abidjan · site **geisarl.com** (nouveau site ; ancien : gei-sarl.ci) · téléphones de leur affiche : (+225) 07 10 29 67 20 · 01 51 75 72 00 · 07 09 71 85 30 · 01 42 51 85 90 · 07 08 62 30 38 · 07 04 75 53 06. **Numéro officiel de GEI (confirmé par l'utilisateur le 28/11/2026) : (+225) 07 04 75 53 06** — à utiliser dans tous les visuels, vidéos, formulaires et messages. Tous les livrables ont été mis à jour avec ce numéro le 28/11/2026, sauf la proposition commerciale déjà signée.
 - Les sites geisarl.com et la page Facebook ne sont pas accessibles depuis les sessions cloud (réseau).
 
 ## Charte graphique (d'après le logo et les affiches)
